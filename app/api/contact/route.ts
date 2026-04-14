@@ -31,11 +31,20 @@ export async function POST(req: Request) {
     }),
   });
 
-  const data = await res.json();
+  const rawText = await res.text();
+  console.log("Web3Forms status:", res.status, "| body:", rawText.slice(0, 300));
+
+  let data: { success?: boolean; message?: string } = {};
+  try {
+    data = JSON.parse(rawText);
+  } catch {
+    console.error("Web3Forms returned non-JSON:", res.status);
+    return NextResponse.json({ error: "Failed to send. Please email directly." }, { status: 500 });
+  }
 
   if (!data.success) {
     console.error("Web3Forms error:", data);
-    return NextResponse.json({ error: "Failed to send. Please email directly." }, { status: 500 });
+    return NextResponse.json({ error: data.message || "Failed to send. Please email directly." }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true });
