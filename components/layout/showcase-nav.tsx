@@ -26,9 +26,9 @@ export default function ShowcaseNav() {
           <span className="text-[7px] tracking-[0.2em] text-[#999] uppercase font-medium">Web Design</span>
         </Link>
 
-        {/* Nav links */}
-        <div className="flex items-center gap-5 text-[11px] text-[#666]">
-          <Link href="/" className="hover:text-[#1a1a1a] transition-colors hidden sm:block">Home</Link>
+        {/* Centered nav links */}
+        <div className="hidden sm:flex items-center gap-6 text-[11px] text-[#666] absolute left-1/2 -translate-x-1/2">
+          <Link href="/" className="hover:text-[#1a1a1a] transition-colors">Home</Link>
 
           {/* Showcase dropdown */}
           <div className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
@@ -49,13 +49,14 @@ export default function ShowcaseNav() {
             )}
           </div>
 
-          <Link href="/contact" className="hover:text-[#1a1a1a] transition-colors hidden sm:block">Contact</Link>
-
-          <Link href="/contact"
-            className="flex items-center gap-1 bg-[#1a1a1a] text-white text-[10px] font-semibold px-3 py-1.5 rounded-full hover:bg-black transition-colors">
-            Want this style? <ArrowRight size={9}/>
-          </Link>
+          <Link href="/contact" className="hover:text-[#1a1a1a] transition-colors">Contact</Link>
         </div>
+
+        {/* Right: CTA */}
+        <Link href="/contact"
+          className="flex items-center gap-1 bg-[#1a1a1a] text-white text-[10px] font-semibold px-3 py-1.5 rounded-full hover:bg-black transition-colors">
+          Want this style? <ArrowRight size={9}/>
+        </Link>
       </div>
 
       {/* Spacer — pushes page content below the fixed strip */}
