@@ -1,122 +1,168 @@
 "use client";
 
+// Style: Bold Playful — Inspired by Blank Street Coffee / Joe & The Juice
+// Deep forest green + cream, display serif headlines, asymmetric layouts,
+// large overlapping photo elements, full personality
+// Typography: Syne (bold display) + Cormorant (serif accent)
+
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Star } from "lucide-react";
+import { Star, MapPin, Clock } from "lucide-react";
 import ShowcaseNav from "@/components/layout/showcase-nav";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
+const fade = {
+  hidden: { opacity:0, y:20 },
+  show: { opacity:1, y:0, transition:{ duration:0.6, ease:[0.22,1,0.36,1] as [number,number,number,number] } },
 };
-const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } };
+const stagger = { hidden:{}, show:{ transition:{ staggerChildren:0.1 } } };
 
-const menuItems = [
-  { name: "The Sunrise Latte", desc: "Espresso, oat milk, honey, cinnamon", price: "$6.50", tag: "Fan Fave", bg: "bg-[#fef3c7]", seed: "coffee1" },
-  { name: "Zesty Matcha Bowl", desc: "Matcha, banana, mango, granola", price: "$11.00", tag: "New", bg: "bg-[#dcfce7]", seed: "food2" },
-  { name: "The Classic Drip", desc: "Single origin, light roast, black", price: "$4.00", tag: null, bg: "bg-[#fff7ed]", seed: "coffee3" },
-  { name: "Berry Burst Smoothie", desc: "Mixed berries, almond milk, chia", price: "$8.50", tag: "Vegan", bg: "bg-[#fce7f3]", seed: "fruit1" },
+const drinks = [
+  { name:"The Forest Blend", desc:"Single origin Ethiopia, light roast, floral notes", price:"$5.50", seed:"coffee-f1", badge:null },
+  { name:"Matcha Ritual", desc:"Ceremonial grade matcha, oat milk, honey", price:"$7.00", seed:"matcha1", badge:"Staff Pick" },
+  { name:"Sunrise Latte", desc:"Espresso, oat milk, house orange syrup, cinnamon", price:"$6.50", seed:"latte1", badge:"Bestseller" },
+  { name:"Cold Brew Tonic", desc:"18-hour cold brew, tonic water, citrus peel", price:"$6.00", seed:"coldbrew1", badge:null },
+];
+
+const food = [
+  { name:"Avocado Toast", desc:"Sourdough, smashed avo, chili flakes, microgreens", price:"$13.00", seed:"avotoast" },
+  { name:"Grain Bowl", desc:"Farro, roasted veg, tahini, pickled onion", price:"$15.00", seed:"grainbowl" },
+  { name:"Banana Loaf", desc:"House-baked, oat milk, brown butter glaze", price:"$5.50", seed:"banana-loaf" },
 ];
 
 export default function PlayfulShowcase() {
   return (
-    <div className="bg-[#fffbf5]">
+    <div style={{fontFamily:"var(--font-syne), sans-serif"}}>
       <ShowcaseNav />
 
-      {/* Fictional Nav */}
-      <div className="bg-[#f97316]">
-        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-          <span className="text-xl font-black text-white tracking-tight">Zest Café ☀️</span>
-          <nav className="hidden md:flex gap-6 text-sm text-white/80 font-medium">
-            {["Menu","About","Visit"].map(l=><a key={l} href="#" className="hover:text-white transition-colors">{l}</a>)}
+      {/* ── Fictional sticky nav ── */}
+      <header className="fixed top-0 left-0 right-0 z-40 bg-[#1a3a2a] h-14 flex items-center px-8">
+        <div className="max-w-6xl mx-auto w-full flex items-center justify-between">
+          <span className="text-lg font-bold text-[#f5e6c8] tracking-tight" style={{fontFamily:"var(--font-cormorant), Georgia, serif"}}>
+            Zest Café
+          </span>
+          <nav className="hidden md:flex items-center gap-8 text-sm text-[#f5e6c8]/60 font-medium">
+            {["Menu","About","Locations","Catering"].map(l=>(
+              <a key={l} href="#" className="hover:text-[#f5e6c8] transition-colors">{l}</a>
+            ))}
           </nav>
+          <a href="#" className="bg-[#f5e6c8] text-[#1a3a2a] text-xs font-bold px-4 py-2 rounded-full hover:bg-white transition-colors">
+            Order Online
+          </a>
         </div>
-      </div>
+      </header>
 
-      {/* Hero */}
-      <section className="bg-[#f97316] px-6 pb-0 pt-12 overflow-hidden relative">
-        <div className="absolute -right-20 top-0 w-64 h-64 rounded-full bg-[#fb923c] opacity-40" />
-        <div className="absolute -left-10 bottom-0 w-48 h-48 rounded-full bg-[#fed7aa] opacity-30" />
-        <div className="max-w-5xl mx-auto relative">
-          <motion.div initial="hidden" animate="show" variants={stagger} className="max-w-xl pb-16">
-            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 bg-white/20 text-white text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
-              ☕ Now Open 7am – 6pm
-            </motion.div>
-            <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl font-black text-white leading-[1.0] tracking-tight">
-              Coffee worth<br />getting up for. ☕
+      {/* ── Hero ── */}
+      <section className="bg-[#1a3a2a] pt-14 overflow-hidden">
+        <div className="max-w-6xl mx-auto px-8 pt-16 pb-0 grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-0 items-end">
+          <motion.div initial="hidden" animate="show" variants={stagger} className="pb-16">
+            <motion.span variants={fade} className="inline-block bg-[#f5e6c8]/10 text-[#f5e6c8]/70 text-xs font-semibold px-3 py-1.5 rounded-full mb-8 tracking-wide">
+              Open Daily 7am – 6pm · Nanaimo, BC
+            </motion.span>
+            <motion.h1 variants={fade}
+              className="text-[clamp(2.8rem,7vw,5.5rem)] font-extrabold leading-[0.95] tracking-tight text-[#f5e6c8]"
+              style={{fontFamily:"var(--font-cormorant), Georgia, serif", fontStyle:"italic"}}
+            >
+              Good coffee.<br/>Good life.
             </motion.h1>
-            <motion.p variants={fadeUp} className="mt-6 text-white/80 text-lg leading-relaxed">
-              Fresh brews, wholesome bites, and good vibes only. Locally loved in Nanaimo since 2019.
+            <motion.p variants={fade} className="mt-6 text-[#f5e6c8]/60 text-base leading-relaxed max-w-sm">
+              Specialty coffee, wholesome food, and the kind of atmosphere that makes you want to stay. Locally rooted since 2019.
             </motion.p>
-            <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
-              <a href="#" className="bg-white text-[#f97316] text-sm font-bold px-6 py-3 rounded-full hover:bg-[#fff7ed] transition-colors">See Our Menu</a>
-              <a href="#" className="border-2 border-white text-white text-sm font-bold px-6 py-3 rounded-full hover:bg-white/10 transition-colors">Find Us</a>
+            <motion.div variants={fade} className="mt-8 flex gap-3 flex-wrap">
+              <a href="#" className="bg-[#f5e6c8] text-[#1a3a2a] font-bold text-sm px-6 py-3 rounded-full hover:bg-white transition-colors">
+                See Our Menu
+              </a>
+              <a href="#" className="border border-[#f5e6c8]/30 text-[#f5e6c8] font-semibold text-sm px-6 py-3 rounded-full hover:border-[#f5e6c8]/60 transition-colors">
+                Our Story
+              </a>
+            </motion.div>
+            <motion.div variants={fade} className="mt-10 flex items-center gap-2">
+              {[...Array(5)].map((_,i)=><Star key={i} size={14} className="fill-[#f5e6c8] text-[#f5e6c8]"/>)}
+              <span className="text-[#f5e6c8]/50 text-sm ml-2">4.9 · 340 Google reviews</span>
             </motion.div>
           </motion.div>
-        </div>
-        {/* Hero image strip */}
-        <div className="relative h-64 overflow-hidden">
-          <Image src="https://picsum.photos/seed/cafe-hero/1200/400" alt="Café interior" fill className="object-cover" unoptimized />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#f97316] via-[#f97316]/20 to-transparent" />
-        </div>
-      </section>
 
-      {/* Wave */}
-      <div className="bg-[#f97316]">
-        <svg viewBox="0 0 1440 60" className="w-full h-12 fill-[#fffbf5]">
-          <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" />
-        </svg>
-      </div>
-
-      {/* Menu */}
-      <section className="py-16 px-6">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
-            <motion.h2 variants={fadeUp} className="text-4xl font-black text-[#1d1d1f] mb-2">What&apos;s good today 🌿</motion.h2>
-            <motion.p variants={fadeUp} className="text-[#6e6e73] mb-10">Seasonal ingredients, always fresh.</motion.p>
-            <motion.div variants={stagger} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {menuItems.map((item) => (
-                <motion.div key={item.name} variants={fadeUp} className={`${item.bg} rounded-3xl overflow-hidden group hover:scale-[1.02] transition-transform cursor-pointer`}>
-                  <div className="relative h-40">
-                    <Image src={`https://picsum.photos/seed/${item.seed}/600/300`} alt={item.name} fill className="object-cover" unoptimized />
-                    {item.tag && (
-                      <span className="absolute top-3 left-3 text-[10px] font-bold bg-[#f97316] text-white px-2 py-0.5 rounded-full">
-                        {item.tag}
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-4 flex items-start justify-between">
-                    <div>
-                      <h3 className="font-bold text-[#1d1d1f]">{item.name}</h3>
-                      <p className="text-sm text-[#6e6e73] mt-0.5">{item.desc}</p>
-                    </div>
-                    <span className="font-black text-[#1d1d1f] ml-4 flex-shrink-0">{item.price}</span>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
+          {/* Hero image — overlaps into next section */}
+          <motion.div
+            initial={{ opacity:0, y:40 }}
+            animate={{ opacity:1, y:0 }}
+            transition={{ duration:0.9, delay:0.3 }}
+            className="relative h-[420px] md:h-[500px]"
+          >
+            <Image
+              src="https://picsum.photos/seed/zest-hero/700/800"
+              alt="Zest Café"
+              fill
+              className="object-cover object-top"
+              unoptimized
+              priority
+            />
+            {/* Floating badge */}
+            <div className="absolute top-6 right-6 bg-[#f5e6c8] text-[#1a3a2a] rounded-2xl p-4 shadow-xl">
+              <div className="text-2xl font-black">4.9</div>
+              <div className="text-xs font-semibold">Stars</div>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Values */}
-      <section className="py-16 px-6 bg-[#fff7ed]">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl font-black text-[#1d1d1f] mb-10">Why we&apos;re different 💛</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { img: "plant-food", icon: "🌱", title: "Plant-First Menu", desc: "Over 80% of our menu is plant-based or easily adaptable." },
-              { img: "coffee-beans", icon: "☕", title: "Local Roasters Only", desc: "We source beans exclusively from BC-based roasters." },
-              { img: "community", icon: "💛", title: "Community First", desc: "10% of profits go back to local food banks every month." },
-            ].map((v) => (
-              <div key={v.title} className="bg-white rounded-3xl overflow-hidden border-2 border-[#fed7aa]">
-                <div className="relative h-32">
-                  <Image src={`https://picsum.photos/seed/${v.img}/400/200`} alt={v.title} fill className="object-cover" unoptimized />
+      {/* ── Drinks menu ── */}
+      <section className="bg-[#faf7f0] py-24 px-8">
+        <div className="max-w-6xl mx-auto">
+          <motion.div initial="hidden" whileInView="show" viewport={{ once:true }} variants={stagger}>
+            <motion.p variants={fade} className="text-xs font-bold tracking-[0.2em] uppercase text-[#1a3a2a]/40 mb-2">What We Brew</motion.p>
+            <motion.h2 variants={fade} className="text-4xl md:text-5xl font-extrabold text-[#1a3a2a] leading-tight mb-12"
+              style={{fontFamily:"var(--font-cormorant), Georgia, serif", fontStyle:"italic"}}>
+              The Menu.
+            </motion.h2>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {drinks.map((d) => (
+              <motion.div
+                key={d.name}
+                initial={{ opacity:0, y:16 }}
+                whileInView={{ opacity:1, y:0 }}
+                viewport={{ once:true }}
+                transition={{ duration:0.5 }}
+                className="group bg-white rounded-2xl overflow-hidden flex cursor-pointer hover:shadow-lg transition-shadow"
+              >
+                <div className="relative w-32 flex-shrink-0">
+                  <Image src={`https://picsum.photos/seed/${d.seed}/300/300`} alt={d.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" unoptimized/>
                 </div>
-                <div className="p-5">
-                  <div className="text-2xl mb-2">{v.icon}</div>
-                  <h3 className="font-bold text-[#1d1d1f] mb-1">{v.title}</h3>
-                  <p className="text-sm text-[#6e6e73] leading-relaxed">{v.desc}</p>
+                <div className="p-5 flex-1">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      {d.badge && (
+                        <span className="inline-block bg-[#1a3a2a] text-white text-[9px] font-bold px-2 py-0.5 rounded-full mb-1.5 tracking-wide">
+                          {d.badge}
+                        </span>
+                      )}
+                      <h3 className="font-bold text-[#1a3a2a] text-base">{d.name}</h3>
+                      <p className="text-sm text-[#888] mt-1 leading-relaxed">{d.desc}</p>
+                    </div>
+                    <span className="font-extrabold text-[#1a3a2a] ml-4 text-base flex-shrink-0">{d.price}</span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Food */}
+          <h3 className="text-2xl font-extrabold text-[#1a3a2a] mt-16 mb-6"
+            style={{fontFamily:"var(--font-cormorant), Georgia, serif", fontStyle:"italic"}}>
+            Something to Eat
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {food.map((f) => (
+              <div key={f.name} className="bg-white rounded-2xl overflow-hidden group cursor-pointer hover:shadow-lg transition-shadow">
+                <div className="relative h-40">
+                  <Image src={`https://picsum.photos/seed/${f.seed}/500/400`} alt={f.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" unoptimized/>
+                </div>
+                <div className="p-4">
+                  <div className="flex justify-between items-start">
+                    <h4 className="font-bold text-[#1a3a2a]">{f.name}</h4>
+                    <span className="font-bold text-[#1a3a2a] ml-2 flex-shrink-0">{f.price}</span>
+                  </div>
+                  <p className="text-xs text-[#888] mt-1 leading-relaxed">{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -124,50 +170,134 @@ export default function PlayfulShowcase() {
         </div>
       </section>
 
-      {/* Hours */}
-      <section className="py-16 px-6">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      {/* ── Story / About — full bleed green section ── */}
+      <section className="bg-[#1a3a2a] py-24 px-8 overflow-hidden">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="text-4xl font-black text-[#1d1d1f] mb-6">Come say hi 👋</h2>
-            <div className="space-y-3">
-              {[["Mon – Fri","7:00 am – 6:00 pm"],["Saturday","8:00 am – 5:00 pm"],["Sunday","9:00 am – 3:00 pm"]].map(([d,h])=>(
-                <div key={d} className="flex justify-between text-sm border-b border-[#fed7aa] pb-3">
-                  <span className="font-semibold text-[#1d1d1f]">{d}</span>
-                  <span className="text-[#6e6e73]">{h}</span>
+            <p className="text-xs font-bold tracking-[0.2em] uppercase text-[#f5e6c8]/40 mb-4">Our Story</p>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-[#f5e6c8] leading-tight"
+              style={{fontFamily:"var(--font-cormorant), Georgia, serif", fontStyle:"italic"}}>
+              Born on the<br/>North Shore.
+            </h2>
+            <p className="mt-6 text-[#f5e6c8]/60 text-base leading-relaxed">
+              Zest started as a farmers&apos; market pop-up in 2019. We outgrew our tent pretty fast. Now we&apos;re in the heart of Nanaimo, serving the neighbourhood we love with coffee sourced from BC roasters we believe in.
+            </p>
+            <p className="mt-4 text-[#f5e6c8]/60 text-base leading-relaxed">
+              Everything on our menu is made in-house, in small batches, with ingredients we can actually name. No shortcuts. No compromises.
+            </p>
+            <div className="mt-10 flex gap-10">
+              {[["2019","Founded"],["100%","BC Sourced"],["4,000+","Monthly Guests"]].map(([v,l])=>(
+                <div key={l}>
+                  <div className="text-2xl font-extrabold text-[#f5e6c8]">{v}</div>
+                  <div className="text-xs text-[#f5e6c8]/40 mt-1">{l}</div>
                 </div>
               ))}
             </div>
-            <div className="mt-6 text-sm text-[#6e6e73]">📍 123 Harbour St, Nanaimo, BC</div>
           </div>
-          <div className="relative h-64 rounded-3xl overflow-hidden">
-            <Image src="https://picsum.photos/seed/nanaimo-cafe/600/400" alt="Café location" fill className="object-cover" unoptimized />
+          <div className="relative">
+            <div className="relative h-80 rounded-2xl overflow-hidden">
+              <Image src="https://picsum.photos/seed/zest-story/700/600" alt="Our story" fill className="object-cover" unoptimized/>
+            </div>
+            {/* Floating tag */}
+            <div className="absolute -bottom-5 -left-5 bg-[#f5e6c8] text-[#1a3a2a] rounded-2xl p-4 shadow-xl">
+              <div className="text-lg font-black">Plant-First</div>
+              <div className="text-xs">80% of our menu</div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Reviews */}
-      <section className="py-16 px-6 bg-[#f97316]">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-black text-white mb-8">People love us ⭐</h2>
+      {/* ── Values ── */}
+      <section className="bg-[#faf7f0] py-24 px-8">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-extrabold text-[#1a3a2a] mb-12"
+            style={{fontFamily:"var(--font-cormorant), Georgia, serif", fontStyle:"italic"}}>
+            What we stand for.
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { name: "Sarah M.", quote: "Best oat latte on the island, no contest." },
-              { name: "Jordan T.", quote: "The vibe is just right. I come here to work every Friday." },
-              { name: "Priya L.", quote: "Genuinely the most friendly staff I've ever encountered." },
-            ].map((r) => (
-              <div key={r.name} className="bg-white/10 backdrop-blur rounded-2xl p-5">
-                <div className="flex gap-0.5 mb-3">
-                  {[...Array(5)].map((_,i)=><Star key={i} size={12} className="fill-white text-white"/>)}
+              { emoji:"🌱", title:"Plant-First Menu", desc:"Over 80% of our menu is fully plant-based or easily adapted. Eating well shouldn't be complicated.", img:"plant-food-val" },
+              { emoji:"☕", title:"BC Roasters Only", desc:"We source exclusively from independent BC roasters who share our values. Every cup has a story.", img:"coffee-beans-val" },
+              { emoji:"🤝", title:"Community Roots", desc:"10% of monthly profits go to local food security programs. Business should give back.", img:"community-val" },
+            ].map((v) => (
+              <div key={v.title} className="bg-white rounded-2xl overflow-hidden">
+                <div className="relative h-44">
+                  <Image src={`https://picsum.photos/seed/${v.img}/500/350`} alt={v.title} fill className="object-cover" unoptimized/>
+                  <div className="absolute top-4 left-4 text-3xl">{v.emoji}</div>
                 </div>
-                <p className="text-white text-sm leading-relaxed mb-3">&quot;{r.quote}&quot;</p>
-                <span className="text-white/60 text-xs font-medium">{r.name}</span>
+                <div className="p-6">
+                  <h3 className="font-extrabold text-[#1a3a2a] mb-2">{v.title}</h3>
+                  <p className="text-sm text-[#888] leading-relaxed">{v.desc}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <div className="h-20" />
+      {/* ── Hours & Location ── */}
+      <section className="bg-white py-24 px-8 border-t border-[#f0ebe3]">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+          <div>
+            <p className="text-xs font-bold tracking-[0.2em] uppercase text-[#999] mb-4">Visit Us</p>
+            <h2 className="text-4xl font-extrabold text-[#1a3a2a] mb-8"
+              style={{fontFamily:"var(--font-cormorant), Georgia, serif", fontStyle:"italic"}}>
+              Come say hi.
+            </h2>
+            <div className="flex items-start gap-3 mb-6">
+              <MapPin size={16} className="text-[#1a3a2a] mt-1 flex-shrink-0"/>
+              <div>
+                <div className="font-bold text-[#1a3a2a] text-sm">123 Harbour Street</div>
+                <div className="text-sm text-[#888]">Nanaimo, BC V9R 2N4</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 mb-10">
+              <Clock size={16} className="text-[#1a3a2a] mt-1 flex-shrink-0"/>
+              <div className="space-y-2 text-sm">
+                {[["Monday – Friday","7:00 am – 6:00 pm"],["Saturday","8:00 am – 5:00 pm"],["Sunday","9:00 am – 3:00 pm"]].map(([d,h])=>(
+                  <div key={d} className="flex gap-6">
+                    <span className="font-semibold text-[#1a3a2a] w-32">{d}</span>
+                    <span className="text-[#888]">{h}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <a href="#" className="inline-block bg-[#1a3a2a] text-[#f5e6c8] font-bold text-sm px-6 py-3 rounded-full hover:bg-black transition-colors">
+              Get Directions
+            </a>
+          </div>
+          <div className="relative h-80 rounded-2xl overflow-hidden">
+            <Image src="https://picsum.photos/seed/zest-location/700/600" alt="Location" fill className="object-cover" unoptimized/>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Reviews ── */}
+      <section className="bg-[#1a3a2a] py-20 px-8">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-extrabold text-[#f5e6c8] mb-10"
+            style={{fontFamily:"var(--font-cormorant), Georgia, serif", fontStyle:"italic"}}>
+            What people are saying.
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { name:"Sarah M.", text:"Best oat latte on the island. The vibe is immaculate — I come every morning before work.", stars:5 },
+              { name:"Jordan T.", text:"I work remotely and Zest is my office. Fast WiFi, great playlist, and the cold brew is elite.", stars:5 },
+              { name:"Priya L.", text:"The grain bowl changed my lunch game. And the staff somehow remember everyone's name.", stars:5 },
+            ].map((r) => (
+              <div key={r.name} className="bg-[#f5e6c8]/10 rounded-2xl p-6">
+                <div className="flex gap-1 mb-3">
+                  {[...Array(r.stars)].map((_,i)=><Star key={i} size={14} className="fill-[#f5e6c8] text-[#f5e6c8]"/>)}
+                </div>
+                <p className="text-[#f5e6c8]/80 text-sm leading-relaxed mb-4">&quot;{r.text}&quot;</p>
+                <span className="text-[#f5e6c8]/40 text-xs font-bold tracking-wide">{r.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="h-20"/>
     </div>
   );
 }
