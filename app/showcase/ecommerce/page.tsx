@@ -63,7 +63,7 @@ export default function EcommerceShowcase() {
       </div>
 
       {/* ── Fictional nav ── */}
-      <header className="sticky top-0 z-40 bg-[#faf7f2]/95 backdrop-blur-sm border-b border-[#e8ddd0]">
+      <header className="sticky top-10 z-40 bg-[#faf7f2]/95 backdrop-blur-sm border-b border-[#e8ddd0]">
         <div className="max-w-6xl mx-auto px-8 h-16 flex items-center justify-between">
           <span className="text-lg font-semibold text-[#3d2c1e] tracking-tight" style={{fontFamily:"var(--font-lora), Georgia, serif"}}>
             Cedar & Co.

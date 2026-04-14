@@ -28,7 +28,7 @@ export default function BoldShowcase() {
       <ShowcaseNav />
 
       {/* ── Fictional nav ── */}
-      <header className="fixed top-0 left-0 right-0 z-40 h-16 flex items-center px-8 md:px-16 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/[0.06]">
+      <header className="fixed top-10 left-0 right-0 z-40 h-16 flex items-center px-8 md:px-16 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-5 h-5 border border-[#d4af37]" style={{clipPath:"polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)"}}>

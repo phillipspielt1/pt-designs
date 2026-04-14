@@ -73,7 +73,7 @@ export default function TradesShowcase() {
       </div>
 
       {/* ── Sticky header ── */}
-      <header className="sticky top-0 z-40 bg-[#1e3a5f] shadow-lg">
+      <header className="sticky top-10 z-40 bg-[#1e3a5f] shadow-lg">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-[#f97316] rounded-md flex items-center justify-center flex-shrink-0">

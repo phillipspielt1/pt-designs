@@ -58,7 +58,7 @@ export default function ProfessionalShowcase() {
       <ShowcaseNav />
 
       {/* ── Fictional nav ── */}
-      <header className="fixed top-0 left-0 right-0 z-40 bg-white border-b border-[#e5e7eb] h-[60px] flex items-center">
+      <header className="fixed top-10 left-0 right-0 z-40 bg-white border-b border-[#e5e7eb] h-[60px] flex items-center">
         <div className="max-w-6xl mx-auto px-8 w-full flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 bg-[#1e3a8a] rounded flex items-center justify-center">

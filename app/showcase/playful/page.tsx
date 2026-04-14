@@ -35,7 +35,7 @@ export default function PlayfulShowcase() {
       <ShowcaseNav />
 
       {/* ── Fictional sticky nav ── */}
-      <header className="fixed top-0 left-0 right-0 z-40 bg-[#1a3a2a] h-14 flex items-center px-8">
+      <header className="fixed top-10 left-0 right-0 z-40 bg-[#1a3a2a] h-14 flex items-center px-8">
         <div className="max-w-6xl mx-auto w-full flex items-center justify-between">
           <span className="text-lg font-bold text-[#f5e6c8] tracking-tight" style={{fontFamily:"var(--font-cormorant), Georgia, serif"}}>
             Zest Café

@@ -29,7 +29,7 @@ export default function MinimalShowcase() {
       <ShowcaseNav />
 
       {/* ── Fictional nav ── */}
-      <header className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-8 md:px-16 h-[60px] bg-white/95 backdrop-blur-sm border-b border-black/[0.06]">
+      <header className="fixed top-10 left-0 right-0 z-40 flex items-center justify-between px-8 md:px-16 h-[60px] bg-white/95 backdrop-blur-sm border-b border-black/[0.06]">
         <span className="text-xs tracking-[0.3em] font-medium text-black uppercase">Mara Studio</span>
         <nav className="hidden md:flex items-center gap-10 text-xs tracking-[0.15em] text-[#999] uppercase">
           {["Work","About","Services","Contact"].map(l=>(
