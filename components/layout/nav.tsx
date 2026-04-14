@@ -28,6 +28,8 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  if (isShowcase) return null;
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-400 ${scrolled ? "bg-white/90 backdrop-blur-xl border-black/[0.07]" : "bg-white/70 backdrop-blur-md border-transparent"}`}>
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
