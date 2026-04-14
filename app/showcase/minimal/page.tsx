@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import ShowcaseNav from "@/components/layout/showcase-nav";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -11,39 +11,25 @@ const fadeUp = {
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
 
 const works = [
-  { title: "Coastal Light", category: "Landscape", aspect: "aspect-[3/4]", bg: "bg-[#d4d0cb]" },
-  { title: "Still Life III", category: "Editorial", aspect: "aspect-square", bg: "bg-[#c8cfc8]" },
-  { title: "Morning Study", category: "Portrait", aspect: "aspect-[4/3]", bg: "bg-[#d9d4cc]" },
-  { title: "Untitled No. 7", category: "Abstract", aspect: "aspect-[3/4]", bg: "bg-[#ccccc8]" },
-  { title: "Open Road", category: "Travel", aspect: "aspect-[16/9]", bg: "bg-[#c4c8cc]" },
-  { title: "Form Study", category: "Fine Art", aspect: "aspect-square", bg: "bg-[#d0cccc]" },
+  { title: "Coastal Light", category: "Landscape", seed: "coastal1", aspect: "aspect-[3/4]" },
+  { title: "Still Life III", category: "Editorial", seed: "still3", aspect: "aspect-square" },
+  { title: "Morning Study", category: "Portrait", seed: "portrait2", aspect: "aspect-[4/3]" },
+  { title: "Untitled No. 7", category: "Abstract", seed: "abstract7", aspect: "aspect-[3/4]" },
+  { title: "Open Road", category: "Travel", seed: "road1", aspect: "aspect-[16/9]" },
+  { title: "Form Study", category: "Fine Art", seed: "fineart2", aspect: "aspect-square" },
 ];
 
 export default function MinimalShowcase() {
   return (
     <div className="bg-white">
-      {/* Back bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-black/[0.06] flex items-center justify-between px-6 h-12">
-        <Link href="/" className="flex items-center gap-2 text-xs text-[#6e6e73] hover:text-[#1d1d1f] transition-colors">
-          <ArrowLeft size={13} /> Back to Phillip Treitel
-        </Link>
-        <span className="text-xs font-medium text-[#1d1d1f]">Style: Minimal</span>
-        <Link href="/contact" className="text-xs font-medium text-[#1d1d1f] bg-[#f5f5f7] px-3 py-1.5 rounded-full hover:bg-[#e8e8ed] transition-colors">
-          Want this style?
-        </Link>
-      </div>
-
-      {/* ── MARA STUDIO MOCK SITE ── */}
+      <ShowcaseNav />
 
       {/* Fictional Nav */}
-      <div className="pt-12 border-b border-black/[0.06]">
+      <div className="border-b border-black/[0.06]">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <span className="text-sm font-medium tracking-widest uppercase text-[#1d1d1f]">Mara Studio</span>
           <nav className="hidden md:flex gap-8 text-xs text-[#6e6e73]">
-            <a href="#" className="hover:text-[#1d1d1f] transition-colors">Work</a>
-            <a href="#" className="hover:text-[#1d1d1f] transition-colors">About</a>
-            <a href="#" className="hover:text-[#1d1d1f] transition-colors">Services</a>
-            <a href="#" className="hover:text-[#1d1d1f] transition-colors">Contact</a>
+            {["Work","About","Services","Contact"].map(l=><a key={l} href="#" className="hover:text-[#1d1d1f] transition-colors">{l}</a>)}
           </nav>
         </div>
       </div>
@@ -61,21 +47,27 @@ export default function MinimalShowcase() {
             <p className="text-base text-[#6e6e73] max-w-xs leading-relaxed">
               Mara Chen is a fine art photographer based in Victoria, BC. Available for editorial, portrait, and commercial work.
             </p>
-            <a href="#" className="flex items-center gap-2 text-sm text-[#1d1d1f] font-medium border-b border-[#1d1d1f] pb-0.5 hover:text-[#6e6e73] hover:border-[#6e6e73] transition-colors">
-              View portfolio <ArrowUpRight size={14} />
+            <a href="#" className="text-sm text-[#1d1d1f] font-medium border-b border-[#1d1d1f] pb-0.5 hover:text-[#6e6e73] hover:border-[#6e6e73] transition-colors">
+              View portfolio →
             </a>
           </motion.div>
         </motion.div>
       </section>
 
-      {/* Full-bleed placeholder image */}
+      {/* Full-bleed hero image */}
       <motion.div
-        initial={{ opacity: 0, scale: 1.02 }}
+        initial={{ opacity: 0, scale: 1.03 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full h-[60vh] bg-[#d4d0cb] flex items-center justify-center"
+        className="w-full h-[60vh] relative overflow-hidden"
       >
-        <span className="text-[#a8a49d] text-xs tracking-widest uppercase">Hero Image</span>
+        <Image
+          src="https://picsum.photos/seed/mara-hero/1600/900"
+          alt="Mara Studio hero"
+          fill
+          className="object-cover"
+          unoptimized
+        />
       </motion.div>
 
       {/* Work grid */}
@@ -88,9 +80,15 @@ export default function MinimalShowcase() {
           <motion.div variants={stagger} className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {works.map((w) => (
               <motion.div key={w.title} variants={fadeUp} className="group cursor-pointer">
-                <div className={`${w.aspect} ${w.bg} w-full rounded-sm overflow-hidden relative flex items-center justify-center`}>
-                  <span className="text-xs text-white/40 tracking-widest uppercase">{w.category}</span>
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500 flex items-end p-4 opacity-0 group-hover:opacity-100">
+                <div className={`${w.aspect} relative overflow-hidden rounded-sm`}>
+                  <Image
+                    src={`https://picsum.photos/seed/${w.seed}/600/600`}
+                    alt={w.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    unoptimized
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-500 flex items-end p-4 opacity-0 group-hover:opacity-100">
                     <div>
                       <div className="text-white text-sm font-medium">{w.title}</div>
                       <div className="text-white/70 text-xs">{w.category}</div>
@@ -107,13 +105,13 @@ export default function MinimalShowcase() {
       <section className="border-t border-black/[0.06] py-24">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div className="h-64 bg-[#e8e4de] rounded-sm flex items-center justify-center">
-              <span className="text-xs text-[#a8a49d] tracking-widest uppercase">Portrait Photo</span>
+            <div className="relative h-80 rounded-sm overflow-hidden">
+              <Image src="https://picsum.photos/seed/mara-portrait/600/800" alt="Mara Chen" fill className="object-cover" unoptimized />
             </div>
             <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
               <motion.p variants={fadeUp} className="text-xs uppercase tracking-[0.2em] text-[#6e6e73] mb-6">About</motion.p>
               <motion.h2 variants={fadeUp} className="text-3xl font-light text-[#1d1d1f] leading-snug">
-                Guided by light, drawn to quiet moments.
+                Guided by light,<br />drawn to quiet moments.
               </motion.h2>
               <motion.p variants={fadeUp} className="mt-6 text-sm text-[#6e6e73] leading-loose">
                 Mara has spent over a decade documenting the world with a careful eye and a patient hand.
@@ -132,7 +130,7 @@ export default function MinimalShowcase() {
         <div className="max-w-5xl mx-auto px-6">
           <p className="text-xs uppercase tracking-[0.2em] text-[#6e6e73] mb-10">Services</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-black/[0.06]">
-            {["Editorial", "Portrait", "Commercial"].map((s) => (
+            {["Editorial","Portrait","Commercial"].map((s) => (
               <div key={s} className="bg-[#f9f8f7] p-8">
                 <h3 className="text-lg font-light text-[#1d1d1f] mb-3">{s}</h3>
                 <p className="text-xs text-[#6e6e73] leading-loose">
@@ -153,15 +151,8 @@ export default function MinimalShowcase() {
         </a>
       </section>
 
-      {/* CTA Banner */}
-      <div className="bg-[#1d1d1f] py-8 px-6 text-center">
-        <p className="text-white/70 text-sm">
-          Like this style?{" "}
-          <Link href="/contact" className="text-white font-medium underline underline-offset-4 hover:text-white/80 transition-colors">
-            Let&apos;s build your minimal site →
-          </Link>
-        </p>
-      </div>
+      {/* Spacer for floating buttons */}
+      <div className="h-20" />
     </div>
   );
 }

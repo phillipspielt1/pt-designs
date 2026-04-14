@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import ShowcaseNav from "@/components/layout/showcase-nav";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -11,45 +12,33 @@ const fadeUp = {
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } };
 
 const events = [
-  { name: "Noir Gala", date: "May 17", capacity: "250 guests", type: "Corporate", color: "bg-[#1a1a1a]" },
-  { name: "The Obsidian", date: "Jun 7", capacity: "120 guests", type: "Private", color: "bg-[#111111]" },
-  { name: "Velvet Evening", date: "Jun 28", capacity: "80 guests", type: "Intimate", color: "bg-[#161616]" },
+  { name: "Noir Gala", date: "May 17", capacity: "250 guests", type: "Corporate" },
+  { name: "The Obsidian", date: "Jun 7", capacity: "120 guests", type: "Private" },
+  { name: "Velvet Evening", date: "Jun 28", capacity: "80 guests", type: "Intimate" },
 ];
 
 const packages = [
-  { name: "Signature", price: "From $4,800", features: ["Venue styling", "Lighting design", "6-hr coordination", "Vendor management"] },
-  { name: "Prestige", price: "From $9,500", features: ["Full signature service", "Custom décor", "12-hr coordination", "Photography liaison", "Bar & catering curation"] },
-  { name: "Bespoke", price: "On request", features: ["Everything in Prestige", "Multi-day events", "International planning", "White-glove concierge"] },
+  { name: "Signature", price: "From $4,800", features: ["Venue styling","Lighting design","6-hr coordination","Vendor management"] },
+  { name: "Prestige", price: "From $9,500", features: ["Full signature service","Custom décor","12-hr coordination","Photography liaison","Bar & catering curation"] },
+  { name: "Bespoke", price: "On request", features: ["Everything in Prestige","Multi-day events","International planning","White-glove concierge"] },
 ];
+
+const gallerySeeds = ["event-dark1","event-dark2","event-dark3","event-dark4","event-dark5","event-dark6","event-dark7","event-dark8"];
 
 export default function BoldShowcase() {
   return (
     <div className="bg-[#0a0a0a]">
-      {/* Back bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/[0.06] flex items-center justify-between px-6 h-12">
-        <Link href="/" className="flex items-center gap-2 text-xs text-white/50 hover:text-white transition-colors">
-          <ArrowLeft size={13} /> Back to Phillip Treitel
-        </Link>
-        <span className="text-xs font-medium text-white">Style: Bold & Dark</span>
-        <Link href="/contact" className="text-xs font-medium text-white bg-white/10 px-3 py-1.5 rounded-full hover:bg-white/20 transition-colors">
-          Want this style?
-        </Link>
-      </div>
-
-      {/* ── ONYX EVENTS MOCK SITE ── */}
+      <ShowcaseNav />
 
       {/* Fictional Nav */}
-      <div className="pt-12 border-b border-white/[0.06]">
+      <div className="border-b border-white/[0.06]">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 bg-[#d4af37] rounded-sm" />
             <span className="text-white text-sm font-semibold tracking-[0.1em] uppercase">Onyx Events</span>
           </div>
           <nav className="hidden md:flex gap-8 text-xs text-white/50 tracking-widest uppercase">
-            <a href="#" className="hover:text-white transition-colors">Events</a>
-            <a href="#" className="hover:text-white transition-colors">Packages</a>
-            <a href="#" className="hover:text-white transition-colors">Gallery</a>
-            <a href="#" className="hover:text-white transition-colors">Contact</a>
+            {["Events","Packages","Gallery","Contact"].map(l=><a key={l} href="#" className="hover:text-white transition-colors">{l}</a>)}
           </nav>
           <a href="#" className="text-xs font-semibold border border-[#d4af37] text-[#d4af37] px-4 py-2 hover:bg-[#d4af37] hover:text-black transition-colors tracking-wider uppercase">
             Enquire
@@ -58,16 +47,18 @@ export default function BoldShowcase() {
       </div>
 
       {/* Hero */}
-      <section className="min-h-[90vh] flex flex-col justify-center px-6 relative overflow-hidden">
+      <section className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden">
+        <div className="absolute inset-0">
+          <Image src="https://picsum.photos/seed/luxury-event/1600/900" alt="Luxury event" fill className="object-cover opacity-25" unoptimized />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent" />
+        </div>
         {/* Grid texture */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "60px 60px" }}
-        />
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          style={{ backgroundImage: "linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)", backgroundSize:"60px 60px" }} />
         {/* Gold accent line */}
         <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-transparent via-[#d4af37] to-transparent" />
 
-        <div className="max-w-6xl mx-auto w-full relative">
+        <div className="max-w-6xl mx-auto w-full px-6 relative">
           <motion.div initial="hidden" animate="show" variants={stagger}>
             <motion.p variants={fadeUp} className="text-xs tracking-[0.3em] text-[#d4af37] uppercase mb-8 font-medium">
               Luxury Event Planning · Victoria, BC
@@ -89,8 +80,6 @@ export default function BoldShowcase() {
             </motion.div>
           </motion.div>
         </div>
-
-        {/* Decorative large text */}
         <div className="absolute right-6 bottom-12 text-[120px] md:text-[200px] font-bold text-white/[0.02] select-none leading-none pointer-events-none">
           ONYX
         </div>
@@ -109,13 +98,11 @@ export default function BoldShowcase() {
             </motion.div>
             <motion.div variants={stagger} className="space-y-3">
               {events.map((e) => (
-                <motion.div
-                  key={e.name}
-                  variants={fadeUp}
-                  className={`${e.color} border border-white/[0.08] p-6 flex items-center justify-between group hover:border-[#d4af37]/40 transition-colors cursor-pointer`}
+                <motion.div key={e.name} variants={fadeUp}
+                  className="bg-[#111] border border-white/[0.08] p-6 flex items-center justify-between group hover:border-[#d4af37]/40 transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-8">
-                    <div className="text-[#d4af37] font-mono text-sm">{e.date}</div>
+                    <div className="text-[#d4af37] font-mono text-sm w-12">{e.date}</div>
                     <div>
                       <h3 className="text-white font-semibold">{e.name}</h3>
                       <p className="text-white/40 text-xs mt-0.5">{e.type} · {e.capacity}</p>
@@ -129,19 +116,22 @@ export default function BoldShowcase() {
         </div>
       </section>
 
-      {/* Gallery placeholder */}
+      {/* Gallery */}
       <section className="py-24 px-6">
         <div className="max-w-6xl mx-auto">
           <p className="text-xs tracking-[0.2em] text-[#d4af37] uppercase mb-4">Gallery</p>
           <h2 className="text-3xl font-bold text-white mb-10">The Onyx Aesthetic</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {[...Array(8)].map((_, i) => (
-              <div
-                key={i}
-                className={`${i === 0 || i === 5 ? "row-span-2" : ""} bg-[#1a1a1a] border border-white/[0.06] flex items-center justify-center`}
-                style={{ minHeight: "140px" }}
-              >
-                <span className="text-white/10 text-xs tracking-widest uppercase">Photo</span>
+            {gallerySeeds.map((seed, i) => (
+              <div key={seed} className={`relative overflow-hidden ${i === 0 ? "row-span-2" : i === 5 ? "row-span-2" : ""}`} style={{ minHeight: "140px" }}>
+                <Image
+                  src={`https://picsum.photos/seed/${seed}/400/400`}
+                  alt="Gallery"
+                  fill
+                  className="object-cover brightness-75 hover:brightness-90 transition-all duration-500"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               </div>
             ))}
           </div>
@@ -155,29 +145,18 @@ export default function BoldShowcase() {
           <h2 className="text-3xl font-bold text-white mb-12">Crafted for every scale.</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {packages.map((p, i) => (
-              <div
-                key={p.name}
-                className={`p-8 border ${i === 1 ? "border-[#d4af37]/50 bg-[#d4af37]/[0.03]" : "border-white/[0.08] bg-[#0f0f0f]"}`}
-              >
+              <div key={p.name} className={`p-8 border ${i === 1 ? "border-[#d4af37]/50 bg-[#d4af37]/[0.03]" : "border-white/[0.08] bg-[#0f0f0f]"}`}>
                 {i === 1 && <div className="text-[10px] tracking-widest uppercase text-[#d4af37] font-bold mb-4">Most Popular</div>}
                 <h3 className={`text-xl font-bold mb-1 ${i === 1 ? "text-[#d4af37]" : "text-white"}`}>{p.name}</h3>
                 <p className="text-white/40 text-sm mb-6">{p.price}</p>
                 <ul className="space-y-2.5 mb-8">
-                  {p.features.map((f) => (
+                  {p.features.map(f=>(
                     <li key={f} className="flex items-center gap-2 text-sm text-white/60">
-                      <div className="w-1 h-1 bg-[#d4af37] rounded-full flex-shrink-0" />
-                      {f}
+                      <div className="w-1 h-1 bg-[#d4af37] rounded-full flex-shrink-0" />{f}
                     </li>
                   ))}
                 </ul>
-                <a
-                  href="#"
-                  className={`block text-center text-xs font-semibold tracking-wider uppercase py-3 transition-colors ${
-                    i === 1
-                      ? "bg-[#d4af37] text-black hover:bg-[#c9a020]"
-                      : "border border-white/20 text-white hover:border-white/40"
-                  }`}
-                >
+                <a href="#" className={`block text-center text-xs font-semibold tracking-wider uppercase py-3 transition-colors ${i===1?"bg-[#d4af37] text-black hover:bg-[#c9a020]":"border border-white/20 text-white hover:border-white/40"}`}>
                   Enquire
                 </a>
               </div>
@@ -186,26 +165,7 @@ export default function BoldShowcase() {
         </div>
       </section>
 
-      {/* Footer strip */}
-      <div className="border-t border-white/[0.06] py-12 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div>
-            <div className="text-white text-sm font-semibold tracking-widest uppercase">Onyx Events</div>
-            <div className="text-white/30 text-xs mt-1">Victoria, BC · By appointment only</div>
-          </div>
-          <div className="text-white/20 text-xs">© 2026 Onyx Events. All rights reserved.</div>
-        </div>
-      </div>
-
-      {/* CTA Banner */}
-      <div className="bg-[#1d1d1f] border-t border-white/10 py-8 px-6 text-center">
-        <p className="text-white/70 text-sm">
-          Like this style?{" "}
-          <Link href="/contact" className="text-white font-medium underline underline-offset-4 hover:text-white/80 transition-colors">
-            Let&apos;s build your bold site →
-          </Link>
-        </p>
-      </div>
+      <div className="h-20" />
     </div>
   );
 }

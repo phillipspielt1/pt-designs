@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowLeft, ShoppingCart, Star, Truck, RefreshCw, Heart } from "lucide-react";
+import { ShoppingCart, Star, Truck, RefreshCw, Heart } from "lucide-react";
+import ShowcaseNav from "@/components/layout/showcase-nav";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -11,12 +12,12 @@ const fadeUp = {
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.09 } } };
 
 const products = [
-  { name: "Handwoven Throw", price: "$89", tag: "Bestseller", bg: "bg-[#e8ddd0]", emoji: "🧵" },
-  { name: "Cedar Soap Bar", price: "$18", tag: "New", bg: "bg-[#dce8d8]", emoji: "🌿" },
-  { name: "Beeswax Candle Set", price: "$42", tag: null, bg: "bg-[#f0e8d0]", emoji: "🕯️" },
-  { name: "Linen Tote Bag", price: "$35", tag: "Sale", bg: "bg-[#e0d8e8]", emoji: "👜" },
-  { name: "Pine Incense Kit", price: "$24", tag: null, bg: "bg-[#d8e8e0]", emoji: "🌲" },
-  { name: "Hand Cream Duo", price: "$28", tag: "New", bg: "bg-[#ead8cc]", emoji: "🫙" },
+  { name: "Handwoven Throw", price: "$89", tag: "Bestseller", seed: "weave1", emoji: "🧵" },
+  { name: "Cedar Soap Bar", price: "$18", tag: "New", seed: "soap1", emoji: "🌿" },
+  { name: "Beeswax Candle Set", price: "$42", tag: null, seed: "candle1", emoji: "🕯️" },
+  { name: "Linen Tote Bag", price: "$35", tag: "Sale", seed: "tote1", emoji: "👜" },
+  { name: "Pine Incense Kit", price: "$24", tag: null, seed: "incense1", emoji: "🌲" },
+  { name: "Hand Cream Duo", price: "$28", tag: "New", seed: "cream1", emoji: "🫙" },
 ];
 
 const categories = [
@@ -30,44 +31,28 @@ const categories = [
 export default function EcommerceShowcase() {
   return (
     <div className="bg-[#faf6f1]">
-      {/* Back bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-[#faf6f1]/90 backdrop-blur-xl border-b border-black/[0.06] flex items-center justify-between px-6 h-12">
-        <Link href="/" className="flex items-center gap-2 text-xs text-[#6e6e73] hover:text-[#1d1d1f] transition-colors">
-          <ArrowLeft size={13} /> Back to Phillip Treitel
-        </Link>
-        <span className="text-xs font-medium text-[#1d1d1f]">Style: E-Commerce</span>
-        <Link href="/contact" className="text-xs font-medium text-[#1d1d1f] bg-[#f0ebe3] px-3 py-1.5 rounded-full hover:bg-[#e8e0d4] transition-colors">
-          Want this style?
-        </Link>
+      <ShowcaseNav />
+
+      {/* Announcement bar */}
+      <div className="bg-[#92400e] text-white text-xs text-center py-2.5 font-medium">
+        Free shipping on orders over $75 · Handmade in BC 🌲
       </div>
 
-      {/* ── CEDAR & CO. MOCK SITE ── */}
-
       {/* Fictional Nav */}
-      <div className="pt-12 bg-[#faf6f1] border-b border-[#e8e0d4]">
+      <div className="bg-[#faf6f1] border-b border-[#e8e0d4]">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <span className="text-base font-semibold text-[#3d2c1e] tracking-tight">Cedar & Co.</span>
           <nav className="hidden md:flex gap-7 text-xs text-[#8a7060] font-medium">
-            <a href="#" className="hover:text-[#3d2c1e] transition-colors">Shop</a>
-            <a href="#" className="hover:text-[#3d2c1e] transition-colors">Collections</a>
-            <a href="#" className="hover:text-[#3d2c1e] transition-colors">Our Story</a>
-            <a href="#" className="hover:text-[#3d2c1e] transition-colors">Journal</a>
+            {["Shop","Collections","Our Story","Journal"].map(l=><a key={l} href="#" className="hover:text-[#3d2c1e] transition-colors">{l}</a>)}
           </nav>
           <div className="flex items-center gap-4">
-            <button className="text-[#8a7060] hover:text-[#3d2c1e] transition-colors">
-              <Heart size={18} />
-            </button>
+            <button className="text-[#8a7060] hover:text-[#3d2c1e] transition-colors"><Heart size={18} /></button>
             <button className="relative text-[#3d2c1e]">
               <ShoppingCart size={18} />
               <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#92400e] text-white text-[9px] rounded-full flex items-center justify-center font-bold">2</span>
             </button>
           </div>
         </div>
-      </div>
-
-      {/* Announcement bar */}
-      <div className="bg-[#92400e] text-white text-xs text-center py-2.5 font-medium">
-        Free shipping on orders over $75 · Handmade in BC 🌲
       </div>
 
       {/* Hero */}
@@ -85,21 +70,17 @@ export default function EcommerceShowcase() {
                 Cedar & Co. makes everyday goods that feel good and do good. Every item is handmade in small batches in Tofino, BC.
               </motion.p>
               <motion.div variants={fadeUp} className="mt-8 flex gap-3">
-                <a href="#" className="bg-[#3d2c1e] text-white text-sm font-medium px-6 py-3 rounded-full hover:bg-[#5c4030] transition-colors">
-                  Shop Now
-                </a>
-                <a href="#" className="border border-[#c4a882] text-[#3d2c1e] text-sm font-medium px-6 py-3 rounded-full hover:bg-[#f0ebe3] transition-colors">
-                  Our Story
-                </a>
+                <a href="#" className="bg-[#3d2c1e] text-white text-sm font-medium px-6 py-3 rounded-full hover:bg-[#5c4030] transition-colors">Shop Now</a>
+                <a href="#" className="border border-[#c4a882] text-[#3d2c1e] text-sm font-medium px-6 py-3 rounded-full hover:bg-[#f0ebe3] transition-colors">Our Story</a>
               </motion.div>
             </motion.div>
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: 24 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="rounded-3xl bg-[#e8ddd0] h-80 md:h-96 flex items-center justify-center text-6xl"
+              className="relative h-80 md:h-96 rounded-3xl overflow-hidden"
             >
-              🌲
+              <Image src="https://picsum.photos/seed/cedar-hero/800/700" alt="Cedar & Co products" fill className="object-cover" unoptimized />
             </motion.div>
           </div>
         </div>
@@ -108,12 +89,9 @@ export default function EcommerceShowcase() {
       {/* Categories */}
       <section className="px-6 py-8 bg-[#f5ede3] border-y border-[#e8ddd0]">
         <div className="max-w-6xl mx-auto">
-          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="flex gap-3 overflow-x-auto pb-2">
             {categories.map((c) => (
-              <button
-                key={c.label}
-                className="flex-shrink-0 flex items-center gap-2 bg-white border border-[#e8ddd0] text-[#3d2c1e] text-xs font-medium px-4 py-2.5 rounded-full hover:bg-[#3d2c1e] hover:text-white hover:border-[#3d2c1e] transition-colors"
-              >
+              <button key={c.label} className="flex-shrink-0 flex items-center gap-2 bg-white border border-[#e8ddd0] text-[#3d2c1e] text-xs font-medium px-4 py-2.5 rounded-full hover:bg-[#3d2c1e] hover:text-white hover:border-[#3d2c1e] transition-colors">
                 <span>{c.emoji}</span> {c.label}
               </button>
             ))}
@@ -132,31 +110,35 @@ export default function EcommerceShowcase() {
             <motion.div variants={stagger} className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {products.map((p) => (
                 <motion.div key={p.name} variants={fadeUp} className="group cursor-pointer">
-                  <div className={`${p.bg} rounded-2xl h-48 flex items-center justify-center text-5xl mb-3 relative overflow-hidden`}>
+                  <div className="relative h-52 rounded-2xl overflow-hidden mb-3">
+                    <Image
+                      src={`https://picsum.photos/seed/${p.seed}/400/400`}
+                      alt={p.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      unoptimized
+                    />
                     {p.tag && (
-                      <span className={`absolute top-3 left-3 text-[10px] font-bold px-2 py-1 rounded-full ${
-                        p.tag === "Sale" ? "bg-red-500 text-white" : p.tag === "New" ? "bg-[#3d2c1e] text-white" : "bg-[#92400e] text-white"
-                      }`}>
+                      <span className={`absolute top-3 left-3 text-[10px] font-bold px-2 py-1 rounded-full ${p.tag==="Sale"?"bg-red-500 text-white":p.tag==="New"?"bg-[#3d2c1e] text-white":"bg-[#92400e] text-white"}`}>
                         {p.tag}
                       </span>
                     )}
                     <button className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-sm">
                       <Heart size={13} className="text-[#8a7060]" />
                     </button>
-                    {p.emoji}
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/40 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button className="w-full bg-white text-[#3d2c1e] text-xs font-medium py-2 rounded-lg">Add to Cart</button>
+                    </div>
                   </div>
                   <div className="flex items-start justify-between">
                     <div>
                       <h3 className="text-sm font-semibold text-[#3d2c1e]">{p.name}</h3>
-                      <div className="flex items-center gap-1 mt-0.5">
-                        {[...Array(5)].map((_, i) => <Star key={i} size={10} className="fill-[#c4a882] text-[#c4a882]" />)}
+                      <div className="flex items-center gap-0.5 mt-0.5">
+                        {[...Array(5)].map((_,i)=><Star key={i} size={10} className="fill-[#c4a882] text-[#c4a882]"/>)}
                       </div>
                     </div>
                     <span className="text-sm font-semibold text-[#3d2c1e]">{p.price}</span>
                   </div>
-                  <button className="mt-3 w-full bg-[#3d2c1e] text-white text-xs font-medium py-2.5 rounded-xl hover:bg-[#5c4030] transition-colors opacity-0 group-hover:opacity-100">
-                    Add to Cart
-                  </button>
                 </motion.div>
               ))}
             </motion.div>
@@ -185,17 +167,17 @@ export default function EcommerceShowcase() {
         </div>
       </section>
 
-      {/* Brand story strip */}
+      {/* Brand story */}
       <section className="py-16 px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="bg-[#e8ddd0] rounded-3xl h-64 flex items-center justify-center text-5xl">
-            🌿
+          <div className="relative h-72 rounded-3xl overflow-hidden">
+            <Image src="https://picsum.photos/seed/tofino-craft/600/400" alt="Making products" fill className="object-cover" unoptimized />
           </div>
           <div>
             <p className="text-xs uppercase tracking-widest text-[#8a7060] font-medium mb-4">Our Story</p>
             <h2 className="text-3xl font-semibold text-[#3d2c1e]">Made with intention, loved for a lifetime.</h2>
             <p className="mt-4 text-[#8a7060] leading-relaxed text-sm">
-              Cedar & Co. started in a Tofino garage in 2021, with a simple belief: the things you bring into your home should be beautiful, honest, and built to last. Every piece is still handmade by our small team.
+              Cedar & Co. started in a Tofino garage in 2021, with a simple belief: the things you bring into your home should be beautiful, honest, and built to last.
             </p>
             <a href="#" className="inline-block mt-6 text-sm font-medium text-[#3d2c1e] border-b border-[#3d2c1e] pb-0.5 hover:text-[#8a7060] hover:border-[#8a7060] transition-colors">
               Meet the makers →
@@ -204,15 +186,7 @@ export default function EcommerceShowcase() {
         </div>
       </section>
 
-      {/* CTA Banner */}
-      <div className="bg-[#1d1d1f] py-8 px-6 text-center">
-        <p className="text-white/70 text-sm">
-          Like this style?{" "}
-          <Link href="/contact" className="text-white font-medium underline underline-offset-4 hover:text-white/80 transition-colors">
-            Let&apos;s build your online store →
-          </Link>
-        </p>
-      </div>
+      <div className="h-20" />
     </div>
   );
 }
