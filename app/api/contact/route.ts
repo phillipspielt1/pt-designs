@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
   }
 
-  if (!process.env.RESEND_API_KEY) {
+  if (!process.env.RESEND_API_KEY || !process.env.CONTACT_EMAIL) {
     return NextResponse.json({ error: "Email service not configured." }, { status: 500 });
   }
 
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
 
   const { error } = await resend.emails.send({
     from: "PT Designs Contact <onboarding@resend.dev>",
-    to: "Phillip.Treitel@gmail.com",
+    to: process.env.CONTACT_EMAIL,
     replyTo: email,
     subject: `New enquiry from ${name}${business ? ` — ${business}` : ""}`,
     html: `
