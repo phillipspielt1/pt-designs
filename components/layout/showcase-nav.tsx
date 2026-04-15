@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, Home } from "lucide-react";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 const showcases = [
   { href: "/showcase/minimal",      label: "Minimal" },
@@ -15,6 +16,11 @@ const showcases = [
 
 export default function ShowcaseNav() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const pathname = usePathname();
+
+  // e.g. "/showcase/playful" → "playful"
+  const styleSlug = pathname.startsWith("/showcase/") ? pathname.split("/showcase/")[1] : "";
+  const contactHref = styleSlug ? `/contact?style=${styleSlug}` : "/contact";
 
   return (
     <>
@@ -63,7 +69,7 @@ export default function ShowcaseNav() {
           </div>
 
           {/* CTA */}
-          <Link href="/contact"
+          <Link href={contactHref}
             className="hidden md:inline-flex items-center gap-1.5 text-[13px] font-medium bg-[#1a1a1a] text-white px-5 py-2.5 rounded-full hover:bg-black transition-colors">
             Want this style? <ArrowRight size={13}/>
           </Link>
@@ -85,7 +91,7 @@ export default function ShowcaseNav() {
 
       {/* Floating CTA pill — bottom right */}
       <Link
-        href="/contact"
+        href={contactHref}
         className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#1d1d1f] text-white text-sm font-semibold px-5 py-3 rounded-full shadow-xl hover:bg-[#3d3d3f] transition-all hover:shadow-2xl hover:-translate-y-0.5 group"
       >
         Want this style?
