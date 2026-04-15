@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { name, email, business, type, style, message, captchaToken } = await req.json();
+  const { name, email, business, type, message, captchaToken } = await req.json();
 
   if (!name || !email || !message) {
     return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
@@ -29,7 +29,6 @@ export async function POST(req: Request) {
       email,
       business: business || "—",
       "project type": type || "—",
-      "style preference": style || "—",
       message,
       "h-captcha-response": captchaToken,
     }),

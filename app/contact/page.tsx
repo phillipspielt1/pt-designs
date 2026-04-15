@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useRef, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Mail, MapPin, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
@@ -15,26 +14,13 @@ const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } };
 // Web3Forms' public hCaptcha site key — works with all Web3Forms accounts
 const HCAPTCHA_SITE_KEY = "50b2fe65-b00b-4b9e-ad62-3ba471098be2";
 
-const STYLE_LABELS: Record<string, string> = {
-  minimal:      "Minimal",
-  playful:      "Playful",
-  professional: "Professional",
-  bold:         "Bold & Dark",
-  ecommerce:    "E-Commerce",
-  trades:       "Trades & Services",
-};
-
 type Status = "idle" | "sending" | "success" | "error";
 
-function ContactPageInner() {
+export default function ContactPage() {
   const [status, setStatus]             = useState<Status>("idle");
   const [errorMsg, setErrorMsg]         = useState("");
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const captchaRef = useRef<HCaptcha>(null);
-
-  const searchParams     = useSearchParams();
-  const styleParam       = searchParams.get("style") ?? "";
-  const preselectedStyle = STYLE_LABELS[styleParam] ?? "";
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -54,7 +40,6 @@ function ContactPageInner() {
       email:        (form.elements.namedItem("email")    as HTMLInputElement).value,
       business:     (form.elements.namedItem("business") as HTMLInputElement).value,
       type:         (form.elements.namedItem("type")     as HTMLSelectElement).value,
-      style:        (form.elements.namedItem("style")    as HTMLSelectElement).value,
       message:      (form.elements.namedItem("message")  as HTMLTextAreaElement).value,
       captchaToken,
     };
@@ -72,7 +57,6 @@ function ContactPageInner() {
         setCaptchaToken(null);
         captchaRef.current?.resetCaptcha();
       } else {
-        // Safely parse JSON — Vercel may return HTML on server errors
         let errorMessage = "Something went wrong. Please try again.";
         try {
           const json = await res.json();
@@ -169,30 +153,16 @@ function ContactPageInner() {
                     <label className="block text-xs font-medium text-[#1d1d1f] mb-2">Business / Project Name</label>
                     <input type="text" name="business" placeholder="e.g. My Café, My Portfolio..." className={inputClass} />
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-medium text-[#1d1d1f] mb-2">What type of site?</label>
-                      <select name="type" className={inputClass}>
-                        <option value="">Select one...</option>
-                        <option>Landing Page</option>
-                        <option>Portfolio</option>
-                        <option>Small Business Site</option>
-                        <option>Online Store</option>
-                        <option>Not sure yet</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium text-[#1d1d1f] mb-2">Which style caught your eye?</label>
-                      <select name="style" defaultValue={preselectedStyle} className={inputClass}>
-                        <option value="">None / Not sure</option>
-                        <option>Minimal</option>
-                        <option>Playful</option>
-                        <option>Professional</option>
-                        <option>Bold &amp; Dark</option>
-                        <option>E-Commerce</option>
-                        <option>Trades &amp; Services</option>
-                      </select>
-                    </div>
+                  <div>
+                    <label className="block text-xs font-medium text-[#1d1d1f] mb-2">What type of site are you interested in?</label>
+                    <select name="type" className={inputClass}>
+                      <option value="">Select one...</option>
+                      <option>Landing Page</option>
+                      <option>Portfolio</option>
+                      <option>Small Business Site</option>
+                      <option>Online Store</option>
+                      <option>Not sure yet</option>
+                    </select>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-[#1d1d1f] mb-2">Tell me about your project *</label>
@@ -240,13 +210,5 @@ function ContactPageInner() {
         </div>
       </section>
     </div>
-  );
-}
-
-export default function ContactPage() {
-  return (
-    <Suspense>
-      <ContactPageInner />
-    </Suspense>
   );
 }
