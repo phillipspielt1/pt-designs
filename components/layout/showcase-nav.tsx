@@ -32,7 +32,7 @@ export default function ShowcaseNav() {
           {/* Wordmark */}
           <Link href="/" className="flex flex-col leading-none group">
             <span className="text-[13px] font-semibold tracking-tight text-[#1a1a1a] group-hover:text-black transition-colors">
-              Phillip Treitel
+              Van Duist & Treitel
             </span>
             <span className="text-[9px] tracking-[0.22em] text-[#999] uppercase font-medium mt-[2px]">
               Web Design

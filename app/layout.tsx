@@ -30,9 +30,9 @@ const lora = Lora({
 });
 
 export const metadata: Metadata = {
-  title: "Phillip Treitel — Web Design",
+  title: "Van Duist & Treitel — Web Design",
   description:
-    "Custom websites for small businesses, portfolios, and online stores. Based on Vancouver Island, BC.",
+    "Custom websites for small businesses, portfolios, and online stores. Based in Nanaimo, BC.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

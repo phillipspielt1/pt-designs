@@ -6,8 +6,8 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6 py-12">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div>
-            <div className="text-sm font-semibold text-[#1d1d1f]">Phillip Treitel</div>
-            <div className="text-xs text-[#6e6e73] mt-1">Web Design · Vancouver Island, BC</div>
+            <div className="text-sm font-semibold text-[#1d1d1f]">Van Duist & Treitel</div>
+            <div className="text-xs text-[#6e6e73] mt-1">Web Design · Nanaimo, BC</div>
           </div>
           <div className="flex flex-wrap gap-6 text-xs text-[#6e6e73]">
             <Link href="/" className="hover:text-[#1d1d1f] transition-colors">Home</Link>
@@ -20,7 +20,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-black/[0.06] text-xs text-[#6e6e73]">
-          © {new Date().getFullYear()} Phillip Treitel. All rights reserved.
+          © {new Date().getFullYear()} Van Duist & Treitel. All rights reserved.
         </div>
       </div>
     </footer>

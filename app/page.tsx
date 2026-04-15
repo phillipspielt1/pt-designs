@@ -500,16 +500,16 @@ export default function HomePage() {
       <section className="relative z-10 bg-white py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
-            <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">About Me</motion.p>
+            <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">About Us</motion.p>
             <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight leading-tight">Young, driven,<br/>built for this.</motion.h2>
             <motion.p variants={fadeUp} className="mt-6 text-base text-[#666] leading-relaxed">
-              I&apos;m Phillip Treitel — a student at VIU studying International Business and Marketing, and a varsity volleyball player on Vancouver Island.
+              We&apos;re Van Duist &amp; Treitel — two VIU students based in Nanaimo, BC, combining a genuine passion for design with a business-minded approach to every project.
             </motion.p>
             <motion.p variants={fadeUp} className="mt-4 text-base text-[#666] leading-relaxed">
-              Being a student means I have low overhead and big motivation. I combine a genuine passion for design with a business-minded approach — every site I build is crafted to not just look good, but to actually work for your goals.
+              Being students means low overhead and big motivation. Every site we build is crafted to not just look good, but to actually work for your goals.
             </motion.p>
             <motion.div variants={fadeUp} className="mt-6 flex flex-col gap-2">
-              {["No agency markup — you pay for work, not overhead","Fast turnaround — most projects done in 1–3 weeks","Direct communication — you work with me, not a middleman"].map(pt=>(
+              {["No agency markup — you pay for work, not overhead","Fast turnaround — most projects done in 1–3 weeks","Direct communication — you work with us, not a middleman"].map(pt=>(
                 <div key={pt} className="flex items-start gap-2.5">
                   <Check size={14} className="text-[#1a1a1a] mt-0.5 flex-shrink-0"/>
                   <span className="text-sm text-[#555]">{pt}</span>
@@ -528,13 +528,13 @@ export default function HomePage() {
             <div className="absolute top-1/3 right-1/3 w-48 h-48 bg-white/[0.04] rounded-full blur-2xl"/>
             <div className="text-center relative z-10">
               <div className="w-20 h-20 rounded-full bg-white/10 border border-white/15 mx-auto mb-4 flex items-center justify-center">
-                <span className="text-white text-xl font-semibold">PT</span>
+                <span className="text-white text-xl font-semibold">VDT</span>
               </div>
-              <div className="text-sm text-white/80 font-medium">Phillip Treitel</div>
-              <div className="text-xs text-white/40 mt-1">VIU · Vancouver Island, BC</div>
+              <div className="text-sm text-white/80 font-medium">Van Duist & Treitel</div>
+              <div className="text-xs text-white/40 mt-1">VIU · Nanaimo, BC</div>
               <div className="flex flex-col items-center gap-2 mt-4">
                 <span className="text-[10px] text-white/30 bg-white/5 px-3 py-1 rounded-full">International Business + Marketing</span>
-                <span className="text-[10px] text-white/30 bg-white/5 px-3 py-1 rounded-full">Varsity Volleyball · Web Design</span>
+                <span className="text-[10px] text-white/30 bg-white/5 px-3 py-1 rounded-full">Two-person team · Web Design</span>
               </div>
             </div>
           </motion.div>

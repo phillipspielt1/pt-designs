@@ -19,12 +19,12 @@ export async function POST(req: Request) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "User-Agent": "PTDesigns-ContactForm/1.0",
+      "User-Agent": "VDTSites-ContactForm/1.0",
     },
     body: JSON.stringify({
       access_key: process.env.WEB3FORMS_KEY?.trim(),
       subject: `New enquiry from ${name}${business ? ` — ${business}` : ""}`,
-      from_name: "PT Designs Contact Form",
+      from_name: "VDT Sites Contact Form",
       name,
       email,
       business: business || "—",
