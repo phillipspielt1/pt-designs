@@ -26,7 +26,7 @@ export default function ShowcaseNav() {
   return (
     <>
       {/* ── Site nav — identical styling to main Nav ── */}
-      <nav className="fixed top-0 left-0 right-0 z-[60] border-b bg-white/90 backdrop-blur-xl border-black/[0.07] font-sans">
+      <nav className="fixed top-0 left-0 right-0 z-[60] border-b bg-white/90 backdrop-blur-xl border-black/[0.07]" style={{fontFamily:"ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"}}>
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
           {/* Wordmark */}
@@ -93,7 +93,8 @@ export default function ShowcaseNav() {
       {/* Floating home pill — bottom left */}
       <Link
         href="/"
-        className="fixed bottom-6 left-6 z-50 flex items-center gap-2 bg-white text-[#1d1d1f] text-sm font-semibold px-4 py-3 rounded-full shadow-xl border border-black/10 hover:bg-[#f5f5f7] transition-all hover:shadow-2xl hover:-translate-y-0.5 group font-sans"
+        className="fixed bottom-6 left-6 z-50 flex items-center gap-2 bg-white text-[#1d1d1f] text-sm font-semibold px-4 py-3 rounded-full shadow-xl border border-black/10 hover:bg-[#f5f5f7] transition-all hover:shadow-2xl hover:-translate-y-0.5 group"
+        style={{fontFamily:"ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"}}
       >
         <Home size={15} className="group-hover:-translate-x-0.5 transition-transform" />
         Phillip Treitel
@@ -102,7 +103,8 @@ export default function ShowcaseNav() {
       {/* Floating CTA pill — bottom right */}
       <Link
         href={contactHref}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#1d1d1f] text-white text-sm font-semibold px-5 py-3 rounded-full shadow-xl hover:bg-[#3d3d3f] transition-all hover:shadow-2xl hover:-translate-y-0.5 group font-sans"
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-[#1d1d1f] text-white text-sm font-semibold px-5 py-3 rounded-full shadow-xl hover:bg-[#3d3d3f] transition-all hover:shadow-2xl hover:-translate-y-0.5 group"
+        style={{fontFamily:"ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"}}
       >
         Want this style?
         <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
