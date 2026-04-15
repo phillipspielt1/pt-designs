@@ -32,7 +32,7 @@ export default function ShowcaseNav() {
           {/* Wordmark */}
           <Link href="/" className="flex flex-col leading-none group">
             <span className="text-[13px] font-semibold tracking-tight text-[#1a1a1a] group-hover:text-black transition-colors">
-              Go Home
+              Van Duist & Treitel
             </span>
             <span className="text-[9px] tracking-[0.22em] text-[#999] uppercase font-medium mt-[2px]">
               Web Design
@@ -98,7 +98,7 @@ export default function ShowcaseNav() {
         style={{fontFamily:"ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"}}
       >
         <Home size={15} className="group-hover:-translate-x-0.5 transition-transform" />
-        Phillip Treitel
+        Go Home
       </Link>
 
       {/* Floating CTA pill — bottom right */}
