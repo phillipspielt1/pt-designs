@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Mail, MapPin, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
@@ -11,16 +12,27 @@ const fadeUp = {
 };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } };
 
-// Web3Forms' public hCaptcha site key — works with all Web3Forms accounts
 const HCAPTCHA_SITE_KEY = "50b2fe65-b00b-4b9e-ad62-3ba471098be2";
+
+const STYLE_TO_TYPE: Record<string, string> = {
+  minimal:      "Minimal",
+  playful:      "Playful",
+  professional: "Professional",
+  bold:         "Bold & Dark",
+  ecommerce:    "E-Commerce / Online Store",
+  trades:       "Trades & Services",
+};
 
 type Status = "idle" | "sending" | "success" | "error";
 
-export default function ContactPage() {
+function ContactPageInner() {
   const [status, setStatus]             = useState<Status>("idle");
   const [errorMsg, setErrorMsg]         = useState("");
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const captchaRef = useRef<HCaptcha>(null);
+
+  const searchParams   = useSearchParams();
+  const preselectedType = STYLE_TO_TYPE[searchParams.get("style") ?? ""] ?? "";
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -155,12 +167,14 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-[#1d1d1f] mb-2">What type of site are you interested in?</label>
-                    <select name="type" className={inputClass}>
+                    <select name="type" defaultValue={preselectedType} className={inputClass}>
                       <option value="">Select one...</option>
-                      <option>Landing Page</option>
-                      <option>Portfolio</option>
-                      <option>Small Business Site</option>
-                      <option>Online Store</option>
+                      <option>Minimal</option>
+                      <option>Playful</option>
+                      <option>Professional</option>
+                      <option>Bold &amp; Dark</option>
+                      <option>E-Commerce / Online Store</option>
+                      <option>Trades &amp; Services</option>
                       <option>Not sure yet</option>
                     </select>
                   </div>
@@ -210,5 +224,13 @@ export default function ContactPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense>
+      <ContactPageInner />
+    </Suspense>
   );
 }
