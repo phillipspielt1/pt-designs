@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Globe, ShoppingBag, User, Zap, Layers, Check, GraduationCap } from "lucide-react";
+import { ArrowRight, Globe, ShoppingBag, User, Zap, Layers, Check, GraduationCap, MapPin, Users, MessageCircle } from "lucide-react";
 
 /* ─── Preview Mockups — real photography + styled layouts ─── */
 
@@ -457,6 +457,41 @@ export default function HomePage() {
                 <p className="text-sm text-[#888] leading-relaxed">{svc.desc}</p>
               </motion.div>
             ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── LOCAL & HONEST ── */}
+      <section className="relative z-10 bg-white py-20 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]">
+        <div className="max-w-7xl mx-auto">
+          <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}
+            className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 items-center">
+            <div>
+              <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">Who We Are</motion.p>
+              <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight leading-tight">
+                Two people.<br />No nonsense.
+              </motion.h2>
+              <motion.p variants={fadeUp} className="mt-5 text-base text-[#666] max-w-xl leading-relaxed">
+                We&apos;re a two-person operation based right here in Nanaimo, BC — not an agency, not a faceless online shop. Just two people who genuinely care about the work and the businesses behind it. We keep things straight with you, communicate clearly, and we&apos;re always happy to have a conversation before you commit to anything. No pressure, no pitch — just a chat.
+              </motion.p>
+            </div>
+            <motion.div variants={fadeUp} className="flex flex-col gap-5 lg:min-w-[240px]">
+              {[
+                { icon: MapPin,         label: "Nanaimo, BC",       sub: "Locally based, locally invested" },
+                { icon: Users,          label: "Two-person team",   sub: "You work with us, not past us" },
+                { icon: MessageCircle,  label: "Always happy to chat", sub: "Reach out any time — no obligation" },
+              ].map(item => (
+                <div key={item.label} className="flex items-start gap-3.5">
+                  <div className="w-9 h-9 bg-[#f5f4f2] rounded-xl flex items-center justify-center flex-shrink-0 border border-black/[0.06]">
+                    <item.icon size={15} className="text-[#1a1a1a]" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-[#1a1a1a]">{item.label}</div>
+                    <div className="text-xs text-[#999] mt-0.5">{item.sub}</div>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
           </motion.div>
         </div>
       </section>
