@@ -24,9 +24,9 @@ const drinks = [
 ];
 
 const food = [
-  { name:"Avocado Toast", desc:"Sourdough, smashed avo, chili flakes, microgreens", price:"$13.00", img:"https://images.unsplash.com/photo-1541519227354-08fa5d50c820?w=500&q=80" },
+  { name:"Avocado Toast", desc:"Sourdough, smashed avo, chili flakes, microgreens", price:"$13.00", img:"https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=500&q=80" },
   { name:"Grain Bowl", desc:"Farro, roasted veg, tahini, pickled onion", price:"$15.00", img:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&q=80" },
-  { name:"Banana Loaf", desc:"House-baked, oat milk, brown butter glaze", price:"$5.50", img:"https://images.unsplash.com/photo-1587302912306-cf1ed9c33146?w=500&q=80" },
+  { name:"Banana Loaf", desc:"House-baked, oat milk, brown butter glaze", price:"$5.50", img:"https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=500&q=80" },
 ];
 
 export default function PlayfulShowcase() {
@@ -224,7 +224,7 @@ export default function PlayfulShowcase() {
                   <div className="absolute top-4 left-4 text-3xl">{v.emoji}</div>
                 </div>
                 <div className="p-6">
-                  <h3 className="font-extrabold text-[#1a3a2a] mb-2">{v.title}</h3>
+                  <h3 className="text-lg font-extrabold text-[#1a3a2a] mb-3">{v.title}</h3>
                   <p className="text-sm text-[#888] leading-relaxed">{v.desc}</p>
                 </div>
               </div>

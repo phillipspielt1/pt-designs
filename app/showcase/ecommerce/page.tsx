@@ -19,9 +19,9 @@ const stagger = { hidden:{}, show:{ transition:{ staggerChildren:0.1 } } };
 const products = [
   { name:"Cedarmoss Throw",    price:"$89",  originalPrice:null,  img:"https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=500&q=80", badge:"Bestseller", desc:"Hand-loomed from recycled cotton, 140×180cm" },
   { name:"Old-Growth Soap",    price:"$18",  originalPrice:null,  img:"https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?w=500&q=80", badge:"New",        desc:"Cedar, Douglas fir & sea salt. 120g bar" },
-  { name:"Beeswax Taper Set",  price:"$42",  originalPrice:"$52", img:"https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500&q=80", badge:"Sale",       desc:"6 tapers, hand-dipped in pure BC beeswax" },
-  { name:"Linen Market Tote",  price:"$35",  originalPrice:null,  img:"https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&q=80", badge:null,         desc:"Undyed Belgian linen, reinforced handles" },
-  { name:"Forest Incense Kit", price:"$28",  originalPrice:null,  img:"https://images.unsplash.com/photo-1545231027-637d2f6210f8?w=500&q=80", badge:"New",         desc:"30 sticks of pine, cedar & sage. Includes holder" },
+  { name:"Beeswax Taper Set",  price:"$42",  originalPrice:"$52", img:"https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=500&q=80", badge:"Sale",       desc:"6 tapers, hand-dipped in pure BC beeswax" },
+  { name:"Linen Market Tote",  price:"$35",  originalPrice:null,  img:"https://images.unsplash.com/photo-1516762689617-e1cffcef479d?w=500&q=80", badge:null,         desc:"Undyed Belgian linen, reinforced handles" },
+  { name:"Forest Incense Kit", price:"$28",  originalPrice:null,  img:"https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=500&q=80", badge:"New",         desc:"30 sticks of pine, cedar & sage. Includes holder" },
   { name:"Hand & Body Cream",  price:"$32",  originalPrice:null,  img:"https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=500&q=80", badge:null,        desc:"Shea, beeswax & wild rose hip. 200ml" },
 ];
 

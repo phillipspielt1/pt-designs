@@ -3,7 +3,7 @@
 import { useState, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { Mail, MapPin, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { MapPin, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 const fadeUp = {
@@ -80,7 +80,7 @@ function ContactPageInner() {
         setCaptchaToken(null);
       }
     } catch {
-      setErrorMsg("Could not reach the server. Please email me directly at Phillip.Treitel@gmail.com");
+      setErrorMsg("Could not reach the server. Please try again later.");
       setStatus("error");
       captchaRef.current?.resetCaptcha();
       setCaptchaToken(null);
@@ -109,15 +109,6 @@ function ContactPageInner() {
                 I&apos;ll get back to you within 24 hours.
               </motion.p>
               <motion.div variants={fadeUp} className="mt-10 space-y-4">
-                <a
-                  href="mailto:Phillip.Treitel@gmail.com"
-                  className="flex items-center gap-3 text-[#1d1d1f] hover:text-[#6e6e73] transition-colors group"
-                >
-                  <div className="w-10 h-10 rounded-full bg-[#f5f5f7] flex items-center justify-center group-hover:bg-[#e8e8ed] transition-colors">
-                    <Mail size={16} />
-                  </div>
-                  <span className="text-sm font-medium">Phillip.Treitel@gmail.com</span>
-                </a>
                 <div className="flex items-center gap-3 text-[#6e6e73]">
                   <div className="w-10 h-10 rounded-full bg-[#f5f5f7] flex items-center justify-center">
                     <MapPin size={16} />
