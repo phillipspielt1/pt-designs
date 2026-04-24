@@ -1,8 +1,8 @@
 import { ImageResponse } from "next/og";
 
-// Next.js file-convention metadata — these exports drive the <meta og:image:*> tags
+// Next.js file-convention metadata - these exports drive the <meta og:image:*> tags
 export const alt =
-  "Van Duist & Treitel — Web Design in Nanaimo, BC. Websites built to impress.";
+  "Van Duist & Treitel - Web Design in Nanaimo, BC. Websites built to impress.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -10,7 +10,7 @@ export const contentType = "image/png";
  * Site-wide Open Graph image, rendered once at build time by Next (cached).
  * Applies to every route that doesn't supply its own opengraph-image file.
  *
- * Uses Satori's default font (Noto Sans) — still clean at link-preview sizes.
+ * Uses Satori's default font (Noto Sans) - still clean at link-preview sizes.
  * Upgrade to a custom font later by loading a .ttf via node:fs and passing
  * it to the ImageResponse `fonts` option.
  */

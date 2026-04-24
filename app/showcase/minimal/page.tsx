@@ -1,8 +1,8 @@
 "use client";
 
-// Style: Editorial Minimal — inspired by Annie's Little Valley
+// Style: Editorial Minimal - inspired by Annie's Little Valley
 // Straight lines, full-bleed photography, zero rounded corners, generous whitespace
-// Typography: Cormorant Garamond — elegant light serif
+// Typography: Cormorant Garamond - elegant light serif
 
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -94,7 +94,7 @@ export default function MinimalShowcase() {
               Guided by light,<br/>drawn to quiet moments.
             </h2>
             <p className="text-base text-[#666] leading-loose mb-6">
-              Mara Chen has spent over a decade documenting the world through a careful and patient lens. Her work explores the relationship between light, form, and the spaces in between — producing images that linger long after you&apos;ve looked away.
+              Mara Chen has spent over a decade documenting the world through a careful and patient lens. Her work explores the relationship between light, form, and the spaces in between - producing images that linger long after you&apos;ve looked away.
             </p>
             <p className="text-base text-[#666] leading-loose">
               Her editorial work has appeared in publications across North America and Europe, including Kinfolk, The New York Times, and National Geographic Traveller.

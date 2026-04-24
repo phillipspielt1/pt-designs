@@ -1,6 +1,6 @@
 "use client";
 
-// Style: Local Trades / Service Business — Peak Home Services
+// Style: Local Trades / Service Business - Peak Home Services
 // Navy + orange, conversion-first, trust signals everywhere
 // Inspired by real high-performing local service business websites
 // Goal: get visitors to call or request a quote
@@ -68,7 +68,7 @@ export default function TradesShowcase() {
 
       {/* ── Emergency banner ── */}
       <div className="bg-[#f97316] text-white text-center py-2 text-xs font-bold tracking-wide relative z-50">
-        ⚡ 24/7 Emergency Service Available —{" "}
+        ⚡ 24/7 Emergency Service Available -{" "}
         <a href="tel:2505550198" className="underline underline-offset-2 hover:text-orange-100 transition-colors">(250) 555-0198</a>
       </div>
 
@@ -212,7 +212,7 @@ export default function TradesShowcase() {
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
             <motion.p variants={fade} className="text-xs font-bold uppercase tracking-widest text-[#f97316] mb-2">Transparent Pricing</motion.p>
             <motion.h2 variants={fade} className="text-3xl md:text-4xl font-bold text-[#1e3a5f] tracking-tight">No surprises. Ever.</motion.h2>
-            <motion.p variants={fade} className="mt-3 text-[#6b7280] max-w-lg">We quote your job before starting. These are standard starting rates — contact us for a free exact quote.</motion.p>
+            <motion.p variants={fade} className="mt-3 text-[#6b7280] max-w-lg">We quote your job before starting. These are standard starting rates - contact us for a free exact quote.</motion.p>
           </motion.div>
           <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
             {pricingTiers.map((tier, i) => (
@@ -248,12 +248,12 @@ export default function TradesShowcase() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-xs font-bold uppercase tracking-widest text-[#f97316] mb-2">Simple Process</p>
-            <h2 className="text-3xl font-bold text-[#1e3a5f]">From call to done — fast.</h2>
+            <h2 className="text-3xl font-bold text-[#1e3a5f]">From call to done - fast.</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 relative">
             <div className="hidden md:block absolute top-7 left-[calc(16.66%+24px)] right-[calc(16.66%+24px)] h-px bg-gray-200" />
             {[
-              { step: "1", title: "Call or Request Online",  desc: "Give us a call or fill out the form below. We'll get you scheduled — often the same day." },
+              { step: "1", title: "Call or Request Online",  desc: "Give us a call or fill out the form below. We'll get you scheduled - often the same day." },
               { step: "2", title: "We Diagnose & Quote",     desc: "Our tech arrives on time, diagnoses the issue, and gives a written upfront quote before any work starts." },
               { step: "3", title: "Job Done Right",          desc: "We do the work, clean up completely, and don't leave until you're 100% satisfied." },
             ].map((item, i) => (
@@ -352,7 +352,7 @@ export default function TradesShowcase() {
             <p className="text-xs font-bold uppercase tracking-widest text-[#f97316] mb-2">Service Area</p>
             <h2 className="text-3xl font-bold text-white mb-4">We come to you.</h2>
             <p className="text-white/60 text-sm mb-8 leading-relaxed">
-              Serving Nanaimo and the entire mid-Vancouver Island region. Not sure if we cover your area? Just call — we&apos;ll let you know right away.
+              Serving Nanaimo and the entire mid-Vancouver Island region. Not sure if we cover your area? Just call - we&apos;ll let you know right away.
             </p>
             <div className="flex flex-wrap gap-2">
               {areas.map(area => (

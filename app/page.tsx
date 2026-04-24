@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Globe, ShoppingBag, User, Zap, Layers, Check, GraduationCap, MapPin, Users, MessageCircle } from "lucide-react";
 
-/* ─── Preview Mockups — real photography + styled layouts ─── */
+/* ─── Preview Mockups - real photography + styled layouts ─── */
 
 function MinimalPreview() {
   return (
@@ -212,7 +212,7 @@ const pricingTiers = [
   {
     name: "Landing Page",
     price: "from $250",
-    desc: "A single, high-impact page built to convert — ideal for new businesses, events, or campaigns.",
+    desc: "A single, high-impact page built to convert - ideal for new businesses, events, or campaigns.",
     features: ["Custom design", "Mobile-first", "Contact form", "Delivered in 1 week"],
   },
   {
@@ -225,7 +225,7 @@ const pricingTiers = [
   {
     name: "Online Store",
     price: "from $900",
-    desc: "A complete e-commerce experience — product pages, cart, checkout, and brand story built in.",
+    desc: "A complete e-commerce experience - product pages, cart, checkout, and brand story built in.",
     features: ["Full shop setup", "Product pages", "Payment ready", "Delivered in 3 weeks"],
   },
 ];
@@ -234,7 +234,7 @@ const services = [
   { icon: Globe,       label: "Landing Pages",        desc: "Convert visitors into customers with a focused, high-impact single page." },
   { icon: User,        label: "Portfolios",            desc: "Showcase your work with a site built to impress the right people." },
   { icon: ShoppingBag, label: "Online Stores",         desc: "Sell products with a smooth, beautiful shopping experience." },
-  { icon: Zap,         label: "Small Business Sites",  desc: "Everything your business needs online — found, trusted, and chosen." },
+  { icon: Zap,         label: "Small Business Sites",  desc: "Everything your business needs online - found, trusted, and chosen." },
   { icon: Layers,      label: "Custom Builds",         desc: "Got something unique in mind? Let's figure it out together." },
 ];
 
@@ -278,7 +278,7 @@ export default function HomePage() {
                 <span className="text-[#999]">to impress.</span>
               </motion.h1>
               <motion.p variants={fadeUp} className="mt-7 text-lg text-[#666] max-w-lg leading-relaxed">
-                Custom websites for small businesses, portfolios, and online stores — at a fraction of agency prices, without the compromise.
+                Custom websites for small businesses, portfolios, and online stores - at a fraction of agency prices, without the compromise.
               </motion.p>
               <motion.div variants={fadeUp} className="mt-10 flex flex-wrap gap-3">
                 <Link href="/contact" className="inline-flex items-center gap-2 bg-[#1a1a1a] text-white text-sm font-medium px-6 py-3.5 rounded-full hover:bg-black transition-all hover:gap-3">
@@ -344,7 +344,7 @@ export default function HomePage() {
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-80px" }} variants={stagger}>
             <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">Design Showcase</motion.p>
             <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight">Every business is different.</motion.h2>
-            <motion.p variants={fadeUp} className="mt-3 text-base text-[#888] max-w-lg">Five fully built demo sites — each a completely different style. Click any to explore the full layout.</motion.p>
+            <motion.p variants={fadeUp} className="mt-3 text-base text-[#888] max-w-lg">Five fully built demo sites - each a completely different style. Click any to explore the full layout.</motion.p>
           </motion.div>
 
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} variants={stagger}
@@ -382,7 +382,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── PRICING — student value proposition ── */}
+      {/* ── PRICING - student value proposition ── */}
       <section className="relative z-10 bg-[#1a1a1a] py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-12px_50px_rgba(0,0,0,0.12)]">
         <div className="max-w-7xl mx-auto">
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
@@ -394,7 +394,7 @@ export default function HomePage() {
               Agency quality.<br/><span className="text-white/40">Student pricing.</span>
             </motion.h2>
             <motion.p variants={fadeUp} className="mt-5 text-base text-white/50 max-w-lg leading-relaxed">
-              Because we&apos;re students, our overhead is near zero — which means we pass those savings directly to you. You get a professional, custom-built website for a fraction of what a studio charges.
+              Because we&apos;re students, our overhead is near zero - which means we pass those savings directly to you. You get a professional, custom-built website for a fraction of what a studio charges.
             </motion.p>
           </motion.div>
 
@@ -433,7 +433,7 @@ export default function HomePage() {
           <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.4 }}
             className="mt-8 text-center text-sm text-white/30">
-            All prices are starting points. Every project gets a custom quote — no surprises.
+            All prices are starting points. Every project gets a custom quote - no surprises.
           </motion.p>
         </div>
       </section>
@@ -472,14 +472,14 @@ export default function HomePage() {
                 Two people.<br />No nonsense.
               </motion.h2>
               <motion.p variants={fadeUp} className="mt-5 text-base text-[#666] max-w-xl leading-relaxed">
-                We&apos;re a two-person operation based right here in Nanaimo, BC — not an agency, not a faceless online shop. Just two people who genuinely care about the work and the businesses behind it. We keep things straight with you, communicate clearly, and we&apos;re always happy to have a conversation before you commit to anything. No pressure, no pitch — just a chat.
+                We&apos;re a two-person operation based right here in Nanaimo, BC - not an agency, not a faceless online shop. Just two people who genuinely care about the work and the businesses behind it. We keep things straight with you, communicate clearly, and we&apos;re always happy to have a conversation before you commit to anything. No pressure, no pitch - just a chat.
               </motion.p>
             </div>
             <motion.div variants={fadeUp} className="flex flex-col gap-5 lg:min-w-[240px]">
               {[
                 { icon: MapPin,         label: "Nanaimo, BC",       sub: "Locally based, locally invested" },
                 { icon: Users,          label: "Two-person team",   sub: "You work with us, not past us" },
-                { icon: MessageCircle,  label: "Always happy to chat", sub: "Reach out any time — no obligation" },
+                { icon: MessageCircle,  label: "Always happy to chat", sub: "Reach out any time - no obligation" },
               ].map(item => (
                 <div key={item.label} className="flex items-start gap-3.5">
                   <div className="w-9 h-9 bg-[#f5f4f2] rounded-xl flex items-center justify-center flex-shrink-0 border border-black/[0.06]">
@@ -503,13 +503,13 @@ export default function HomePage() {
             <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">About Us</motion.p>
             <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight leading-tight">Young, driven,<br/>built for this.</motion.h2>
             <motion.p variants={fadeUp} className="mt-6 text-base text-[#666] leading-relaxed">
-              We&apos;re Van Duist &amp; Treitel — two VIU students based in Nanaimo, BC, combining a genuine passion for design with a business-minded approach to every project.
+              We&apos;re Van Duist &amp; Treitel - two VIU students based in Nanaimo, BC, combining a genuine passion for design with a business-minded approach to every project.
             </motion.p>
             <motion.p variants={fadeUp} className="mt-4 text-base text-[#666] leading-relaxed">
               Being students means low overhead and big motivation. Every site we build is crafted to not just look good, but to actually work for your goals.
             </motion.p>
             <motion.div variants={fadeUp} className="mt-6 flex flex-col gap-2">
-              {["No agency markup — you pay for work, not overhead","Fast turnaround — most projects done in 1–3 weeks","Direct communication — you work with us, not a middleman"].map(pt=>(
+              {["No agency markup - you pay for work, not overhead","Fast turnaround - most projects done in 1–3 weeks","Direct communication - you work with us, not a middleman"].map(pt=>(
                 <div key={pt} className="flex items-start gap-2.5">
                   <Check size={14} className="text-[#1a1a1a] mt-0.5 flex-shrink-0"/>
                   <span className="text-sm text-[#555]">{pt}</span>
@@ -550,7 +550,7 @@ export default function HomePage() {
           </motion.div>
           <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { step: "01", title: "Discovery", desc: "We chat about your business, goals, and vision. No jargon — just a real conversation about what you need." },
+              { step: "01", title: "Discovery", desc: "We chat about your business, goals, and vision. No jargon - just a real conversation about what you need." },
               { step: "02", title: "Design & Build", desc: "We design and build from scratch, checking in regularly. You see progress and can give feedback throughout." },
               { step: "03", title: "Launch", desc: "Your site goes live. We make sure everything runs perfectly and walk you through managing it yourself." },
             ].map((item, i) => (

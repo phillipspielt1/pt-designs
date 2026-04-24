@@ -2,8 +2,8 @@
  * Cloudflare Workers deployment config for vdtsites (Next.js 16 via OpenNext).
  *
  * This file tells Wrangler (Cloudflare's CLI) how to deploy the Worker that
- * OpenNext generates from the Next build output. All the heavy lifting —
- * bundling, code-splitting, cache adapter wiring — is done by
+ * OpenNext generates from the Next build output. All the heavy lifting -
+ * bundling, code-splitting, cache adapter wiring - is done by
  * `npx opennextjs-cloudflare build`, which writes into `.open-next/`.
  *
  * Docs: https://opennext.js.org/cloudflare/get-started
@@ -13,8 +13,8 @@
   "name": "vdtsites",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-10-01",
-  // nodejs_compat             — let Next/Node libs run on the Workers runtime
-  // global_fetch_strictly_public — required by OpenNext for fetch() semantics
+  // nodejs_compat             - let Next/Node libs run on the Workers runtime
+  // global_fetch_strictly_public - required by OpenNext for fetch() semantics
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   // Static assets (public/, .next/static, etc.) are served directly from the
   // edge without invoking the Worker. Bound as ASSETS so OpenNext can reach it.

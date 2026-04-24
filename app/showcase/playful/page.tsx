@@ -1,6 +1,6 @@
 "use client";
 
-// Style: Bold Playful — Inspired by Blank Street Coffee / Joe & The Juice
+// Style: Bold Playful - Inspired by Blank Street Coffee / Joe & The Juice
 // Deep forest green + cream, display serif headlines, asymmetric layouts,
 // large overlapping photo elements, full personality
 // Typography: Syne (bold display) + Cormorant (serif accent)
@@ -279,7 +279,7 @@ export default function PlayfulShowcase() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { name:"Sarah M.", text:"Best oat latte on the island. The vibe is immaculate — I come every morning before work.", stars:5 },
+              { name:"Sarah M.", text:"Best oat latte on the island. The vibe is immaculate - I come every morning before work.", stars:5 },
               { name:"Jordan T.", text:"I work remotely and Zest is my office. Fast WiFi, great playlist, and the cold brew is elite.", stars:5 },
               { name:"Priya L.", text:"The grain bowl changed my lunch game. And the staff somehow remember everyone's name.", stars:5 },
             ].map((r) => (

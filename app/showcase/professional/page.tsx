@@ -1,6 +1,6 @@
 "use client";
 
-// Style: Clean Professional — inspired by Stripe / McKinsey
+// Style: Clean Professional - inspired by Stripe / McKinsey
 // Pure white, precise grid, large statement headline, data-driven proof,
 // structured sections, minimal decoration, corporate authority
 // Typography: System sans-serif throughout
@@ -259,7 +259,7 @@ export default function ProfessionalShowcase() {
           <h2 className="text-3xl font-bold text-gray-900 mb-10">Common questions.</h2>
           <div className="space-y-2">
             {[
-              { q:"What does 'fee-based' mean?", a:"We charge a transparent fee based on assets under management — not commissions. This means our advice is always in your best interest, not influenced by product sales." },
+              { q:"What does 'fee-based' mean?", a:"We charge a transparent fee based on assets under management - not commissions. This means our advice is always in your best interest, not influenced by product sales." },
               { q:"How do I get started?", a:"Book a complimentary 30-minute discovery call. We'll discuss your situation, goals, and whether we're the right fit. No obligation, no sales pressure." },
               { q:"What's the minimum investment?", a:"We typically work with clients with $250,000+ in investable assets, though we make exceptions for young professionals with strong savings trajectories." },
               { q:"Are you regulated?", a:"Yes. Harbour Advisory Group is registered with the British Columbia Securities Commission (BCSC) and all advisors hold relevant professional designations." },
@@ -282,7 +282,7 @@ export default function ProfessionalShowcase() {
       <section className="bg-[#1e3a8a] py-24 px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Ready to take control of your financial future?</h2>
-          <p className="text-white/60 text-base mb-8 max-w-xl mx-auto">Schedule a no-obligation 30-minute discovery call. No pressure, no jargon — just an honest conversation.</p>
+          <p className="text-white/60 text-base mb-8 max-w-xl mx-auto">Schedule a no-obligation 30-minute discovery call. No pressure, no jargon - just an honest conversation.</p>
           <a href="#" className="inline-flex items-center gap-2 bg-white text-[#1e3a8a] text-sm font-bold px-8 py-4 rounded-lg hover:bg-gray-50 transition-colors">
             Book a Free Consultation <ArrowRight size={15}/>
           </a>

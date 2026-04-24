@@ -1,6 +1,6 @@
 "use client";
 
-// Style: Luxury Dark Editorial — inspired by Soho House / luxury fashion brands
+// Style: Luxury Dark Editorial - inspired by Soho House / luxury fashion brands
 // Full-bleed editorial photography, elegant Cormorant serif,
 // maximum restraint, gold accents used sparingly, generous whitespace
 // Feels like a high-end magazine editorial
@@ -95,7 +95,7 @@ export default function BoldShowcase() {
         </div>
       </section>
 
-      {/* ── Introduction — editorial two-column ── */}
+      {/* ── Introduction - editorial two-column ── */}
       <section className="py-32 px-8 md:px-16 max-w-7xl mx-auto">
         <motion.div initial="hidden" whileInView="show" viewport={{ once:true }} variants={stagger}
           className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-20 items-start">
@@ -111,7 +111,7 @@ export default function BoldShowcase() {
               Onyx Events was founded on a single principle: that a truly extraordinary event leaves no room for compromise. From the first conversation to the final curtain, every detail is considered, refined, and executed with precision.
             </p>
             <p className="text-base text-white/50 leading-loose mb-10">
-              We work with a select number of clients each year — corporations, private individuals, cultural institutions — who share our commitment to the exceptional.
+              We work with a select number of clients each year - corporations, private individuals, cultural institutions - who share our commitment to the exceptional.
             </p>
             <div className="grid grid-cols-3 gap-6 border-t border-white/[0.08] pt-8">
               {[["15+","Years Experience"],["400+","Events Delivered"],["6","Countries"]].map(([v,l])=>(
@@ -132,7 +132,7 @@ export default function BoldShowcase() {
         <div className="absolute inset-0 flex items-center justify-center">
           <blockquote className="text-center max-w-2xl px-8">
             <p className="text-2xl md:text-3xl font-light text-white/90 italic leading-relaxed">
-              &ldquo;The measure of an extraordinary event is not what you remember — it&apos;s what you feel.&rdquo;
+              &ldquo;The measure of an extraordinary event is not what you remember - it&apos;s what you feel.&rdquo;
             </p>
           </blockquote>
         </div>
@@ -173,7 +173,7 @@ export default function BoldShowcase() {
         </motion.div>
       </section>
 
-      {/* ── Services — editorial list ── */}
+      {/* ── Services - editorial list ── */}
       <section className="border-t border-white/[0.06] py-32 px-8 md:px-16">
         <div className="max-w-7xl mx-auto">
           <p className="text-[10px] tracking-[0.35em] uppercase text-[#d4af37] mb-16 font-light">Services</p>

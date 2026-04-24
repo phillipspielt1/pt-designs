@@ -131,7 +131,7 @@ function ContactPageInner() {
                   </div>
                   <h2 className="text-2xl font-semibold text-[#1d1d1f]">Message sent!</h2>
                   <p className="text-[#6e6e73] max-w-xs">
-                    Thanks — we&apos;ll be in touch within 24 hours.
+                    Thanks - we&apos;ll be in touch within 24 hours.
                   </p>
                   <button
                     onClick={() => setStatus("idle")}

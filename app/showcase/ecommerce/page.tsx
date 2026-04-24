@@ -1,6 +1,6 @@
 "use client";
 
-// Style: Warm Artisan E-Commerce — inspired by Brightland / Otherland
+// Style: Warm Artisan E-Commerce - inspired by Brightland / Otherland
 // Alternating editorial image/text sections, warm cream palette,
 // story-forward design, Lora serif headlines, product-focused with lifestyle imagery
 // Every section tells part of the brand story
@@ -34,22 +34,22 @@ const stories = [
   },
   {
     title:"Made by hand,\none at a time.",
-    body:"Our Tofino studio produces everything in small batches. No assembly lines, no shortcuts. Each item is made by one of our nine makers — people who care deeply about what they make.",
+    body:"Our Tofino studio produces everything in small batches. No assembly lines, no shortcuts. Each item is made by one of our nine makers - people who care deeply about what they make.",
     img:"https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=700&q=80",
     imgLeft:false,
   },
   {
     title:"Packaged to\nlast a lifetime.",
-    body:"Our packaging is 100% recyclable or compostable. We use soy-based inks, recycled paper, and avoid single-use plastic entirely. The box is part of the experience — and it goes back to the earth.",
+    body:"Our packaging is 100% recyclable or compostable. We use soy-based inks, recycled paper, and avoid single-use plastic entirely. The box is part of the experience - and it goes back to the earth.",
     img:"https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=700&q=80",
     imgLeft:true,
   },
 ];
 
 const reviews = [
-  { name:"Amanda K.", location:"Vancouver, BC", stars:5, text:"The Cedarmoss Throw is the most beautiful thing I own. The weight, the texture, the smell when it arrived — nothing like it.", product:"Cedarmoss Throw" },
+  { name:"Amanda K.", location:"Vancouver, BC", stars:5, text:"The Cedarmoss Throw is the most beautiful thing I own. The weight, the texture, the smell when it arrived - nothing like it.", product:"Cedarmoss Throw" },
   { name:"Tom R.", location:"Victoria, BC", stars:5, text:"I've tried a lot of artisan soaps. Cedar & Co. is in a different category entirely. Three bars in and I'm a lifer.", product:"Old-Growth Soap" },
-  { name:"Sarah L.", location:"Tofino, BC", stars:5, text:"Gave the incense kit as a gift and immediately ordered one for myself. The forest scent is exactly right — not perfumey, just real.", product:"Forest Incense Kit" },
+  { name:"Sarah L.", location:"Tofino, BC", stars:5, text:"Gave the incense kit as a gift and immediately ordered one for myself. The forest scent is exactly right - not perfumey, just real.", product:"Forest Incense Kit" },
 ];
 
 export default function EcommerceShowcase() {
@@ -83,7 +83,7 @@ export default function EcommerceShowcase() {
         </div>
       </header>
 
-      {/* ── Hero — split editorial ── */}
+      {/* ── Hero - split editorial ── */}
       <section className="max-w-6xl mx-auto px-8 py-16 md:py-24">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-12 items-center">
           <motion.div initial="hidden" animate="show" variants={stagger}>
@@ -190,7 +190,7 @@ export default function EcommerceShowcase() {
         </div>
       </section>
 
-      {/* ── Brand story — alternating editorial sections ── */}
+      {/* ── Brand story - alternating editorial sections ── */}
       <section className="py-24 px-8">
         <div className="max-w-6xl mx-auto">
           <p className="text-xs uppercase tracking-[0.2em] text-[#8a7060] mb-4">Our Story</p>
