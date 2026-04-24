@@ -9,7 +9,6 @@ import {
   SITE_NAME,
   SITE_TAGLINE,
   SITE_DESCRIPTION,
-  DEFAULT_OG_IMAGE,
   jsonLdOrganization,
   jsonLdWebsite,
 } from "@/lib/site";
@@ -69,6 +68,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  // NOTE: og:image and twitter:image are emitted automatically by
+  // app/opengraph-image.tsx and app/twitter-image.tsx (Next file conventions).
+  // Do not duplicate images here.
   openGraph: {
     type: "website",
     locale: "en_CA",
@@ -76,20 +78,11 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: `${SITE_NAME} — ${SITE_TAGLINE}`,
     description: SITE_DESCRIPTION,
-    images: [
-      {
-        url: DEFAULT_OG_IMAGE,
-        width: 512,
-        height: 512,
-        alt: `${SITE_NAME} — ${SITE_TAGLINE}`,
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE_NAME} — ${SITE_TAGLINE}`,
     description: SITE_DESCRIPTION,
-    images: [DEFAULT_OG_IMAGE],
   },
   robots: {
     index: true,
