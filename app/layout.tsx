@@ -4,6 +4,15 @@ import "./globals.css";
 import Nav from "@/components/layout/nav";
 import Footer from "@/components/layout/footer";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import {
+  SITE_URL,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_DESCRIPTION,
+  DEFAULT_OG_IMAGE,
+  jsonLdOrganization,
+  jsonLdWebsite,
+} from "@/lib/site";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
@@ -31,19 +40,91 @@ const lora = Lora({
 });
 
 export const metadata: Metadata = {
-  title: "Van Duist & Treitel — Web Design",
-  description:
-    "Custom websites for small businesses, portfolios, and online stores. Based in Nanaimo, BC.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    template: `%s — ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  keywords: [
+    "web design Nanaimo",
+    "Nanaimo website designer",
+    "Vancouver Island web design",
+    "BC web design",
+    "small business website",
+    "custom website design",
+    "portfolio website",
+    "e-commerce website",
+    "landing page design",
+    "Next.js web design",
+    "VIU student web design",
+    "affordable web design Canada",
+    "Van Duist Treitel",
+  ],
+  category: "Web Design",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_CA",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: DEFAULT_OG_IMAGE,
+        width: 512,
+        height: 512,
+        alt: `${SITE_NAME} — ${SITE_TAGLINE}`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geist.variable} ${cormorant.variable} ${syne.variable} ${lora.variable}`}>
+    <html lang="en-CA" className={`${geist.variable} ${cormorant.variable} ${syne.variable} ${lora.variable}`}>
       <body className="antialiased">
         <Nav />
         <main>{children}</main>
         <Footer />
         <SpeedInsights />
+        {/* Structured data for local SEO (knowledge panel, rich results) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrganization) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebsite) }}
+        />
       </body>
     </html>
   );
