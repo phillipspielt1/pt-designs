@@ -17,6 +17,7 @@ export default function Footer() {
             <Link href="/showcase/bold" className="hover:text-[#1d1d1f] transition-colors">Bold & Dark</Link>
             <Link href="/showcase/ecommerce" className="hover:text-[#1d1d1f] transition-colors">E-Commerce</Link>
             <Link href="/contact" className="hover:text-[#1d1d1f] transition-colors">Contact</Link>
+            <Link href="/terms-of-service" className="hover:text-[#1d1d1f] transition-colors">Terms of Service</Link>
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-black/[0.06] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#6e6e73]">
