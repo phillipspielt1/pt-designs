@@ -29,9 +29,9 @@
   // ],
   "vars": {
     // FROM address. Must live on a domain (or subdomain) that has Email
-    // Routing enabled in this account. mail.vdtsites.ca keeps the apex MX
-    // free for whatever else lives at vdtsites.ca.
-    "CONTACT_FROM_EMAIL": "VDT Test <noreply@mail.vdtsites.ca>",
+    // Routing enabled in this Cloudflare account. Since nothing else uses
+    // vdtsites.ca mail, we point the FROM at the apex directly.
+    "CONTACT_FROM_EMAIL": "VDT Test <noreply@vdtsites.ca>",
     // Displayed to the user as the contact destination; actual delivery
     // happens via SEND_EMAIL.destination_address above.
     "CONTACT_TO_EMAIL": "info@vdtsites.ca"
