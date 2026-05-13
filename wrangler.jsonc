@@ -8,13 +8,13 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
-  // Publish to workers.dev until vdtsites.ca propagates. When ready, flip
-  // `workers_dev` to false and uncomment the `routes` block below, then
-  // redeploy.
+  // Apex of vdtsites.ca. Cloudflare creates the DNS automatically on
+  // deploy when the zone is on this account. workers.dev URL stays live
+  // alongside the custom domain as a backup.
   "workers_dev": true,
-  // "routes": [
-  //   { "pattern": "vdtsites.ca", "custom_domain": true }
-  // ],
+  "routes": [
+    { "pattern": "vdtsites.ca", "custom_domain": true }
+  ],
   // Cloudflare Workers Email Routing send_email binding. The destination
   // address MUST be a verified destination in Email Routing for this
   // Cloudflare account (Email > Email Routing > Destination Addresses).
