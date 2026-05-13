@@ -1,0 +1,35 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "vdttest",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-01-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  // Apex of vdtsites.ca. Cloudflare creates the DNS automatically on first
+  // deploy. Make sure the zone is on this account.
+  "routes": [
+    { "pattern": "vdtsites.ca", "custom_domain": true }
+  ],
+  // Cloudflare Workers Email Routing send_email binding. The destination
+  // address MUST be a verified destination in Email Routing for this
+  // Cloudflare account (Email > Email Routing > Destination Addresses).
+  // Placeholder until Sem verifies his personal inbox - update + redeploy.
+  "send_email": [
+    {
+      "name": "SEND_EMAIL",
+      "destination_address": "REPLACE_WITH_VERIFIED_DESTINATION@example.com"
+    }
+  ],
+  "vars": {
+    // FROM address. Must live on a domain (or subdomain) that has Email
+    // Routing enabled in this account. mail.vdtsites.ca keeps the apex MX
+    // free for whatever else lives at vdtsites.ca.
+    "CONTACT_FROM_EMAIL": "VDT Test <noreply@mail.vdtsites.ca>",
+    // Displayed to the user as the contact destination; actual delivery
+    // happens via SEND_EMAIL.destination_address above.
+    "CONTACT_TO_EMAIL": "info@vdtsites.ca"
+  }
+}

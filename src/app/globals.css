@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bone: #FAF5EC;
+  --color-ink: #15110B;
+  --color-ink-soft: #2A2117;
+  --color-line: rgba(21, 17, 11, 0.12);
+  --color-accent: #5D6A4A;
+  --color-accent-strong: #43503A;
+
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-body: "Hanken Grotesk", "Inter", system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    background: var(--color-bone);
+    color: var(--color-ink);
+  }
+  body {
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.018em;
+  }
+}

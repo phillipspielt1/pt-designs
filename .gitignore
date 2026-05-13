@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+.open-next
+.wrangler
+.env*.local
+.DS_Store
+*.log
+.vercel
+.deploy-secrets.tmp
+*.deploy-secrets*
