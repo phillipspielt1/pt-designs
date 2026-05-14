@@ -6,9 +6,17 @@ import { THEMES } from "@/lib/themes";
 import { useTheme } from "@/components/ThemeProvider";
 import { GooeyText } from "@/components/ui/gooey-text-morphing";
 
-// Morph theme cycles its hero title through this list, gluing the
-// transitions with the SVG threshold filter (gooey effect).
-const MORPH_TITLE_WORDS = ["Morph", "Shift", "Flow", "Blend", "Form"];
+// Three hero variants exist for the Morph theme - pick one with the
+// preview chips at top-center, ship the winner, then delete the rest.
+
+// Variant A - "Sentence Stack" - the verb morphs.
+const MORPH_VERBS = ["BUILD", "CRAFT", "SHIP", "DESIGN"];
+// Variant B - "Centered Noun" - the noun morphs.
+const MORPH_NOUNS = ["WEBSITES", "BRANDS", "STORES", "TOOLS"];
+// Variant C - "Three-Line Poster" - the descriptor morphs.
+const MORPH_ADJ = ["SHARP", "DRIVEN", "READY", "FAST"];
+
+type MorphVariant = "a" | "b" | "c";
 
 const SLIDE_MS = 8500;
 const MORPH_S = 1.2;
@@ -37,6 +45,7 @@ export default function HeroCarousel() {
   const [paused, setPaused] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
   const [bp, setBp] = useState<"base" | "sm" | "md">("md");
+  const [morphVariant, setMorphVariant] = useState<MorphVariant>("a");
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const goTo = useCallback(
@@ -157,72 +166,91 @@ export default function HeroCarousel() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
       </div>
 
-      {/* Hero text */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-12 max-w-[44rem] pointer-events-none">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current.id}
-            variants={textVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="pointer-events-auto"
-          >
-            <p
-              className="text-xs tracking-[0.32em] uppercase mb-4"
-              style={{ color: "rgba(255,255,255,0.75)" }}
+      {/* Variant picker - only on Morph theme. Top center. */}
+      {current.id === "morph" && (
+        <div className="absolute top-7 left-1/2 -translate-x-1/2 z-[45] flex items-center gap-2 pointer-events-auto">
+          <span className="text-[10px] tracking-[0.28em] uppercase text-white/55 mr-1">
+            Hero variant
+          </span>
+          {(["a", "b", "c"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setMorphVariant(v)}
+              className="size-7 rounded-full text-[10px] font-medium uppercase transition-all"
+              style={{
+                background: morphVariant === v ? "#fff" : "rgba(255,255,255,0.10)",
+                color: morphVariant === v ? "#000" : "rgba(255,255,255,0.7)",
+                border: "1px solid rgba(255,255,255,0.25)",
+              }}
+              aria-label={`Hero variant ${v.toUpperCase()}`}
+              aria-pressed={morphVariant === v}
             >
-              Active theme
-            </p>
-            {current.id === "morph" ? (
-              <div className="mb-4 -ml-1">
-                <GooeyText
-                  texts={MORPH_TITLE_WORDS}
-                  morphTime={1.1}
-                  cooldownTime={1.6}
-                  className="h-[5.5rem] sm:h-[7rem] md:h-[9rem]"
-                  textClassName="text-6xl sm:text-7xl md:text-8xl tracking-tight !text-left !justify-start uppercase leading-none"
-                  textStyle={{
-                    color: "#FFFFFF",
-                    fontFamily: current.fontDisplay,
-                    fontWeight: 500,
-                  }}
-                />
-              </div>
-            ) : (
+              {v.toUpperCase()}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Hero text - layout differs by theme and (for morph) by variant. */}
+      {current.id === "morph" ? (
+        <MorphHero
+          variant={morphVariant}
+          fontDisplay={current.fontDisplay}
+          fontBody={current.fontBody}
+          accent={current.accent}
+          accentInk={current.accentInk}
+        />
+      ) : (
+        <div className="absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-12 max-w-[44rem] pointer-events-none">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.id}
+              variants={textVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="pointer-events-auto"
+            >
+              <p
+                className="text-xs tracking-[0.32em] uppercase mb-4"
+                style={{ color: "rgba(255,255,255,0.75)" }}
+              >
+                Active theme
+              </p>
               <h1
-                className="font-display uppercase text-white leading-[0.92] tracking-tight text-6xl sm:text-7xl md:text-8xl mb-4"
+                className="uppercase text-white leading-[0.92] tracking-tight text-6xl sm:text-7xl md:text-8xl mb-4"
                 style={{ fontFamily: current.fontDisplay }}
               >
                 {current.name}
               </h1>
-            )}
-            <p
-              className="text-white/80 max-w-md mb-9 leading-relaxed text-[15px]"
-              style={{ fontFamily: current.fontBody }}
-            >
-              {current.tagline}. Click any card on the right to switch the
-              page&apos;s palette, type, and shape.
-            </p>
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => {
-                  const next = document.getElementById("about");
-                  next?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="rounded-full text-[11px] tracking-[0.28em] uppercase px-7 py-3 transition-colors"
-                style={{
-                  background: current.accent,
-                  color: current.accentInk,
-                }}
+              <p
+                className="text-white/80 max-w-md mb-9 leading-relaxed text-[15px]"
+                style={{ fontFamily: current.fontBody }}
               >
-                See it applied
-              </button>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+                {current.tagline}. Click any card on the right to switch the
+                page&apos;s palette, type, and shape.
+              </p>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const next = document.getElementById("about");
+                    next?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="rounded-full text-[11px] tracking-[0.28em] uppercase px-7 py-3 transition-colors"
+                  style={{
+                    background: current.accent,
+                    color: current.accentInk,
+                  }}
+                >
+                  See it applied
+                </button>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      )}
 
       {/* CARD RAIL */}
       <div
@@ -368,5 +396,171 @@ export default function HeroCarousel() {
         </AnimatePresence>
       </div>
     </section>
+  );
+}
+
+/* -----------------------------------------------------------------------
+ * MorphHero - three swappable hero compositions, all powered by GooeyText.
+ * Pick one (A/B/C) via the chip picker at top-center of the section.
+ * --------------------------------------------------------------------- */
+
+type MorphHeroProps = {
+  variant: MorphVariant;
+  fontDisplay: string;
+  fontBody: string;
+  accent: string;
+  accentInk: string;
+};
+
+function MorphHero({
+  variant,
+  fontDisplay,
+  fontBody,
+  accent,
+  accentInk,
+}: MorphHeroProps) {
+  const ctaBtn = (
+    <button
+      type="button"
+      onClick={() => {
+        document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
+      }}
+      className="rounded-full text-[11px] tracking-[0.28em] uppercase px-7 py-3 transition-colors"
+      style={{ background: accent, color: accentInk, fontFamily: fontBody }}
+    >
+      See it applied
+    </button>
+  );
+
+  /* -------- VARIANT A: SENTENCE STACK, LEFT-ALIGNED ------------------ */
+  if (variant === "a") {
+    return (
+      <div className="absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-12 max-w-[44rem] pointer-events-none">
+        <motion.div
+          key={`morph-a`}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="pointer-events-auto"
+        >
+          <p
+            className="text-xs tracking-[0.32em] uppercase mb-6 text-white/70"
+            style={{ fontFamily: fontBody }}
+          >
+            Two-person studio · Nanaimo BC
+          </p>
+          <p
+            className="uppercase text-white leading-[0.95] tracking-tight text-3xl sm:text-4xl md:text-5xl mb-1"
+            style={{ fontFamily: fontDisplay, fontWeight: 500 }}
+          >
+            We
+          </p>
+          <GooeyText
+            texts={MORPH_VERBS}
+            morphTime={1.1}
+            cooldownTime={1.6}
+            className="h-[5.5rem] sm:h-[7rem] md:h-[8.5rem] -ml-1"
+            textClassName="!justify-start !text-left text-7xl sm:text-8xl md:text-9xl leading-none uppercase tracking-tight"
+            textStyle={{ color: "#FFFFFF", fontFamily: fontDisplay, fontWeight: 500 }}
+          />
+          <p
+            className="uppercase text-white leading-[0.95] tracking-tight text-3xl sm:text-4xl md:text-5xl mb-7 mt-1"
+            style={{ fontFamily: fontDisplay, fontWeight: 500 }}
+          >
+            websites that work.
+          </p>
+          <p
+            className="text-white/75 max-w-md mb-9 leading-relaxed text-[15px]"
+            style={{ fontFamily: fontBody }}
+          >
+            No agency markup. No twelve-week timelines. Just two students who
+            ship sites that look good and do their job.
+          </p>
+          <div className="flex items-center gap-3">{ctaBtn}</div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  /* -------- VARIANT B: CENTERED NOUN, POSTER STYLE ------------------ */
+  if (variant === "b") {
+    return (
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 pointer-events-none">
+        <motion.div
+          key={`morph-b`}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center pointer-events-auto"
+        >
+          <p
+            className="text-xs tracking-[0.42em] uppercase mb-5 text-white/70"
+            style={{ fontFamily: fontBody }}
+          >
+            We make
+          </p>
+          <GooeyText
+            texts={MORPH_NOUNS}
+            morphTime={1.1}
+            cooldownTime={1.6}
+            className="h-[6rem] sm:h-[8rem] md:h-[10rem] w-full"
+            textClassName="text-7xl sm:text-8xl md:text-[120pt] leading-none uppercase tracking-tighter"
+            textStyle={{ color: "#FFFFFF", fontFamily: fontDisplay, fontWeight: 500 }}
+          />
+          <p
+            className="mt-6 text-white/80 max-w-xl mx-auto leading-relaxed text-base sm:text-lg"
+            style={{ fontFamily: fontBody }}
+          >
+            for ambitious businesses that mean it. Built in Nanaimo by two
+            students who&apos;ve had enough of bloated agency invoices.
+          </p>
+          <div className="mt-10 flex items-center justify-center gap-3">
+            {ctaBtn}
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  /* -------- VARIANT C: THREE-LINE STATEMENT POSTER ------------------ */
+  return (
+    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 pointer-events-none">
+      <motion.div
+        key={`morph-c`}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="text-center pointer-events-auto"
+      >
+        <p
+          className="uppercase text-white leading-none tracking-tight text-5xl sm:text-6xl md:text-7xl"
+          style={{ fontFamily: fontDisplay, fontWeight: 500 }}
+        >
+          Two people.
+        </p>
+        <GooeyText
+          texts={MORPH_ADJ}
+          morphTime={1.0}
+          cooldownTime={1.5}
+          className="h-[5.5rem] sm:h-[7.5rem] md:h-[9rem] w-full my-1"
+          textClassName="text-7xl sm:text-8xl md:text-[110pt] leading-none uppercase tracking-tighter"
+          textStyle={{ color: "#FFFFFF", fontFamily: fontDisplay, fontWeight: 500 }}
+        />
+        <p
+          className="uppercase text-white leading-none tracking-tight text-5xl sm:text-6xl md:text-7xl"
+          style={{ fontFamily: fontDisplay, fontWeight: 500 }}
+        >
+          No nonsense.
+        </p>
+        <p
+          className="mt-8 text-white/75 max-w-md mx-auto leading-relaxed text-[15px]"
+          style={{ fontFamily: fontBody }}
+        >
+          A two-student studio in Nanaimo, BC. We build websites for people who
+          want results, not invoices.
+        </p>
+        <div className="mt-8 flex items-center justify-center gap-3">{ctaBtn}</div>
+      </motion.div>
+    </div>
   );
 }
