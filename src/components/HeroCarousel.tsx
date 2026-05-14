@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type Destination = {
   id: string;
@@ -64,36 +64,38 @@ const DESTINATIONS: Destination[] = [
 ];
 
 const SLIDE_MS = 7000;
-const MORPH_S = 1.0;
-// easeOutQuint - long tail, no bounce
-const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const BUBBLE_S = 1.1;
+// easeOutQuart - long fluid tail, no bounce. Feels like a bubble inflating.
+const BUBBLE_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 const LEN = DESTINATIONS.length;
-const RAIL_SLOTS = LEN - 1; // every non-active destination
+const RAIL_SLOTS = LEN - 1;
 
-// Card dimensions per breakpoint (kept small enough that all 5 fit
-// comfortably above tablet width).
 const CARD = {
-  base: { w: 96, h: 138, gap: 8 },
-  sm: { w: 124, h: 175, gap: 10 },
-  md: { w: 148, h: 210, gap: 12 },
+  base: { w: 96, h: 138, gap: 8, bottom: 104 },
+  sm: { w: 124, h: 175, gap: 10, bottom: 120 },
+  md: { w: 148, h: 210, gap: 12, bottom: 144 },
 };
 
 export default function HeroCarousel() {
+  const sectionRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
+  // While `prev !== null`, a bubble transition is playing: previous image
+  // sits underneath, new image clip-paths in as a growing circle.
+  const [prev, setPrev] = useState<number | null>(null);
+  const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const [progress, setProgress] = useState(0);
   const [paused, setPaused] = useState(false);
   const [bp, setBp] = useState<"base" | "sm" | "md">("md");
+  const [size, setSize] = useState({ w: 1200, h: 800 });
 
-  const goTo = useCallback((index: number) => {
-    setActive(((index % LEN) + LEN) % LEN);
-    setProgress(0);
-  }, []);
-
-  // Track current breakpoint so card positions are pixel-correct
-  // (framer-motion needs concrete numbers to animate between).
+  // Track viewport breakpoint + section size (for bubble max radius).
   useEffect(() => {
     const update = () => {
+      const sect = sectionRef.current;
+      if (sect) {
+        setSize({ w: sect.clientWidth, h: sect.clientHeight });
+      }
       const w = window.innerWidth;
       setBp(w >= 768 ? "md" : w >= 640 ? "sm" : "base");
     };
@@ -102,7 +104,7 @@ export default function HeroCarousel() {
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  // Preload every image so swaps never reveal a half-loaded photo.
+  // Preload all destination images.
   useEffect(() => {
     DESTINATIONS.forEach((d) => {
       const img = new window.Image();
@@ -110,9 +112,38 @@ export default function HeroCarousel() {
     });
   }, []);
 
-  // Auto-advance - pauses on hover. RAF for fluid progress bar.
+  const card = CARD[bp];
+  const paddingRight = bp === "md" ? 48 : bp === "sm" ? 32 : 20;
+
+  // Default bubble origin when auto-advance fires - center of the
+  // leftmost rail card, the one visually "next up".
+  const autoOrigin = useCallback(() => {
+    const rightPx = paddingRight + (RAIL_SLOTS - 1) * (card.w + card.gap);
+    return {
+      x: size.w - rightPx - card.w / 2,
+      y: size.h - card.bottom - card.h / 2,
+    };
+  }, [paddingRight, card, size]);
+
+  const transitionTo = useCallback(
+    (toIndex: number, originPx?: { x: number; y: number }) => {
+      const i = ((toIndex % LEN) + LEN) % LEN;
+      if (i === active) return;
+      // Already mid-transition? Ignore - a clean bubble in flight beats
+      // queueing a new one and clipping the current one short.
+      if (prev !== null) return;
+
+      setOrigin(originPx ?? autoOrigin());
+      setPrev(active);
+      setActive(i);
+      setProgress(0);
+    },
+    [active, prev, autoOrigin],
+  );
+
+  // Auto-advance loop - paused during a bubble transition and on hover.
   useEffect(() => {
-    if (paused) return;
+    if (paused || prev !== null) return;
     const startedAt = performance.now();
     let raf = 0;
     const tick = (now: number) => {
@@ -120,25 +151,50 @@ export default function HeroCarousel() {
       const pct = Math.min(100, (elapsed / SLIDE_MS) * 100);
       setProgress(pct);
       if (elapsed >= SLIDE_MS) {
-        goTo(active + 1);
+        transitionTo(active + 1);
         return;
       }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [active, paused, goTo]);
+  }, [active, paused, prev, transitionTo]);
+
+  // Compute the max radius needed for the bubble to fully cover the
+  // section from the chosen origin (distance from origin to the
+  // furthest corner).
+  const maxR = Math.hypot(
+    Math.max(origin.x, size.w - origin.x),
+    Math.max(origin.y, size.h - origin.y),
+  );
 
   const current = DESTINATIONS[active];
-  const card = CARD[bp];
-  const paddingRight = bp === "md" ? 48 : bp === "sm" ? 32 : 20;
+  const prevDest = prev !== null ? DESTINATIONS[prev] : null;
 
-  // Compute the right-px for a given rail slot (0 = leftmost of rail).
-  const railRightPx = (slot: number) =>
-    paddingRight + (RAIL_SLOTS - 1 - slot) * (card.w + card.gap);
+  // Card click - bubble origin is the card's center.
+  const onCardClick = (e: React.MouseEvent<HTMLButtonElement>, destIdx: number) => {
+    const cardRect = e.currentTarget.getBoundingClientRect();
+    const sectRect = sectionRef.current?.getBoundingClientRect();
+    if (!sectRect) {
+      transitionTo(destIdx);
+      return;
+    }
+    transitionTo(destIdx, {
+      x: cardRect.left + cardRect.width / 2 - sectRect.left,
+      y: cardRect.top + cardRect.height / 2 - sectRect.top,
+    });
+  };
+
+  // Card list - all destinations except current, in cyclic order
+  // starting from active+1.
+  const cards = Array.from({ length: RAIL_SLOTS }, (_, i) => {
+    const idx = (active + 1 + i) % LEN;
+    return { ...DESTINATIONS[idx], _idx: idx };
+  });
 
   return (
     <section
+      ref={sectionRef}
       className="relative w-full h-[100svh] min-h-[680px] overflow-hidden bg-black select-none"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -149,98 +205,62 @@ export default function HeroCarousel() {
           className="h-full bg-amber-400"
           style={{
             width: `${progress}%`,
-            transition: paused ? "width 200ms ease-out" : "none",
+            transition: paused || prev !== null ? "width 200ms ease-out" : "none",
           }}
         />
       </div>
 
-      {/*
-        Every destination is rendered ONCE with a stable layoutId. Its
-        position/size depends on offset from `active`:
-          offset 0  → hero (full bleed)
-          offset 1..N-1 → rail slot 0..N-2 (left to right)
-        When `active` changes, each element's target position changes and
-        framer-motion smoothly morphs every one in parallel. The old hero
-        slides + shrinks to the far right of the rail, the next card grows
-        into the hero, and the middle cards shift one slot left.
-      */}
-      {DESTINATIONS.map((d, i) => {
-        const offset = (i - active + LEN) % LEN;
-        const isHero = offset === 0;
-        const railSlot = offset - 1;
+      {/* Z-0: previous hero image - visible only during a bubble transition.
+          Sits under the new image so the bubble effect reveals the new
+          photo over the old. */}
+      {prevDest && (
+        <div
+          key={`prev-${prevDest.id}`}
+          className="absolute inset-0 z-0"
+          style={{ background: prevDest.fallback }}
+        >
+          <img
+            src={prevDest.image}
+            alt=""
+            className="w-full h-full object-cover"
+            draggable={false}
+          />
+        </div>
+      )}
 
-        const heroBox = { top: 0, left: 0, right: 0, bottom: 0, borderRadius: 0 };
-        const cardBottom = bp === "md" ? "9rem" : bp === "sm" ? "7.5rem" : "6.5rem";
-        const cardBox = isHero
-          ? null
-          : {
-              top: "auto" as const,
-              left: "auto" as const,
-              right: `${railRightPx(railSlot)}px`,
-              bottom: cardBottom,
-              width: `${card.w}px`,
-              height: `${card.h}px`,
-              borderRadius: "1rem",
-            };
+      {/* Z-1: current hero image with bubble clip-path. On a transition,
+          starts as a 0px circle at the click origin and grows to cover
+          the section. */}
+      <motion.div
+        key={`current-${current.id}`}
+        className="absolute inset-0 z-[1]"
+        style={{ background: current.fallback }}
+        initial={
+          prev !== null
+            ? { clipPath: `circle(0px at ${origin.x}px ${origin.y}px)` }
+            : false
+        }
+        animate={{
+          clipPath: `circle(${maxR}px at ${origin.x}px ${origin.y}px)`,
+        }}
+        transition={{ duration: BUBBLE_S, ease: BUBBLE_EASE }}
+        onAnimationComplete={() => setPrev(null)}
+      >
+        <img
+          src={current.image}
+          alt={current.title}
+          className="absolute inset-0 w-full h-full object-cover"
+          draggable={false}
+        />
+      </motion.div>
 
-        return (
-          <motion.button
-            key={d.id}
-            type="button"
-            layoutId={`dest-${d.id}`}
-            onClick={isHero ? undefined : () => goTo(i)}
-            className="absolute overflow-hidden text-left shadow-2xl ring-1 ring-white/10"
-            style={{
-              ...(isHero ? heroBox : cardBox!),
-              background: d.fallback,
-              cursor: isHero ? "default" : "pointer",
-              zIndex: isHero ? 0 : 20,
-              willChange: "transform",
-            }}
-            transition={{ duration: MORPH_S, ease: EASE }}
-            whileHover={isHero ? undefined : { y: -6 }}
-            aria-label={isHero ? undefined : `Go to ${d.title}`}
-          >
-            <img
-              src={d.image}
-              alt={d.title}
-              className="absolute inset-0 w-full h-full object-cover"
-              draggable={false}
-              onError={(e) => {
-                (e.currentTarget as HTMLImageElement).style.opacity = "0";
-              }}
-            />
-            {/* Card-only label + vignette. Rendered always; opacity flips
-                with the role so framer-motion doesn't have to mount/unmount
-                children mid-morph (which would cause a flicker). */}
-            <div
-              className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent transition-opacity duration-300"
-              style={{ opacity: isHero ? 0 : 1 }}
-            />
-            <div
-              className="absolute bottom-0 left-0 right-0 p-3 transition-opacity duration-300"
-              style={{ opacity: isHero ? 0 : 1 }}
-            >
-              <p className="text-[9px] tracking-[0.22em] uppercase text-white/65 mb-1">
-                {d.eyebrow}
-              </p>
-              <p className="font-display uppercase text-white text-sm sm:text-base leading-tight tracking-tight">
-                {d.title}
-              </p>
-            </div>
-          </motion.button>
-        );
-      })}
-
-      {/* Static vignette over the hero image only (z-5, above hero z-0
-          but below text/cards). Doesn't move with the morph. */}
+      {/* Z-5: static vignette - tints both prev + current images. */}
       <div className="absolute inset-0 z-[5] pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/10" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
       </div>
 
-      {/* HERO TEXT - simple opacity crossfade only. No blur, no movement,
-          intentionally decoupled from the image morph timing. */}
+      {/* Z-10: hero text - pure opacity crossfade, no movement, no blur. */}
       <div className="absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-12 max-w-[44rem] pointer-events-none">
         <AnimatePresence mode="wait">
           <motion.div
@@ -248,7 +268,7 @@ export default function HeroCarousel() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: "easeOut" }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             className="pointer-events-auto"
           >
             <div className="w-10 h-px bg-white mb-5" />
@@ -282,12 +302,63 @@ export default function HeroCarousel() {
         </AnimatePresence>
       </div>
 
-      {/* CONTROLS + COUNTER */}
+      {/* Z-20: card rail - 5 non-active destinations, infinite cyclic order.
+          Cards use framer-motion's `layout` so position shifts animate
+          smoothly. Click any card to fire the bubble from its center. */}
+      <div
+        className="absolute right-0 z-20 flex"
+        style={{
+          bottom: `${card.bottom}px`,
+          gap: `${card.gap}px`,
+          paddingRight: `${paddingRight}px`,
+        }}
+      >
+        <AnimatePresence initial={false} mode="popLayout">
+          {cards.map((c) => (
+            <motion.button
+              key={c.id}
+              type="button"
+              layout
+              onClick={(e) => onCardClick(e, c._idx)}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              whileHover={{ y: -6 }}
+              transition={{ duration: 0.55, ease: BUBBLE_EASE }}
+              className="relative overflow-hidden text-left shadow-2xl ring-1 ring-white/10 rounded-2xl shrink-0 cursor-pointer"
+              style={{
+                width: `${card.w}px`,
+                height: `${card.h}px`,
+                background: c.fallback,
+              }}
+              aria-label={`Go to ${c.title}`}
+            >
+              <img
+                src={c.image}
+                alt={c.title}
+                className="absolute inset-0 w-full h-full object-cover"
+                draggable={false}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-3">
+                <p className="text-[9px] tracking-[0.22em] uppercase text-white/65 mb-1 truncate">
+                  {c.eyebrow}
+                </p>
+                <p className="font-display uppercase text-white text-sm sm:text-base leading-tight tracking-tight">
+                  {c.title}
+                </p>
+              </div>
+            </motion.button>
+          ))}
+        </AnimatePresence>
+      </div>
+
+      {/* Z-30: controls + counter */}
       <div className="absolute bottom-8 left-0 right-0 z-30 px-6 sm:px-12 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
             type="button"
-            onClick={() => goTo(active - 1)}
+            onClick={() => transitionTo(active - 1)}
             className="size-11 rounded-full border border-white/40 text-white hover:bg-white hover:text-black transition-colors flex items-center justify-center"
             aria-label="Previous"
           >
@@ -297,7 +368,7 @@ export default function HeroCarousel() {
           </button>
           <button
             type="button"
-            onClick={() => goTo(active + 1)}
+            onClick={() => transitionTo(active + 1)}
             className="size-11 rounded-full border border-white/40 text-white hover:bg-white hover:text-black transition-colors flex items-center justify-center"
             aria-label="Next"
           >
@@ -310,7 +381,7 @@ export default function HeroCarousel() {
               className="absolute inset-y-0 left-0 bg-amber-400"
               style={{
                 width: `${progress}%`,
-                transition: paused ? "width 200ms ease-out" : "none",
+                transition: paused || prev !== null ? "width 200ms ease-out" : "none",
               }}
             />
           </div>
@@ -321,7 +392,7 @@ export default function HeroCarousel() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: "easeOut" }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             className="font-display text-white text-4xl sm:text-5xl tracking-tight tabular-nums"
             aria-label={`Slide ${active + 1} of ${LEN}`}
           >
