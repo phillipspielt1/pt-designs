@@ -9,8 +9,6 @@ type Destination = {
   title: string;
   body: string;
   image: string;
-  // CSS gradient shown behind the image so failed loads don't reveal a
-  // blank box - the gradient also tints the hero while the image loads.
   fallback: string;
 };
 
@@ -66,35 +64,53 @@ const DESTINATIONS: Destination[] = [
 ];
 
 const SLIDE_MS = 7000;
-const MORPH_MS = 1100;
-const VISIBLE_CARDS = 4;
-// easeOutQuint - long tail, no bounce, very film-like
+const MORPH_S = 1.0;
+// easeOutQuint - long tail, no bounce
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+const LEN = DESTINATIONS.length;
+const RAIL_SLOTS = LEN - 1; // every non-active destination
+
+// Card dimensions per breakpoint (kept small enough that all 5 fit
+// comfortably above tablet width).
+const CARD = {
+  base: { w: 96, h: 138, gap: 8 },
+  sm: { w: 124, h: 175, gap: 10 },
+  md: { w: 148, h: 210, gap: 12 },
+};
 
 export default function HeroCarousel() {
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [imgLoaded, setImgLoaded] = useState<Record<string, boolean>>({});
+  const [bp, setBp] = useState<"base" | "sm" | "md">("md");
 
   const goTo = useCallback((index: number) => {
-    const len = DESTINATIONS.length;
-    setActive(((index % len) + len) % len);
+    setActive(((index % LEN) + LEN) % LEN);
     setProgress(0);
   }, []);
 
-  // Preload every destination image once on mount so swaps don't pop.
+  // Track current breakpoint so card positions are pixel-correct
+  // (framer-motion needs concrete numbers to animate between).
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      setBp(w >= 768 ? "md" : w >= 640 ? "sm" : "base");
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  // Preload every image so swaps never reveal a half-loaded photo.
   useEffect(() => {
     DESTINATIONS.forEach((d) => {
-      const img = new Image();
-      img.onload = () => setImgLoaded((s) => ({ ...s, [d.id]: true }));
-      img.onerror = () => setImgLoaded((s) => ({ ...s, [d.id]: false }));
+      const img = new window.Image();
       img.src = d.image;
     });
   }, []);
 
-  // Auto-advance - pauses on hover. requestAnimationFrame keeps the
-  // progress bar buttery (16ms ticks) without flooding React renders.
+  // Auto-advance - pauses on hover. RAF for fluid progress bar.
   useEffect(() => {
     if (paused) return;
     const startedAt = performance.now();
@@ -114,10 +130,12 @@ export default function HeroCarousel() {
   }, [active, paused, goTo]);
 
   const current = DESTINATIONS[active];
-  const cards = Array.from({ length: VISIBLE_CARDS }, (_, i) => {
-    const idx = (active + 1 + i) % DESTINATIONS.length;
-    return { ...DESTINATIONS[idx], _idx: idx };
-  });
+  const card = CARD[bp];
+  const paddingRight = bp === "md" ? 48 : bp === "sm" ? 32 : 20;
+
+  // Compute the right-px for a given rail slot (0 = leftmost of rail).
+  const railRightPx = (slot: number) =>
+    paddingRight + (RAIL_SLOTS - 1 - slot) * (card.w + card.gap);
 
   return (
     <section
@@ -125,7 +143,7 @@ export default function HeroCarousel() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Top progress bar (auto-rotate timer) */}
+      {/* Top progress bar */}
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-white/10 z-40 pointer-events-none">
         <div
           className="h-full bg-amber-400"
@@ -136,59 +154,101 @@ export default function HeroCarousel() {
         />
       </div>
 
-      {/* MORPH LAYER (z-0): just the hero image. layoutId shared with the
-          matching card so framer-motion morphs the card image to the full
-          hero frame. Gradients live OUTSIDE this layer so they don't scale
-          weirdly during the transform. */}
-      <AnimatePresence initial={false} mode="sync">
-        <motion.div
-          key={current.id}
-          layoutId={`dest-${current.id}`}
-          className="absolute inset-0 z-0"
-          style={{
-            background: current.fallback,
-            willChange: "transform",
-          }}
-          transition={{
-            duration: MORPH_MS / 1000,
-            ease: EASE,
-            layout: { duration: MORPH_MS / 1000, ease: EASE },
-          }}
-        >
-          <img
-            src={current.image}
-            alt={current.title}
-            className="w-full h-full object-cover"
-            style={{
-              opacity: imgLoaded[current.id] === false ? 0 : 1,
-              transition: "opacity 600ms ease",
-            }}
-            draggable={false}
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).style.opacity = "0";
-              setImgLoaded((s) => ({ ...s, [current.id]: false }));
-            }}
-          />
-        </motion.div>
-      </AnimatePresence>
+      {/*
+        Every destination is rendered ONCE with a stable layoutId. Its
+        position/size depends on offset from `active`:
+          offset 0  → hero (full bleed)
+          offset 1..N-1 → rail slot 0..N-2 (left to right)
+        When `active` changes, each element's target position changes and
+        framer-motion smoothly morphs every one in parallel. The old hero
+        slides + shrinks to the far right of the rail, the next card grows
+        into the hero, and the middle cards shift one slot left.
+      */}
+      {DESTINATIONS.map((d, i) => {
+        const offset = (i - active + LEN) % LEN;
+        const isHero = offset === 0;
+        const railSlot = offset - 1;
 
-      {/* STATIC VIGNETTE (z-5): doesn't move with the morph. Always blankets
-          the hero image for legible text + cards over any photo. */}
+        const heroBox = { top: 0, left: 0, right: 0, bottom: 0, borderRadius: 0 };
+        const cardBottom = bp === "md" ? "9rem" : bp === "sm" ? "7.5rem" : "6.5rem";
+        const cardBox = isHero
+          ? null
+          : {
+              top: "auto" as const,
+              left: "auto" as const,
+              right: `${railRightPx(railSlot)}px`,
+              bottom: cardBottom,
+              width: `${card.w}px`,
+              height: `${card.h}px`,
+              borderRadius: "1rem",
+            };
+
+        return (
+          <motion.button
+            key={d.id}
+            type="button"
+            layoutId={`dest-${d.id}`}
+            onClick={isHero ? undefined : () => goTo(i)}
+            className="absolute overflow-hidden text-left shadow-2xl ring-1 ring-white/10"
+            style={{
+              ...(isHero ? heroBox : cardBox!),
+              background: d.fallback,
+              cursor: isHero ? "default" : "pointer",
+              zIndex: isHero ? 0 : 20,
+              willChange: "transform",
+            }}
+            transition={{ duration: MORPH_S, ease: EASE }}
+            whileHover={isHero ? undefined : { y: -6 }}
+            aria-label={isHero ? undefined : `Go to ${d.title}`}
+          >
+            <img
+              src={d.image}
+              alt={d.title}
+              className="absolute inset-0 w-full h-full object-cover"
+              draggable={false}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.opacity = "0";
+              }}
+            />
+            {/* Card-only label + vignette. Rendered always; opacity flips
+                with the role so framer-motion doesn't have to mount/unmount
+                children mid-morph (which would cause a flicker). */}
+            <div
+              className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent transition-opacity duration-300"
+              style={{ opacity: isHero ? 0 : 1 }}
+            />
+            <div
+              className="absolute bottom-0 left-0 right-0 p-3 transition-opacity duration-300"
+              style={{ opacity: isHero ? 0 : 1 }}
+            >
+              <p className="text-[9px] tracking-[0.22em] uppercase text-white/65 mb-1">
+                {d.eyebrow}
+              </p>
+              <p className="font-display uppercase text-white text-sm sm:text-base leading-tight tracking-tight">
+                {d.title}
+              </p>
+            </div>
+          </motion.button>
+        );
+      })}
+
+      {/* Static vignette over the hero image only (z-5, above hero z-0
+          but below text/cards). Doesn't move with the morph. */}
       <div className="absolute inset-0 z-[5] pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/15" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
       </div>
 
-      {/* HERO TEXT (z-10): crossfade between slides. mode="popLayout"
-          lets entering and exiting content overlap, so there's no gap. */}
+      {/* HERO TEXT - simple opacity crossfade only. No blur, no movement,
+          intentionally decoupled from the image morph timing. */}
       <div className="absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-12 max-w-[44rem] pointer-events-none">
-        <AnimatePresence initial={false} mode="popLayout">
+        <AnimatePresence mode="wait">
           <motion.div
             key={current.id}
-            initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            exit={{ opacity: 0, y: -18, filter: "blur(6px)" }}
-            transition={{ duration: 0.8, ease: EASE, delay: 0.05 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
             className="pointer-events-auto"
           >
             <div className="w-10 h-px bg-white mb-5" />
@@ -222,54 +282,7 @@ export default function HeroCarousel() {
         </AnimatePresence>
       </div>
 
-      {/* CARD RAIL (z-20): each card shares its layoutId with the hero when
-          it becomes active. Click promotes it via goTo. */}
-      <div className="absolute right-0 bottom-28 sm:bottom-36 z-20 pr-6 sm:pr-12 flex gap-4">
-        <AnimatePresence initial={false} mode="popLayout">
-          {cards.map((c) => (
-            <motion.button
-              key={c.id}
-              type="button"
-              layoutId={`dest-${c.id}`}
-              onClick={() => goTo(c._idx)}
-              initial={{ opacity: 0, x: 40, scale: 0.92 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              transition={{
-                duration: MORPH_MS / 1000,
-                ease: EASE,
-                layout: { duration: MORPH_MS / 1000, ease: EASE },
-              }}
-              className="relative w-[140px] sm:w-[170px] h-[200px] sm:h-[240px] rounded-2xl overflow-hidden shadow-2xl cursor-pointer text-left group ring-1 ring-white/10"
-              style={{ background: c.fallback, willChange: "transform" }}
-            >
-              <img
-                src={c.image}
-                alt={c.title}
-                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                style={{ opacity: imgLoaded[c.id] === false ? 0 : 1 }}
-                draggable={false}
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).style.opacity = "0";
-                  setImgLoaded((s) => ({ ...s, [c.id]: false }));
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-3.5">
-                <p className="text-[9px] tracking-[0.22em] uppercase text-white/65 mb-1">
-                  {c.eyebrow}
-                </p>
-                <p className="font-display uppercase text-white text-base sm:text-lg leading-tight tracking-tight">
-                  {c.title}
-                </p>
-              </div>
-            </motion.button>
-          ))}
-        </AnimatePresence>
-      </div>
-
-      {/* CONTROLS + COUNTER (z-30) */}
+      {/* CONTROLS + COUNTER */}
       <div className="absolute bottom-8 left-0 right-0 z-30 px-6 sm:px-12 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
@@ -302,12 +315,19 @@ export default function HeroCarousel() {
             />
           </div>
         </div>
-        <div
-          className="font-display text-white text-4xl sm:text-5xl tracking-tight tabular-nums"
-          aria-label={`Slide ${active + 1} of ${DESTINATIONS.length}`}
-        >
-          {String(active + 1).padStart(2, "0")}
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="font-display text-white text-4xl sm:text-5xl tracking-tight tabular-nums"
+            aria-label={`Slide ${active + 1} of ${LEN}`}
+          >
+            {String(active + 1).padStart(2, "0")}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );
