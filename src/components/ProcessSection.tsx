@@ -1,3 +1,8 @@
+"use client";
+
+import { motion } from "framer-motion";
+import ScrollReveal, { SCROLL_STAGGER_CHILD } from "@/components/ScrollReveal";
+
 const STEPS = [
   {
     n: "01",
@@ -26,25 +31,32 @@ export default function ProcessSection() {
       }}
     >
       <div className="max-w-6xl mx-auto">
-        <p
-          className="text-[11px] tracking-[0.32em] uppercase mb-6"
-          style={{ color: "var(--theme-ink-muted)" }}
-        >
-          The process
-        </p>
-        <h2
-          className="text-5xl sm:text-6xl leading-[0.95] tracking-tight mb-14 max-w-2xl"
-          style={{ fontFamily: "var(--theme-font-display)" }}
-        >
-          Simple process.
-          <br />
-          Great results.
-        </h2>
+        <ScrollReveal>
+          <p
+            className="text-[11px] tracking-[0.32em] uppercase mb-6"
+            style={{ color: "var(--theme-ink-muted)" }}
+          >
+            The process
+          </p>
+          <h2
+            className="text-5xl sm:text-6xl leading-[0.95] tracking-tight mb-14 max-w-2xl"
+            style={{ fontFamily: "var(--theme-font-display)" }}
+          >
+            Simple process.
+            <br />
+            Great results.
+          </h2>
+        </ScrollReveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+        <ScrollReveal
+          variant="stagger"
+          className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6"
+        >
           {STEPS.map((s) => (
-            <div
+            <motion.div
               key={s.n}
+              variants={SCROLL_STAGGER_CHILD}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
               className="p-7 sm:p-8 flex flex-col gap-4"
               style={{
                 background: "var(--theme-bg)",
@@ -80,9 +92,9 @@ export default function ProcessSection() {
               >
                 {s.body}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

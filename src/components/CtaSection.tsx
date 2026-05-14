@@ -1,3 +1,7 @@
+"use client";
+
+import ScrollReveal from "@/components/ScrollReveal";
+
 export default function CtaSection() {
   return (
     <section
@@ -8,7 +12,7 @@ export default function CtaSection() {
         color: "var(--theme-ink)",
       }}
     >
-      <div className="max-w-2xl mx-auto text-center">
+      <ScrollReveal className="max-w-2xl mx-auto text-center">
         <h2
           className="text-5xl sm:text-6xl leading-[0.95] tracking-tight mb-5"
           style={{ fontFamily: "var(--theme-font-display)" }}
@@ -39,7 +43,7 @@ export default function CtaSection() {
           Get in touch
           <span aria-hidden>→</span>
         </a>
-      </div>
+      </ScrollReveal>
     </section>
   );
 }
