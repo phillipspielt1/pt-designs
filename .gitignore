@@ -5,6 +5,13 @@ out
 .wrangler
 tsconfig.tsbuildinfo
 *.tsbuildinfo
+
+# Local reference assets (mockup videos / screenshots dropped in the repo
+# root for inspiration). Don't commit binaries to the project root.
+/*.mp4
+/*.mov
+/*.webm
+/videoframe_*.png
 .env*.local
 .DS_Store
 *.log

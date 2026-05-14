@@ -8,7 +8,8 @@
   --color-accent: #5D6A4A;
   --color-accent-strong: #43503A;
 
-  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-display: "Anton", "Oswald", "Bebas Neue", "Hanken Grotesk", system-ui, sans-serif;
+  --font-serif: "Fraunces", "Iowan Old Style", Georgia, serif;
   --font-body: "Hanken Grotesk", "Inter", system-ui, sans-serif;
 }
 
@@ -24,6 +25,6 @@
   h1, h2, h3 {
     font-family: var(--font-display);
     font-weight: 400;
-    letter-spacing: -0.018em;
+    letter-spacing: -0.005em;
   }
 }
