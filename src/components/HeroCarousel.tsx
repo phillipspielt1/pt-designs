@@ -63,9 +63,10 @@ const DESTINATIONS: Destination[] = [
   },
 ];
 
-const SLIDE_MS = 7000;
-const MORPH_S = 1.1;
-const TEXT_S = 0.45;
+const SLIDE_MS = 7500;
+const MORPH_S = 1.45;
+const LABEL_S = 0.5;
+const TEXT_S = 0.5;
 const VISIBLE_CARDS = 4;
 // easeOutCubic - settles smoothly, no bounce
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -99,8 +100,7 @@ export default function HeroCarousel() {
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  // Preload every image - the morph looks worst when a fresh image
-  // suddenly snaps into place mid-transition.
+  // Preload every image so the morph never reveals a half-loaded photo.
   useEffect(() => {
     DESTINATIONS.forEach((d) => {
       const img = new window.Image();
@@ -108,7 +108,7 @@ export default function HeroCarousel() {
     });
   }, []);
 
-  // Auto-advance loop
+  // Auto-advance
   useEffect(() => {
     if (paused) return;
     const startedAt = performance.now();
@@ -131,10 +131,6 @@ export default function HeroCarousel() {
   const card = CARD[bp];
   const paddingRight = bp === "md" ? 48 : bp === "sm" ? 32 : 20;
 
-  // Next N destinations as cards. Each shares its layoutId with the
-  // hero - when active advances, the leftmost card's layoutId is the
-  // new hero, so framer-motion morphs the card itself (image and all)
-  // up to the full hero frame. Exactly like the reference video.
   const cards = Array.from({ length: VISIBLE_CARDS }, (_, i) => {
     const idx = (active + 1 + i) % LEN;
     return { ...DESTINATIONS[idx], _idx: idx };
@@ -157,8 +153,8 @@ export default function HeroCarousel() {
         />
       </div>
 
-      {/* HERO LAYER - shared layoutId morphs the clicked card INTO this
-          frame. The old hero just fades out (no layoutId target). */}
+      {/* HERO LAYER - the new active card morphs IN here via shared
+          layoutId. The old hero just fades out (no matching layoutId). */}
       <AnimatePresence initial={false}>
         <motion.div
           key={current.id}
@@ -168,7 +164,7 @@ export default function HeroCarousel() {
           exit={{ opacity: 0 }}
           transition={{
             layout: { duration: MORPH_S, ease: EASE },
-            opacity: { duration: 0.65, ease: "easeOut" },
+            opacity: { duration: 0.7, ease: "easeOut" },
             default: { duration: MORPH_S, ease: EASE },
           }}
         >
@@ -181,14 +177,14 @@ export default function HeroCarousel() {
         </motion.div>
       </AnimatePresence>
 
-      {/* STATIC VIGNETTE - sits above the hero but below text/cards.
-          Doesn't move with the morph. */}
+      {/* Static vignette - sits above the hero but below text/cards. */}
       <div className="absolute inset-0 z-[5] pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/10" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
       </div>
 
-      {/* HERO TEXT - pure opacity crossfade, no movement, no blur. */}
+      {/* Hero text - pure opacity crossfade, completely independent
+          of the image morph. */}
       <div className="absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-12 max-w-[44rem] pointer-events-none">
         <AnimatePresence mode="wait">
           <motion.div
@@ -230,10 +226,9 @@ export default function HeroCarousel() {
         </AnimatePresence>
       </div>
 
-      {/* CARD RAIL - each card shares a layoutId with the hero. Click
-          a card and framer-motion morphs that exact card up to the
-          full hero frame. Other cards shift one slot left; a new card
-          slides in from the right edge. */}
+      {/* CARD RAIL (z-20) - only the image. Each card shares a
+          layoutId with the hero. Click promotes it via goTo and the
+          image morphs up to the full hero frame. */}
       <div
         className="absolute right-0 z-20 flex"
         style={{
@@ -255,7 +250,7 @@ export default function HeroCarousel() {
               whileHover={{ y: -6 }}
               transition={{
                 layout: { duration: MORPH_S, ease: EASE },
-                opacity: { duration: MORPH_S * 0.65, ease: EASE },
+                opacity: { duration: MORPH_S * 0.6, ease: EASE },
                 x: { duration: MORPH_S * 0.7, ease: EASE },
                 scale: { duration: MORPH_S * 0.65, ease: EASE },
                 default: { duration: MORPH_S, ease: EASE },
@@ -268,19 +263,45 @@ export default function HeroCarousel() {
               }}
               aria-label={`Go to ${c.title}`}
             >
-              {/* The image is what morphs to the hero. */}
               <img
                 src={c.image}
                 alt={c.title}
                 className="absolute inset-0 w-full h-full object-cover"
                 draggable={false}
               />
-              {/* Card-only label + gradient. These belong to the card
-                  presentation; when the card morphs to hero, framer-
-                  motion swaps in the hero's children (just the image),
-                  so they don't follow the morph to full screen. */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent pointer-events-none" />
-              <div className="absolute bottom-0 left-0 right-0 p-3 pointer-events-none">
+            </motion.button>
+          ))}
+        </AnimatePresence>
+      </div>
+
+      {/* CARD LABELS (z-21) - a parallel flex container that mirrors
+          the card rail's geometry. Labels are decoupled from the
+          morphing image entirely: when a card's layoutId promotes to
+          hero, its label animates down + fades to nothing instead of
+          stretching with the image. New labels rise in from below
+          as their card enters the rail. */}
+      <div
+        className="absolute right-0 z-[21] flex pointer-events-none"
+        style={{
+          bottom: `${card.bottom}px`,
+          gap: `${card.gap}px`,
+          paddingRight: `${paddingRight}px`,
+        }}
+      >
+        <AnimatePresence initial={false} mode="popLayout">
+          {cards.map((c) => (
+            <motion.div
+              key={`label-${c.id}`}
+              layout
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 24 }}
+              transition={{ duration: LABEL_S, ease: EASE }}
+              className="relative shrink-0 rounded-2xl overflow-hidden"
+              style={{ width: `${card.w}px`, height: `${card.h}px` }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-3">
                 <p className="text-[9px] tracking-[0.22em] uppercase text-white/65 mb-1 truncate">
                   {c.eyebrow}
                 </p>
@@ -288,7 +309,7 @@ export default function HeroCarousel() {
                   {c.title}
                 </p>
               </div>
-            </motion.button>
+            </motion.div>
           ))}
         </AnimatePresence>
       </div>
