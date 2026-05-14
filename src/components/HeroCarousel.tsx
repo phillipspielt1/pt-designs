@@ -198,9 +198,10 @@ export default function HeroCarousel() {
         </div>
       )}
 
-      {/* Bg picker - only on Morph theme. Top center. Chip styling
-          adapts to the chosen bg so it stays readable. */}
-      {isMorphActive && (
+      {/* Bg picker - only on Morph theme AND only in local dev. The
+          deployed site uses the default morphBg state and the picker
+          is stripped entirely. Pick locally, ship the chosen value. */}
+      {isMorphActive && process.env.NODE_ENV !== "production" && (
         <div className="absolute top-7 left-1/2 -translate-x-1/2 z-[45] flex items-center gap-2 pointer-events-auto">
           <span
             className="text-[10px] tracking-[0.28em] uppercase mr-1"
