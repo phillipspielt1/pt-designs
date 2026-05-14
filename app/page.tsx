@@ -208,28 +208,6 @@ const showcases = [
   { href: "/showcase/trades",       label: "Trades & Services", tag: "Home Services · Local Business", description: "Conversion-first for local trades. Built to get calls, quotes, and bookings.", Preview: TradesPreview },
 ];
 
-const pricingTiers = [
-  {
-    name: "Landing Page",
-    price: "from $250",
-    desc: "A single, high-impact page built to convert - ideal for new businesses, events, or campaigns.",
-    features: ["Custom design", "Mobile-first", "Contact form", "Delivered in 1 week"],
-  },
-  {
-    name: "Business Website",
-    price: "from $500",
-    desc: "A full multi-page site that tells your story, builds trust, and gets you found online.",
-    features: ["Up to 5 pages", "SEO-ready", "Photo-optimised", "Delivered in 2 weeks"],
-    highlight: true,
-  },
-  {
-    name: "Online Store",
-    price: "from $900",
-    desc: "A complete e-commerce experience - product pages, cart, checkout, and brand story built in.",
-    features: ["Full shop setup", "Product pages", "Payment ready", "Delivered in 3 weeks"],
-  },
-];
-
 const services = [
   { icon: Globe,       label: "Landing Pages",        desc: "Convert visitors into customers with a focused, high-impact single page." },
   { icon: User,        label: "Portfolios",            desc: "Showcase your work with a site built to impress the right people." },
@@ -382,9 +360,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── PRICING - student value proposition ── */}
+      {/* ── VALUE PROP + CONTACT CTA ── */}
       <section className="relative z-10 bg-[#1a1a1a] py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-12px_50px_rgba(0,0,0,0.12)]">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-3xl mx-auto text-center">
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
             <motion.div variants={fadeUp} className="inline-flex items-center gap-2 bg-white/10 text-white/70 text-[11px] font-medium px-3 py-1.5 rounded-full mb-6">
               <GraduationCap size={12}/>
@@ -393,48 +371,19 @@ export default function HomePage() {
             <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-white tracking-tight leading-tight">
               Agency quality.<br/><span className="text-white/40">Student pricing.</span>
             </motion.h2>
-            <motion.p variants={fadeUp} className="mt-5 text-base text-white/50 max-w-lg leading-relaxed">
+            <motion.p variants={fadeUp} className="mt-5 text-base text-white/50 max-w-lg mx-auto leading-relaxed">
               Because we&apos;re students, our overhead is near zero - which means we pass those savings directly to you. You get a professional, custom-built website for a fraction of what a studio charges.
             </motion.p>
+            <motion.div variants={fadeUp} className="mt-10">
+              <Link href="/contact"
+                className="inline-flex items-center gap-2 bg-white text-[#1a1a1a] text-sm font-medium px-7 py-3.5 rounded-full transition-all hover:gap-3 hover:bg-white/90">
+                Get a quote <ArrowRight size={14}/>
+              </Link>
+              <p className="mt-5 text-xs text-white/30">
+                Every project gets a custom quote - no surprises.
+              </p>
+            </motion.div>
           </motion.div>
-
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-4">
-            {pricingTiers.map((tier, i) => (
-              <motion.div key={tier.name}
-                initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
-                className={`rounded-2xl p-7 flex flex-col ${tier.highlight ? "bg-white text-[#1a1a1a]" : "bg-white/[0.06] text-white border border-white/[0.08]"}`}
-              >
-                <div className={`text-xs font-semibold uppercase tracking-widest mb-1 ${tier.highlight ? "text-[#1a1a1a]" : "text-white/40"}`}>
-                  {tier.name}
-                </div>
-                <div className={`text-3xl font-semibold mt-2 mb-4 ${tier.highlight ? "text-[#1a1a1a]" : "text-white"}`}>
-                  {tier.price}
-                </div>
-                <p className={`text-sm leading-relaxed mb-6 ${tier.highlight ? "text-[#666]" : "text-white/50"}`}>
-                  {tier.desc}
-                </p>
-                <ul className="space-y-2 mb-8 flex-1">
-                  {tier.features.map(f => (
-                    <li key={f} className={`flex items-center gap-2 text-sm ${tier.highlight ? "text-[#444]" : "text-white/60"}`}>
-                      <Check size={13} className={tier.highlight ? "text-[#1a1a1a]" : "text-white/40"} />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/contact"
-                  className={`inline-flex items-center justify-center gap-2 text-sm font-medium px-5 py-3 rounded-full transition-all hover:gap-3 ${tier.highlight ? "bg-[#1a1a1a] text-white hover:bg-black" : "bg-white/10 text-white hover:bg-white/20"}`}>
-                  Get a quote <ArrowRight size={13}/>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-
-          <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-8 text-center text-sm text-white/30">
-            All prices are starting points. Every project gets a custom quote - no surprises.
-          </motion.p>
         </div>
       </section>
 
