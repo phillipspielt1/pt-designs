@@ -478,21 +478,23 @@ function MorphHero({
         className="text-center pointer-events-auto"
       >
         <p
-          className="uppercase leading-none tracking-tight text-5xl sm:text-6xl md:text-7xl"
+          className="uppercase leading-[1.05] tracking-tight text-5xl sm:text-6xl md:text-7xl"
           style={{ color: ink, fontFamily: fontDisplay, fontWeight: 500 }}
         >
           Two people.
         </p>
+        {/* Container height is generous (~1.6x text size) so absolute
+            text spans never overflow upward into the line above. */}
         <GooeyText
           texts={MORPH_ADJ}
           morphTime={1.0}
           cooldownTime={1.5}
-          className="h-[6.5rem] sm:h-[8.5rem] md:h-[10rem] w-full my-2"
-          textClassName="text-7xl sm:text-8xl md:text-[110pt] leading-none uppercase tracking-tighter"
+          className="h-[6rem] sm:h-[8rem] md:h-[10rem] w-full my-3 sm:my-4"
+          textClassName="text-6xl sm:text-7xl md:text-8xl leading-none uppercase tracking-tighter"
           textStyle={{ color: ink, fontFamily: fontDisplay, fontWeight: 500 }}
         />
         <p
-          className="uppercase leading-none tracking-tight text-5xl sm:text-6xl md:text-7xl"
+          className="uppercase leading-[1.05] tracking-tight text-5xl sm:text-6xl md:text-7xl"
           style={{ color: ink, fontFamily: fontDisplay, fontWeight: 500 }}
         >
           No nonsense.

@@ -14,6 +14,11 @@ interface GooeyTextProps {
    * display font + color via CSS variables).
    */
   textStyle?: React.CSSProperties;
+  /**
+   * How to anchor the morphing text horizontally within its container.
+   * Vertical centering is constant. Default: "center".
+   */
+  align?: "center" | "left" | "right";
 }
 
 /**
@@ -33,7 +38,14 @@ export function GooeyText({
   className,
   textClassName,
   textStyle,
+  align = "center",
 }: GooeyTextProps) {
+  const alignClasses =
+    align === "left"
+      ? "top-1/2 left-0 -translate-y-1/2"
+      : align === "right"
+        ? "top-1/2 right-0 -translate-y-1/2"
+        : "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2";
   const text1Ref = React.useRef<HTMLSpanElement>(null);
   const text2Ref = React.useRef<HTMLSpanElement>(null);
   // Unique SVG filter id per instance - if multiple GooeyText components
@@ -137,13 +149,21 @@ export function GooeyText({
       </svg>
 
       <div
-        className="flex items-center justify-center"
+        className="relative w-full h-full"
         style={{ filter: `url(#${filterId})` }}
       >
+        {/* Both spans are absolutely centered within the container.
+            Using top-1/2 + left-1/2 + translate centers reliably even
+            when the text is much smaller than the container height,
+            so morphed text never drifts to a corner or overflows
+            another line of copy above/below. */}
         <span
           ref={text1Ref}
           className={cn(
-            "absolute inline-block select-none text-center text-6xl md:text-[60pt]",
+            "absolute",
+            alignClasses,
+            "inline-block whitespace-nowrap select-none text-6xl md:text-[60pt]",
+            align === "center" && "text-center",
             textClassName,
           )}
           style={textStyle}
@@ -151,7 +171,10 @@ export function GooeyText({
         <span
           ref={text2Ref}
           className={cn(
-            "absolute inline-block select-none text-center text-6xl md:text-[60pt]",
+            "absolute",
+            alignClasses,
+            "inline-block whitespace-nowrap select-none text-6xl md:text-[60pt]",
+            align === "center" && "text-center",
             textClassName,
           )}
           style={textStyle}

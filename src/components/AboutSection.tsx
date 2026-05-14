@@ -44,8 +44,9 @@ export default function AboutSection() {
                 texts={HEADLINE_MORPH}
                 morphTime={1.1}
                 cooldownTime={1.4}
-                className="h-[7.5rem] sm:h-[9rem] -ml-1"
-                textClassName="text-6xl sm:text-7xl tracking-tight !text-left !justify-start"
+                align="left"
+                className="h-[7.5rem] sm:h-[9rem]"
+                textClassName="text-6xl sm:text-7xl tracking-tight"
                 textStyle={{
                   color: active.ink,
                   fontFamily: active.fontDisplay,
