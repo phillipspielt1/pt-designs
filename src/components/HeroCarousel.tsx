@@ -63,12 +63,16 @@ const DESTINATIONS: Destination[] = [
   },
 ];
 
-const SLIDE_MS = 7500;
-const MORPH_S = 1.45;
-const LABEL_S = 0.5;
-const TEXT_S = 0.5;
+const SLIDE_MS = 8500;
+const MORPH_S = 1.9;
+const LABEL_S = 0.55;
+const TEXT_S = 0.55;
 const VISIBLE_CARDS = 4;
-// easeOutCubic - settles smoothly, no bounce
+// MORPH_EASE - slow start, fast acceleration, soft settle. Mimics the
+// reference video where the card starts opening gently and the speed
+// keeps building all the way to the final frame.
+const MORPH_EASE: [number, number, number, number] = [0.7, 0, 0.25, 1];
+// EASE for everything else (entry/exit animations, label fades).
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const LEN = DESTINATIONS.length;
@@ -163,9 +167,9 @@ export default function HeroCarousel() {
           style={{ background: current.fallback }}
           exit={{ opacity: 0 }}
           transition={{
-            layout: { duration: MORPH_S, ease: EASE },
+            layout: { duration: MORPH_S, ease: MORPH_EASE },
             opacity: { duration: 0.7, ease: "easeOut" },
-            default: { duration: MORPH_S, ease: EASE },
+            default: { duration: MORPH_S, ease: MORPH_EASE },
           }}
         >
           <img
@@ -249,10 +253,12 @@ export default function HeroCarousel() {
               exit={{ opacity: 0 }}
               whileHover={{ y: -6 }}
               transition={{
-                layout: { duration: MORPH_S, ease: EASE },
-                opacity: { duration: MORPH_S * 0.6, ease: EASE },
-                x: { duration: MORPH_S * 0.7, ease: EASE },
-                scale: { duration: MORPH_S * 0.65, ease: EASE },
+                // The layout-morph is the dramatic exponential curve;
+                // entry animations (new cards sliding in) stay smooth.
+                layout: { duration: MORPH_S, ease: MORPH_EASE },
+                opacity: { duration: MORPH_S * 0.5, ease: EASE },
+                x: { duration: MORPH_S * 0.55, ease: EASE },
+                scale: { duration: MORPH_S * 0.5, ease: EASE },
                 default: { duration: MORPH_S, ease: EASE },
               }}
               className="relative overflow-hidden text-left shadow-2xl ring-1 ring-white/10 rounded-2xl shrink-0 cursor-pointer"
