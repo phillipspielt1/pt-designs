@@ -12,6 +12,11 @@ tsconfig.tsbuildinfo
 /*.mov
 /*.webm
 /videoframe_*.png
+
+# Personal scratch dirs that don't belong in source control
+/test/
+/test
+*.pdf
 .env*.local
 .DS_Store
 *.log
