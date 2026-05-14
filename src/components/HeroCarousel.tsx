@@ -34,7 +34,7 @@ const DESTINATIONS: Destination[] = [
     eyebrow: "Sahara Desert · Morocco",
     title: "Marrakech Merzouga",
     body: "Cross the Atlas to the Erg Chebbi dunes. Camel trek at golden hour, sleep under a sky thick with stars.",
-    image: "https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=1800&q=80",
+    image: "https://images.unsplash.com/photo-1547234935-80c7145ec969?w=1800&q=80",
     fallback: "linear-gradient(135deg, #c7894a 0%, #7a4a1f 60%, #2b1c0d 100%)",
   },
   {
@@ -42,7 +42,7 @@ const DESTINATIONS: Destination[] = [
     eyebrow: "Sierra Nevada · United States",
     title: "Yosemite National Park",
     body: "Granite walls, sequoia groves, and a valley floor that drops your jaw every quarter mile. Stand on Glacier Point.",
-    image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1800&q=80",
+    image: "https://images.unsplash.com/photo-1480497490787-505ec076689f?w=1800&q=80",
     fallback: "linear-gradient(135deg, #5a6873 0%, #2d3640 60%, #0e1418 100%)",
   },
   {
@@ -50,7 +50,7 @@ const DESTINATIONS: Destination[] = [
     eyebrow: "Tarifa · Spain",
     title: "Los Lances Beach",
     body: "Where the Mediterranean meets the Atlantic. Wind every afternoon, kites every evening, North Africa across the strait.",
-    image: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=1800&q=80",
+    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1800&q=80",
     fallback: "linear-gradient(135deg, #4a6680 0%, #25384a 60%, #0f1820 100%)",
   },
   {
