@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type Destination = {
   id: string;
@@ -63,17 +63,16 @@ const DESTINATIONS: Destination[] = [
   },
 ];
 
-const SLIDE_MS = 8000;
-const MORPH_S = 1.7;
-const FADE_S = 1.55; // old hero crossfade - nearly the full morph length
-const LABEL_S = 0.55;
-const TEXT_S = 0.55;
+// Timings measured directly off the reference video (1.2s total
+// transition, 60fps source, broken into phases).
+const SLIDE_MS = 7000;
+const MORPH_S = 1.2; // total transition duration
+const FADE_S = 0.85; // old hero opacity fade
+const BLUR_PX = 8; // peak motion blur during transition
 const VISIBLE_CARDS = 4;
-// easeOutCubic - smooth deceleration, the curve the reference video uses.
-// Fast-ish start, gentle settle. NO exponential creep at the start.
+// easeOutCubic - matches the reference video's deceleration curve
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
-// Symmetric easeInOut for the crossfade so the old hero loses opacity
-// gradually across the whole transition, never snapping to black.
+// Crossfade easing - symmetric for smooth tail
 const FADE_EASE: [number, number, number, number] = [0.4, 0, 0.6, 1];
 
 const LEN = DESTINATIONS.length;
@@ -88,11 +87,24 @@ export default function HeroCarousel() {
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
   const [bp, setBp] = useState<"base" | "sm" | "md">("md");
+  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const goTo = useCallback((index: number) => {
     setActive(((index % LEN) + LEN) % LEN);
     setProgress(0);
+    setTransitioning(true);
+    if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+    transitionTimeoutRef.current = setTimeout(() => {
+      setTransitioning(false);
+    }, MORPH_S * 1000);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -141,6 +153,21 @@ export default function HeroCarousel() {
     return { ...DESTINATIONS[idx], _idx: idx };
   });
 
+  // Text variants - precise per-state timing to match the reference
+  // video where old text exits fast (~0.25s) and new text appears
+  // late (~0.45s after transition start).
+  const textVariants = {
+    initial: { opacity: 0 },
+    animate: {
+      opacity: 1,
+      transition: { duration: 0.45, delay: 0.45, ease: "easeOut" as const },
+    },
+    exit: {
+      opacity: 0,
+      transition: { duration: 0.25, ease: "easeIn" as const },
+    },
+  };
+
   return (
     <section
       className="relative w-full h-[100svh] min-h-[680px] overflow-hidden bg-black select-none"
@@ -158,21 +185,22 @@ export default function HeroCarousel() {
         />
       </div>
 
-      {/* HERO LAYER - the new active card morphs IN here via shared
-          layoutId. The old hero just fades out (no matching layoutId). */}
+      {/* HERO LAYER - shared layoutId morphs the clicked card UP into
+          this frame. Motion blur ramps on during the morph and clears
+          as the new image settles, matching the reference video's
+          micro-second timing precisely. */}
       <AnimatePresence initial={false}>
         <motion.div
           key={current.id}
           layoutId={`dest-${current.id}`}
           className="absolute inset-0 z-0 overflow-hidden"
-          style={{ background: current.fallback }}
-          exit={{ opacity: 0 }}
+          style={{ background: current.fallback, willChange: "transform, filter" }}
+          initial={{ filter: `blur(${BLUR_PX}px)` }}
+          animate={{ filter: "blur(0px)" }}
+          exit={{ opacity: 0, filter: `blur(${BLUR_PX}px)` }}
           transition={{
             layout: { duration: MORPH_S, ease: EASE },
-            // The old hero crossfades across nearly the full morph
-            // duration, so the background between the growing new
-            // card and screen edge stays softly visible rather than
-            // snapping to black halfway through.
+            filter: { duration: MORPH_S * 0.75, ease: "easeOut" },
             opacity: { duration: FADE_S, ease: FADE_EASE },
             default: { duration: MORPH_S, ease: EASE },
           }}
@@ -186,22 +214,24 @@ export default function HeroCarousel() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Static vignette - sits above the hero but below text/cards. */}
+      {/* Static vignette - above the hero image, below text/cards. */}
       <div className="absolute inset-0 z-[5] pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/10" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
       </div>
 
-      {/* Hero text - pure opacity crossfade, completely independent
-          of the image morph. */}
+      {/* Hero text - per-state variants so old exits fast (0.25s) and
+          new enters with a 0.45s delay (after the morph is half-way
+          through), matching the video where the new text only appears
+          once the morph is settling. */}
       <div className="absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-12 max-w-[44rem] pointer-events-none">
         <AnimatePresence mode="wait">
           <motion.div
             key={current.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: TEXT_S, ease: "easeOut" }}
+            variants={textVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
             className="pointer-events-auto"
           >
             <div className="w-10 h-px bg-white mb-5" />
@@ -235,9 +265,9 @@ export default function HeroCarousel() {
         </AnimatePresence>
       </div>
 
-      {/* CARD RAIL (z-20) - only the image. Each card shares a
-          layoutId with the hero. Click promotes it via goTo and the
-          image morphs up to the full hero frame. */}
+      {/* CARD RAIL - cards lift -6px and blur 4px while transitioning,
+          matching the "preparation" phase in the reference video where
+          all cards rise slightly and motion-blur for ~200ms. */}
       <div
         className="absolute right-0 z-20 flex"
         style={{
@@ -253,18 +283,23 @@ export default function HeroCarousel() {
               type="button"
               layoutId={`dest-${c.id}`}
               onClick={() => goTo(c._idx)}
-              initial={{ opacity: 0, x: 50, scale: 0.92 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0 }}
-              whileHover={{ y: -6 }}
+              initial={{ opacity: 0, x: 50, scale: 0.92, filter: `blur(${BLUR_PX}px)` }}
+              animate={{
+                opacity: 1,
+                x: 0,
+                scale: 1,
+                y: transitioning ? -6 : 0,
+                filter: transitioning ? "blur(4px)" : "blur(0px)",
+              }}
+              exit={{ opacity: 0, filter: `blur(${BLUR_PX}px)` }}
+              whileHover={transitioning ? undefined : { y: -6 }}
               transition={{
-                // All transforms share the same easeOutCubic curve so
-                // the card growth, position shift, and image scaling
-                // all decelerate together. No conflicting timings.
                 layout: { duration: MORPH_S, ease: EASE },
                 opacity: { duration: MORPH_S * 0.6, ease: EASE },
                 x: { duration: MORPH_S * 0.7, ease: EASE },
                 scale: { duration: MORPH_S * 0.65, ease: EASE },
+                y: { duration: 0.35, ease: EASE },
+                filter: { duration: 0.35, ease: "easeOut" },
                 default: { duration: MORPH_S, ease: EASE },
               }}
               className="relative overflow-hidden text-left shadow-2xl ring-1 ring-white/10 rounded-2xl shrink-0 cursor-pointer"
@@ -272,6 +307,7 @@ export default function HeroCarousel() {
                 width: `${card.w}px`,
                 height: `${card.h}px`,
                 background: c.fallback,
+                willChange: "transform, filter",
               }}
               aria-label={`Go to ${c.title}`}
             >
@@ -286,12 +322,10 @@ export default function HeroCarousel() {
         </AnimatePresence>
       </div>
 
-      {/* CARD LABELS (z-21) - a parallel flex container that mirrors
-          the card rail's geometry. Labels are decoupled from the
-          morphing image entirely: when a card's layoutId promotes to
-          hero, its label animates down + fades to nothing instead of
-          stretching with the image. New labels rise in from below
-          as their card enters the rail. */}
+      {/* CARD LABELS - parallel layer, decoupled from card morph. Exit
+          animation is BLUR + SLIDE DOWN + FADE (matching the video
+          where labels blur out as the card lifts off), not just a
+          slide. */}
       <div
         className="absolute right-0 z-[21] flex pointer-events-none"
         style={{
@@ -305,10 +339,19 @@ export default function HeroCarousel() {
             <motion.div
               key={`label-${c.id}`}
               layout
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 24 }}
-              transition={{ duration: LABEL_S, ease: EASE }}
+              initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                filter: transitioning ? "blur(2px)" : "blur(0px)",
+              }}
+              exit={{ opacity: 0, y: 18, filter: "blur(6px)" }}
+              transition={{
+                duration: 0.4,
+                ease: EASE,
+                opacity: { duration: 0.35 },
+                filter: { duration: 0.3 },
+              }}
               className="relative shrink-0 rounded-2xl overflow-hidden"
               style={{ width: `${card.w}px`, height: `${card.h}px` }}
             >
@@ -326,7 +369,7 @@ export default function HeroCarousel() {
         </AnimatePresence>
       </div>
 
-      {/* CONTROLS + COUNTER */}
+      {/* Controls + counter */}
       <div className="absolute bottom-8 left-0 right-0 z-30 px-6 sm:px-12 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
@@ -359,13 +402,15 @@ export default function HeroCarousel() {
             />
           </div>
         </div>
+        {/* Counter flips immediately on transition start - matches the
+            video where "02" appears at t=2.9s (just 0.2s after the
+            transition begins). */}
         <AnimatePresence mode="wait">
           <motion.div
             key={current.id}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: TEXT_S, ease: "easeOut" }}
+            animate={{ opacity: 1, transition: { duration: 0.2, delay: 0.05 } }}
+            exit={{ opacity: 0, transition: { duration: 0.15 } }}
             className="font-display text-white text-4xl sm:text-5xl tracking-tight tabular-nums"
             aria-label={`Slide ${active + 1} of ${LEN}`}
           >
