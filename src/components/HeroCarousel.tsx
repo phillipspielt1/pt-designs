@@ -63,17 +63,18 @@ const DESTINATIONS: Destination[] = [
   },
 ];
 
-const SLIDE_MS = 8500;
-const MORPH_S = 1.9;
+const SLIDE_MS = 8000;
+const MORPH_S = 1.7;
+const FADE_S = 1.55; // old hero crossfade - nearly the full morph length
 const LABEL_S = 0.55;
 const TEXT_S = 0.55;
 const VISIBLE_CARDS = 4;
-// MORPH_EASE - slow start, fast acceleration, soft settle. Mimics the
-// reference video where the card starts opening gently and the speed
-// keeps building all the way to the final frame.
-const MORPH_EASE: [number, number, number, number] = [0.7, 0, 0.25, 1];
-// EASE for everything else (entry/exit animations, label fades).
+// easeOutCubic - smooth deceleration, the curve the reference video uses.
+// Fast-ish start, gentle settle. NO exponential creep at the start.
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+// Symmetric easeInOut for the crossfade so the old hero loses opacity
+// gradually across the whole transition, never snapping to black.
+const FADE_EASE: [number, number, number, number] = [0.4, 0, 0.6, 1];
 
 const LEN = DESTINATIONS.length;
 
@@ -167,9 +168,13 @@ export default function HeroCarousel() {
           style={{ background: current.fallback }}
           exit={{ opacity: 0 }}
           transition={{
-            layout: { duration: MORPH_S, ease: MORPH_EASE },
-            opacity: { duration: 0.7, ease: "easeOut" },
-            default: { duration: MORPH_S, ease: MORPH_EASE },
+            layout: { duration: MORPH_S, ease: EASE },
+            // The old hero crossfades across nearly the full morph
+            // duration, so the background between the growing new
+            // card and screen edge stays softly visible rather than
+            // snapping to black halfway through.
+            opacity: { duration: FADE_S, ease: FADE_EASE },
+            default: { duration: MORPH_S, ease: EASE },
           }}
         >
           <img
@@ -253,12 +258,13 @@ export default function HeroCarousel() {
               exit={{ opacity: 0 }}
               whileHover={{ y: -6 }}
               transition={{
-                // The layout-morph is the dramatic exponential curve;
-                // entry animations (new cards sliding in) stay smooth.
-                layout: { duration: MORPH_S, ease: MORPH_EASE },
-                opacity: { duration: MORPH_S * 0.5, ease: EASE },
-                x: { duration: MORPH_S * 0.55, ease: EASE },
-                scale: { duration: MORPH_S * 0.5, ease: EASE },
+                // All transforms share the same easeOutCubic curve so
+                // the card growth, position shift, and image scaling
+                // all decelerate together. No conflicting timings.
+                layout: { duration: MORPH_S, ease: EASE },
+                opacity: { duration: MORPH_S * 0.6, ease: EASE },
+                x: { duration: MORPH_S * 0.7, ease: EASE },
+                scale: { duration: MORPH_S * 0.65, ease: EASE },
                 default: { duration: MORPH_S, ease: EASE },
               }}
               className="relative overflow-hidden text-left shadow-2xl ring-1 ring-white/10 rounded-2xl shrink-0 cursor-pointer"
