@@ -36,6 +36,12 @@ export function GooeyText({
 }: GooeyTextProps) {
   const text1Ref = React.useRef<HTMLSpanElement>(null);
   const text2Ref = React.useRef<HTMLSpanElement>(null);
+  // Unique SVG filter id per instance - if multiple GooeyText components
+  // mount on the same page (e.g. hero + about section both morphing),
+  // sharing one filter id causes the browser to pick one element and the
+  // others render unfiltered, producing flashing/glitch artefacts.
+  const reactId = React.useId();
+  const filterId = `gooey-text-threshold-${reactId.replace(/:/g, "")}`;
 
   React.useEffect(() => {
     let textIndex = texts.length - 1;
@@ -117,7 +123,7 @@ export function GooeyText({
     <div className={cn("relative", className)}>
       <svg className="absolute h-0 w-0" aria-hidden="true" focusable="false">
         <defs>
-          <filter id="gooey-text-threshold">
+          <filter id={filterId}>
             <feColorMatrix
               in="SourceGraphic"
               type="matrix"
@@ -132,7 +138,7 @@ export function GooeyText({
 
       <div
         className="flex items-center justify-center"
-        style={{ filter: "url(#gooey-text-threshold)" }}
+        style={{ filter: `url(#${filterId})` }}
       >
         <span
           ref={text1Ref}

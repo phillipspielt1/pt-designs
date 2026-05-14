@@ -6,17 +6,38 @@ import { THEMES } from "@/lib/themes";
 import { useTheme } from "@/components/ThemeProvider";
 import { GooeyText } from "@/components/ui/gooey-text-morphing";
 
-// Three hero variants exist for the Morph theme - pick one with the
-// preview chips at top-center, ship the winner, then delete the rest.
-
-// Variant A - "Sentence Stack" - the verb morphs.
-const MORPH_VERBS = ["BUILD", "CRAFT", "SHIP", "DESIGN"];
-// Variant B - "Centered Noun" - the noun morphs.
-const MORPH_NOUNS = ["WEBSITES", "BRANDS", "STORES", "TOOLS"];
-// Variant C - "Three-Line Poster" - the descriptor morphs.
+// Morph theme hero - three-line poster ("Two people. / [ADJ] / No nonsense.")
+// with three background swatches to choose from (no gradient).
 const MORPH_ADJ = ["SHARP", "DRIVEN", "READY", "FAST"];
 
-type MorphVariant = "a" | "b" | "c";
+type MorphBg = "dark" | "light" | "warm";
+
+const MORPH_BG_OPTIONS: Record<
+  MorphBg,
+  { name: string; bg: string; ink: string; eyebrow: string; vignette: boolean }
+> = {
+  dark: {
+    name: "Dark",
+    bg: "#0A0A0A",
+    ink: "#FFFFFF",
+    eyebrow: "rgba(255,255,255,0.70)",
+    vignette: true,
+  },
+  light: {
+    name: "Light",
+    bg: "#FFFFFF",
+    ink: "#0A0A0A",
+    eyebrow: "rgba(10,10,10,0.55)",
+    vignette: false,
+  },
+  warm: {
+    name: "Warm",
+    bg: "#FAF5EC",
+    ink: "#15110B",
+    eyebrow: "rgba(21,17,11,0.55)",
+    vignette: false,
+  },
+};
 
 const SLIDE_MS = 8500;
 const MORPH_S = 1.2;
@@ -45,7 +66,7 @@ export default function HeroCarousel() {
   const [paused, setPaused] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
   const [bp, setBp] = useState<"base" | "sm" | "md">("md");
-  const [morphVariant, setMorphVariant] = useState<MorphVariant>("a");
+  const [morphBg, setMorphBg] = useState<MorphBg>("dark");
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const goTo = useCallback(
@@ -106,6 +127,14 @@ export default function HeroCarousel() {
     return { ...THEMES[idx], _idx: idx };
   });
 
+  // Morph theme overrides its gradient swatch with a solid bg chosen
+  // from the picker. Applies to both the hero motion.div and any rail
+  // card representing Morph, so the card-to-hero morph stays clean.
+  const morphCfg = MORPH_BG_OPTIONS[morphBg];
+  const swatchFor = (themeId: string, defaultSwatch: string) =>
+    themeId === "morph" ? morphCfg.bg : defaultSwatch;
+  const isMorphActive = current.id === "morph";
+
   const textVariants = {
     initial: { opacity: 0 },
     animate: {
@@ -137,15 +166,15 @@ export default function HeroCarousel() {
         />
       </div>
 
-      {/* HERO LAYER - swatch (CSS gradient) as the morphing image, so
-          every theme's hero is guaranteed to match its palette. */}
+      {/* HERO LAYER - swatch is each theme's gradient, except Morph
+          which uses a solid colour picked from the bg chip group. */}
       <AnimatePresence initial={false}>
         <motion.div
           key={current.id}
           layoutId={`theme-${current.id}`}
           className="absolute inset-0 z-0 overflow-hidden"
           style={{
-            background: current.swatch,
+            background: swatchFor(current.id, current.swatch),
             willChange: "transform, filter",
           }}
           initial={{ filter: `blur(${BLUR_PX}px)` }}
@@ -160,42 +189,56 @@ export default function HeroCarousel() {
         />
       </AnimatePresence>
 
-      {/* Static vignette */}
-      <div className="absolute inset-0 z-[5] pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
-      </div>
-
-      {/* Variant picker - only on Morph theme. Top center. */}
-      {current.id === "morph" && (
-        <div className="absolute top-7 left-1/2 -translate-x-1/2 z-[45] flex items-center gap-2 pointer-events-auto">
-          <span className="text-[10px] tracking-[0.28em] uppercase text-white/55 mr-1">
-            Hero variant
-          </span>
-          {(["a", "b", "c"] as const).map((v) => (
-            <button
-              key={v}
-              type="button"
-              onClick={() => setMorphVariant(v)}
-              className="size-7 rounded-full text-[10px] font-medium uppercase transition-all"
-              style={{
-                background: morphVariant === v ? "#fff" : "rgba(255,255,255,0.10)",
-                color: morphVariant === v ? "#000" : "rgba(255,255,255,0.7)",
-                border: "1px solid rgba(255,255,255,0.25)",
-              }}
-              aria-label={`Hero variant ${v.toUpperCase()}`}
-              aria-pressed={morphVariant === v}
-            >
-              {v.toUpperCase()}
-            </button>
-          ))}
+      {/* Static vignette - only when the active hero is dark, so text
+          stays legible. Hidden on Morph + light/warm. */}
+      {(!isMorphActive || morphCfg.vignette) && (
+        <div className="absolute inset-0 z-[5] pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
         </div>
       )}
 
-      {/* Hero text - layout differs by theme and (for morph) by variant. */}
-      {current.id === "morph" ? (
+      {/* Bg picker - only on Morph theme. Top center. Chip styling
+          adapts to the chosen bg so it stays readable. */}
+      {isMorphActive && (
+        <div className="absolute top-7 left-1/2 -translate-x-1/2 z-[45] flex items-center gap-2 pointer-events-auto">
+          <span
+            className="text-[10px] tracking-[0.28em] uppercase mr-1"
+            style={{ color: morphCfg.eyebrow }}
+          >
+            Background
+          </span>
+          {(["dark", "light", "warm"] as const).map((v) => {
+            const isActive = morphBg === v;
+            const chipBase = morphCfg.ink === "#FFFFFF" ? "255,255,255" : "10,10,10";
+            return (
+              <button
+                key={v}
+                type="button"
+                onClick={() => setMorphBg(v)}
+                className="px-3 h-7 rounded-full text-[10px] font-medium uppercase tracking-[0.18em] transition-all"
+                style={{
+                  background: isActive
+                    ? morphCfg.ink
+                    : `rgba(${chipBase}, 0.08)`,
+                  color: isActive ? morphCfg.bg : morphCfg.ink,
+                  border: `1px solid rgba(${chipBase}, 0.25)`,
+                }}
+                aria-pressed={isActive}
+              >
+                {MORPH_BG_OPTIONS[v].name}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Hero text - Morph uses the dedicated three-line poster, others
+          fall through to the standard left-aligned panel. */}
+      {isMorphActive ? (
         <MorphHero
-          variant={morphVariant}
+          ink={morphCfg.ink}
+          eyebrowColor={morphCfg.eyebrow}
           fontDisplay={current.fontDisplay}
           fontBody={current.fontBody}
           accent={current.accent}
@@ -291,7 +334,7 @@ export default function HeroCarousel() {
               style={{
                 width: `${card.w}px`,
                 height: `${card.h}px`,
-                background: c.swatch,
+                background: swatchFor(c.id, c.swatch),
                 willChange: "transform, filter",
               }}
               aria-label={`Switch to ${c.name} theme`}
@@ -400,12 +443,14 @@ export default function HeroCarousel() {
 }
 
 /* -----------------------------------------------------------------------
- * MorphHero - three swappable hero compositions, all powered by GooeyText.
- * Pick one (A/B/C) via the chip picker at top-center of the section.
+ * MorphHero - the chosen "Variant C" composition: three centered lines,
+ * with the middle line morphing through MORPH_ADJ. Colours are passed
+ * in so the same component handles Dark / Light / Warm backgrounds.
  * --------------------------------------------------------------------- */
 
 type MorphHeroProps = {
-  variant: MorphVariant;
+  ink: string;
+  eyebrowColor: string;
   fontDisplay: string;
   fontBody: string;
   accent: string;
@@ -413,128 +458,28 @@ type MorphHeroProps = {
 };
 
 function MorphHero({
-  variant,
+  ink,
+  eyebrowColor,
   fontDisplay,
   fontBody,
   accent,
   accentInk,
 }: MorphHeroProps) {
-  const ctaBtn = (
-    <button
-      type="button"
-      onClick={() => {
-        document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
-      }}
-      className="rounded-full text-[11px] tracking-[0.28em] uppercase px-7 py-3 transition-colors"
-      style={{ background: accent, color: accentInk, fontFamily: fontBody }}
-    >
-      See it applied
-    </button>
-  );
-
-  /* -------- VARIANT A: SENTENCE STACK, LEFT-ALIGNED ------------------ */
-  if (variant === "a") {
-    return (
-      <div className="absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-12 max-w-[44rem] pointer-events-none">
-        <motion.div
-          key={`morph-a`}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="pointer-events-auto"
-        >
-          <p
-            className="text-xs tracking-[0.32em] uppercase mb-6 text-white/70"
-            style={{ fontFamily: fontBody }}
-          >
-            Two-person studio · Nanaimo BC
-          </p>
-          <p
-            className="uppercase text-white leading-[0.95] tracking-tight text-3xl sm:text-4xl md:text-5xl mb-1"
-            style={{ fontFamily: fontDisplay, fontWeight: 500 }}
-          >
-            We
-          </p>
-          <GooeyText
-            texts={MORPH_VERBS}
-            morphTime={1.1}
-            cooldownTime={1.6}
-            className="h-[5.5rem] sm:h-[7rem] md:h-[8.5rem] -ml-1"
-            textClassName="!justify-start !text-left text-7xl sm:text-8xl md:text-9xl leading-none uppercase tracking-tight"
-            textStyle={{ color: "#FFFFFF", fontFamily: fontDisplay, fontWeight: 500 }}
-          />
-          <p
-            className="uppercase text-white leading-[0.95] tracking-tight text-3xl sm:text-4xl md:text-5xl mb-7 mt-1"
-            style={{ fontFamily: fontDisplay, fontWeight: 500 }}
-          >
-            websites that work.
-          </p>
-          <p
-            className="text-white/75 max-w-md mb-9 leading-relaxed text-[15px]"
-            style={{ fontFamily: fontBody }}
-          >
-            No agency markup. No twelve-week timelines. Just two students who
-            ship sites that look good and do their job.
-          </p>
-          <div className="flex items-center gap-3">{ctaBtn}</div>
-        </motion.div>
-      </div>
-    );
-  }
-
-  /* -------- VARIANT B: CENTERED NOUN, POSTER STYLE ------------------ */
-  if (variant === "b") {
-    return (
-      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 pointer-events-none">
-        <motion.div
-          key={`morph-b`}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center pointer-events-auto"
-        >
-          <p
-            className="text-xs tracking-[0.42em] uppercase mb-5 text-white/70"
-            style={{ fontFamily: fontBody }}
-          >
-            We make
-          </p>
-          <GooeyText
-            texts={MORPH_NOUNS}
-            morphTime={1.1}
-            cooldownTime={1.6}
-            className="h-[6rem] sm:h-[8rem] md:h-[10rem] w-full"
-            textClassName="text-7xl sm:text-8xl md:text-[120pt] leading-none uppercase tracking-tighter"
-            textStyle={{ color: "#FFFFFF", fontFamily: fontDisplay, fontWeight: 500 }}
-          />
-          <p
-            className="mt-6 text-white/80 max-w-xl mx-auto leading-relaxed text-base sm:text-lg"
-            style={{ fontFamily: fontBody }}
-          >
-            for ambitious businesses that mean it. Built in Nanaimo by two
-            students who&apos;ve had enough of bloated agency invoices.
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-3">
-            {ctaBtn}
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
-
-  /* -------- VARIANT C: THREE-LINE STATEMENT POSTER ------------------ */
   return (
     <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 pointer-events-none">
       <motion.div
-        key={`morph-c`}
+        // Re-key on `ink` so the entrance animation replays when the
+        // user flips between backgrounds - subtle confirmation that
+        // the change registered.
+        key={`morph-${ink}`}
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="text-center pointer-events-auto"
       >
         <p
-          className="uppercase text-white leading-none tracking-tight text-5xl sm:text-6xl md:text-7xl"
-          style={{ fontFamily: fontDisplay, fontWeight: 500 }}
+          className="uppercase leading-none tracking-tight text-5xl sm:text-6xl md:text-7xl"
+          style={{ color: ink, fontFamily: fontDisplay, fontWeight: 500 }}
         >
           Two people.
         </p>
@@ -542,24 +487,35 @@ function MorphHero({
           texts={MORPH_ADJ}
           morphTime={1.0}
           cooldownTime={1.5}
-          className="h-[5.5rem] sm:h-[7.5rem] md:h-[9rem] w-full my-1"
+          className="h-[6.5rem] sm:h-[8.5rem] md:h-[10rem] w-full my-2"
           textClassName="text-7xl sm:text-8xl md:text-[110pt] leading-none uppercase tracking-tighter"
-          textStyle={{ color: "#FFFFFF", fontFamily: fontDisplay, fontWeight: 500 }}
+          textStyle={{ color: ink, fontFamily: fontDisplay, fontWeight: 500 }}
         />
         <p
-          className="uppercase text-white leading-none tracking-tight text-5xl sm:text-6xl md:text-7xl"
-          style={{ fontFamily: fontDisplay, fontWeight: 500 }}
+          className="uppercase leading-none tracking-tight text-5xl sm:text-6xl md:text-7xl"
+          style={{ color: ink, fontFamily: fontDisplay, fontWeight: 500 }}
         >
           No nonsense.
         </p>
         <p
-          className="mt-8 text-white/75 max-w-md mx-auto leading-relaxed text-[15px]"
-          style={{ fontFamily: fontBody }}
+          className="mt-8 max-w-md mx-auto leading-relaxed text-[15px]"
+          style={{ color: eyebrowColor, fontFamily: fontBody }}
         >
           A two-student studio in Nanaimo, BC. We build websites for people who
           want results, not invoices.
         </p>
-        <div className="mt-8 flex items-center justify-center gap-3">{ctaBtn}</div>
+        <div className="mt-8 flex items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="rounded-full text-[11px] tracking-[0.28em] uppercase px-7 py-3 transition-colors"
+            style={{ background: accent, color: accentInk, fontFamily: fontBody }}
+          >
+            See it applied
+          </button>
+        </div>
       </motion.div>
     </div>
   );
