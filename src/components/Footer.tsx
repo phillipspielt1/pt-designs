@@ -1,13 +1,23 @@
 export default function Footer() {
   return (
-    <footer className="mt-24 border-t border-[var(--color-line)]">
-      <div className="mx-auto max-w-3xl px-6 py-8 flex items-center justify-between text-xs text-[var(--color-ink-soft)]/70">
-        <span>&copy; {new Date().getFullYear()} VDT Test</span>
+    <footer
+      className="themed-section border-t"
+      style={{
+        background: "var(--theme-bg)",
+        borderColor: "var(--theme-line)",
+        color: "var(--theme-ink-muted)",
+      }}
+    >
+      <div className="mx-auto max-w-5xl px-6 sm:px-12 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+        <span style={{ fontFamily: "var(--theme-font-body)" }}>
+          &copy; {new Date().getFullYear()} VDT Test
+        </span>
         <a
           href="https://vdtsites.com"
           target="_blank"
           rel="noreferrer"
-          className="font-mono uppercase tracking-[0.18em] text-[10px] hover:text-[var(--color-ink)] transition-colors"
+          className="font-mono uppercase tracking-[0.18em] text-[10px] transition-opacity hover:opacity-70"
+          style={{ color: "var(--theme-ink-muted)" }}
         >
           Site by VDTSITES.COM
         </a>

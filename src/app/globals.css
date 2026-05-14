@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+  /* Globe Express legacy palette - kept for nav + non-themed elements */
   --color-bone: #FAF5EC;
   --color-ink: #15110B;
   --color-ink-soft: #2A2117;
@@ -23,8 +24,38 @@
     -webkit-font-smoothing: antialiased;
   }
   h1, h2, h3 {
-    font-family: var(--font-display);
     font-weight: 400;
     letter-spacing: -0.005em;
   }
+}
+
+/* Themed sections - read --theme-* CSS variables set by <ThemeProvider>.
+   Transitions on color / background / border / shadow let the page
+   smoothly animate when the active theme changes. */
+.themed-root,
+.themed-section,
+.themed-panel {
+  transition:
+    background 700ms cubic-bezier(0.4, 0, 0.6, 1),
+    background-color 700ms cubic-bezier(0.4, 0, 0.6, 1),
+    color 700ms cubic-bezier(0.4, 0, 0.6, 1),
+    border-color 700ms cubic-bezier(0.4, 0, 0.6, 1),
+    box-shadow 700ms cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.themed-section *,
+.themed-panel * {
+  transition:
+    color 700ms cubic-bezier(0.4, 0, 0.6, 1),
+    background 700ms cubic-bezier(0.4, 0, 0.6, 1),
+    background-color 700ms cubic-bezier(0.4, 0, 0.6, 1),
+    border-color 700ms cubic-bezier(0.4, 0, 0.6, 1),
+    border-radius 500ms cubic-bezier(0.4, 0, 0.6, 1),
+    box-shadow 700ms cubic-bezier(0.4, 0, 0.6, 1),
+    font-family 0ms; /* fonts swap instantly - looks weird mid-fade */
+}
+
+/* Smooth scrolling for the in-page CTA links */
+html {
+  scroll-behavior: smooth;
 }

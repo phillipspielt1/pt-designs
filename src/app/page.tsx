@@ -1,32 +1,61 @@
+import AboutSection from "@/components/AboutSection";
 import ContactForm from "@/components/ContactForm";
+import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
 import HeroCarousel from "@/components/HeroCarousel";
+import ProcessSection from "@/components/ProcessSection";
 import SiteNav from "@/components/SiteNav";
+import ThemeProvider from "@/components/ThemeProvider";
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col">
-      <div className="relative">
-        <SiteNav />
-        <HeroCarousel />
-      </div>
-
-      <section className="px-6 py-24 bg-[var(--color-bone)]">
-        <div className="mx-auto max-w-xl">
-          <p className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-ink-soft)]/60 mb-4">
-            Sandbox · VDT Test
-          </p>
-          <h2 className="font-display uppercase text-5xl sm:text-6xl mb-3 leading-none">
-            Get in touch
-          </h2>
-          <p className="text-sm text-[var(--color-ink-soft)]/70 mb-10">
-            Drop a note and it lands in the inbox.
-          </p>
-          <ContactForm />
+    <ThemeProvider>
+      <main className="min-h-screen flex flex-col">
+        <div className="relative">
+          <SiteNav />
+          <HeroCarousel />
         </div>
-      </section>
 
-      <Footer />
-    </main>
+        <AboutSection />
+        <ProcessSection />
+        <CtaSection />
+
+        <section
+          id="form"
+          className="themed-section py-24 px-6 sm:px-12"
+          style={{
+            background: "var(--theme-bg-alt)",
+            color: "var(--theme-ink)",
+          }}
+        >
+          <div className="mx-auto max-w-xl">
+            <p
+              className="text-[11px] tracking-[0.32em] uppercase mb-3"
+              style={{ color: "var(--theme-ink-muted)" }}
+            >
+              Tell us everything
+            </p>
+            <h2
+              className="text-4xl sm:text-5xl mb-3 leading-none"
+              style={{ fontFamily: "var(--theme-font-display)" }}
+            >
+              Send a message
+            </h2>
+            <p
+              className="text-sm mb-10"
+              style={{
+                color: "var(--theme-ink-muted)",
+                fontFamily: "var(--theme-font-body)",
+              }}
+            >
+              Drop a note and it lands in the inbox.
+            </p>
+            <ContactForm />
+          </div>
+        </section>
+
+        <Footer />
+      </main>
+    </ThemeProvider>
   );
 }

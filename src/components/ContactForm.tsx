@@ -40,7 +40,15 @@ export default function ContactForm() {
   if (status === "ok") {
     return (
       <div className="text-center py-10">
-        <p className="font-display text-2xl">Thanks, message received.</p>
+        <p
+          className="text-2xl"
+          style={{
+            color: "var(--theme-ink)",
+            fontFamily: "var(--theme-font-display)",
+          }}
+        >
+          Thanks, message received.
+        </p>
       </div>
     );
   }
@@ -62,13 +70,21 @@ export default function ContactForm() {
       />
 
       {status === "error" && (
-        <p className="text-sm text-red-700">{errorMsg}</p>
+        <p className="text-sm" style={{ color: "#dc2626" }}>
+          {errorMsg}
+        </p>
       )}
 
       <button
         type="submit"
         disabled={status === "sending"}
-        className="w-full rounded-full bg-[var(--color-ink)] text-[var(--color-bone)] py-3 hover:bg-[var(--color-accent-strong)] transition-colors disabled:opacity-60"
+        className="w-full py-3 transition-colors disabled:opacity-60 text-sm tracking-[0.18em] uppercase"
+        style={{
+          background: "var(--theme-accent)",
+          color: "var(--theme-accent-ink)",
+          borderRadius: "var(--theme-radius-lg)",
+          fontFamily: "var(--theme-font-body)",
+        }}
       >
         {status === "sending" ? "Sending..." : "Send"}
       </button>
@@ -89,17 +105,44 @@ function Field({
   required?: boolean;
   multiline?: boolean;
 }) {
-  const cls =
-    "w-full bg-white/60 border border-[var(--color-line)] rounded-xl px-4 py-3 text-[var(--color-ink)] placeholder:text-[var(--color-ink-soft)]/40 focus:outline-none focus:border-[var(--color-accent)] focus:bg-white transition-colors";
+  const fieldStyle: React.CSSProperties = {
+    background: "var(--theme-bg)",
+    border: "1px solid var(--theme-line)",
+    color: "var(--theme-ink)",
+    borderRadius: "var(--theme-radius-sm)",
+    fontFamily: "var(--theme-font-body)",
+  };
+  const cls = "w-full px-4 py-3 focus:outline-none focus:ring-2 transition-colors";
   return (
     <label className="block">
-      <span className="block text-[11px] uppercase tracking-[0.22em] text-[var(--color-ink-soft)]/70 mb-2">
-        {label} {required && <span className="text-red-700">*</span>}
+      <span
+        className="block text-[11px] uppercase tracking-[0.22em] mb-2"
+        style={{
+          color: "var(--theme-ink-muted)",
+          fontFamily: "var(--theme-font-body)",
+        }}
+      >
+        {label}{" "}
+        {required && (
+          <span style={{ color: "var(--theme-accent)" }}>*</span>
+        )}
       </span>
       {multiline ? (
-        <textarea name={name} required={required} rows={5} className={`${cls} resize-none`} />
+        <textarea
+          name={name}
+          required={required}
+          rows={5}
+          className={`${cls} resize-none`}
+          style={fieldStyle}
+        />
       ) : (
-        <input name={name} type={type} required={required} className={cls} />
+        <input
+          name={name}
+          type={type}
+          required={required}
+          className={cls}
+          style={fieldStyle}
+        />
       )}
     </label>
   );

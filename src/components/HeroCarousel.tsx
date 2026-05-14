@@ -2,80 +2,18 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { THEMES } from "@/lib/themes";
+import { useTheme } from "@/components/ThemeProvider";
 
-type Destination = {
-  id: string;
-  eyebrow: string;
-  title: string;
-  body: string;
-  image: string;
-  fallback: string;
-};
-
-const DESTINATIONS: Destination[] = [
-  {
-    id: "saint-antonien",
-    eyebrow: "Switzerland Alps",
-    title: "Saint Antönien",
-    body: "Carve through the high passes of the Prättigau on dirt and switchbacks. Long-day rides, alpine huts, no crowds.",
-    image: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=1800&q=80",
-    fallback: "linear-gradient(135deg, #3d4a3b 0%, #1d2624 60%, #0f1310 100%)",
-  },
-  {
-    id: "nagano",
-    eyebrow: "Japan Alps",
-    title: "Nagano Prefecture",
-    body: "Mist-laced cedar forests, onsens, and a powder season that never seems to quit. A long quiet tour of mountain Japan.",
-    image: "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=1800&q=80",
-    fallback: "linear-gradient(135deg, #4a5552 0%, #232a29 60%, #11171a 100%)",
-  },
-  {
-    id: "merzouga",
-    eyebrow: "Sahara Desert · Morocco",
-    title: "Marrakech Merzouga",
-    body: "Cross the Atlas to the Erg Chebbi dunes. Camel trek at golden hour, sleep under a sky thick with stars.",
-    image: "https://images.unsplash.com/photo-1547234935-80c7145ec969?w=1800&q=80",
-    fallback: "linear-gradient(135deg, #c7894a 0%, #7a4a1f 60%, #2b1c0d 100%)",
-  },
-  {
-    id: "yosemite",
-    eyebrow: "Sierra Nevada · United States",
-    title: "Yosemite National Park",
-    body: "Granite walls, sequoia groves, and a valley floor that drops your jaw every quarter mile. Stand on Glacier Point.",
-    image: "https://images.unsplash.com/photo-1480497490787-505ec076689f?w=1800&q=80",
-    fallback: "linear-gradient(135deg, #5a6873 0%, #2d3640 60%, #0e1418 100%)",
-  },
-  {
-    id: "los-lances",
-    eyebrow: "Tarifa · Spain",
-    title: "Los Lances Beach",
-    body: "Where the Mediterranean meets the Atlantic. Wind every afternoon, kites every evening, North Africa across the strait.",
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1800&q=80",
-    fallback: "linear-gradient(135deg, #4a6680 0%, #25384a 60%, #0f1820 100%)",
-  },
-  {
-    id: "tromso",
-    eyebrow: "Northern Norway",
-    title: "Tromsø Aurora",
-    body: "Chase the green light across the Arctic. Reindeer at dusk, fjord kayaking under the midnight glow, no crowds at all.",
-    image: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1800&q=80",
-    fallback: "linear-gradient(135deg, #1a2940 0%, #0e1b2e 60%, #050a14 100%)",
-  },
-];
-
-// Timings measured directly off the reference video (1.2s total
-// transition, 60fps source, broken into phases).
-const SLIDE_MS = 7000;
-const MORPH_S = 1.2; // total transition duration
-const FADE_S = 0.85; // old hero opacity fade
-const BLUR_PX = 8; // peak motion blur during transition
+const SLIDE_MS = 8500;
+const MORPH_S = 1.2;
+const FADE_S = 0.85;
+const BLUR_PX = 8;
 const VISIBLE_CARDS = 4;
-// easeOutCubic - matches the reference video's deceleration curve
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
-// Crossfade easing - symmetric for smooth tail
 const FADE_EASE: [number, number, number, number] = [0.4, 0, 0.6, 1];
 
-const LEN = DESTINATIONS.length;
+const LEN = THEMES.length;
 
 const CARD = {
   base: { w: 108, h: 152, gap: 10, bottom: 108 },
@@ -84,22 +22,31 @@ const CARD = {
 };
 
 export default function HeroCarousel() {
-  const [active, setActive] = useState(0);
+  const { activeId, setActiveId } = useTheme();
+  const active = Math.max(
+    0,
+    THEMES.findIndex((t) => t.id === activeId),
+  );
+
   const [progress, setProgress] = useState(0);
   const [paused, setPaused] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
   const [bp, setBp] = useState<"base" | "sm" | "md">("md");
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const goTo = useCallback((index: number) => {
-    setActive(((index % LEN) + LEN) % LEN);
-    setProgress(0);
-    setTransitioning(true);
-    if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
-    transitionTimeoutRef.current = setTimeout(() => {
-      setTransitioning(false);
-    }, MORPH_S * 1000);
-  }, []);
+  const goTo = useCallback(
+    (index: number) => {
+      const i = ((index % LEN) + LEN) % LEN;
+      setActiveId(THEMES[i].id);
+      setProgress(0);
+      setTransitioning(true);
+      if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+      transitionTimeoutRef.current = setTimeout(() => {
+        setTransitioning(false);
+      }, MORPH_S * 1000);
+    },
+    [setActiveId],
+  );
 
   useEffect(() => {
     return () => {
@@ -115,14 +62,6 @@ export default function HeroCarousel() {
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
-  }, []);
-
-  // Preload every image so the morph never reveals a half-loaded photo.
-  useEffect(() => {
-    DESTINATIONS.forEach((d) => {
-      const img = new window.Image();
-      img.src = d.image;
-    });
   }, []);
 
   // Auto-advance
@@ -144,18 +83,15 @@ export default function HeroCarousel() {
     return () => cancelAnimationFrame(raf);
   }, [active, paused, goTo]);
 
-  const current = DESTINATIONS[active];
+  const current = THEMES[active];
   const card = CARD[bp];
   const paddingRight = bp === "md" ? 48 : bp === "sm" ? 32 : 20;
 
   const cards = Array.from({ length: VISIBLE_CARDS }, (_, i) => {
     const idx = (active + 1 + i) % LEN;
-    return { ...DESTINATIONS[idx], _idx: idx };
+    return { ...THEMES[idx], _idx: idx };
   });
 
-  // Text variants - precise per-state timing to match the reference
-  // video where old text exits fast (~0.25s) and new text appears
-  // late (~0.45s after transition start).
   const textVariants = {
     initial: { opacity: 0 },
     animate: {
@@ -170,31 +106,34 @@ export default function HeroCarousel() {
 
   return (
     <section
-      className="relative w-full h-[100svh] min-h-[680px] overflow-hidden bg-black select-none"
+      className="relative w-full h-[100svh] min-h-[680px] overflow-hidden select-none"
+      style={{ background: "#000" }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Top progress bar */}
+      {/* Progress bar */}
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-white/10 z-40 pointer-events-none">
         <div
-          className="h-full bg-amber-400"
+          className="h-full"
           style={{
+            background: current.accent,
             width: `${progress}%`,
             transition: paused ? "width 200ms ease-out" : "none",
           }}
         />
       </div>
 
-      {/* HERO LAYER - shared layoutId morphs the clicked card UP into
-          this frame. Motion blur ramps on during the morph and clears
-          as the new image settles, matching the reference video's
-          micro-second timing precisely. */}
+      {/* HERO LAYER - swatch (CSS gradient) as the morphing image, so
+          every theme's hero is guaranteed to match its palette. */}
       <AnimatePresence initial={false}>
         <motion.div
           key={current.id}
-          layoutId={`dest-${current.id}`}
+          layoutId={`theme-${current.id}`}
           className="absolute inset-0 z-0 overflow-hidden"
-          style={{ background: current.fallback, willChange: "transform, filter" }}
+          style={{
+            background: current.swatch,
+            willChange: "transform, filter",
+          }}
           initial={{ filter: `blur(${BLUR_PX}px)` }}
           animate={{ filter: "blur(0px)" }}
           exit={{ opacity: 0, filter: `blur(${BLUR_PX}px)` }}
@@ -204,26 +143,16 @@ export default function HeroCarousel() {
             opacity: { duration: FADE_S, ease: FADE_EASE },
             default: { duration: MORPH_S, ease: EASE },
           }}
-        >
-          <img
-            src={current.image}
-            alt={current.title}
-            className="w-full h-full object-cover"
-            draggable={false}
-          />
-        </motion.div>
+        />
       </AnimatePresence>
 
-      {/* Static vignette - above the hero image, below text/cards. */}
+      {/* Static vignette */}
       <div className="absolute inset-0 z-[5] pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/10" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
       </div>
 
-      {/* Hero text - per-state variants so old exits fast (0.25s) and
-          new enters with a 0.45s delay (after the morph is half-way
-          through), matching the video where the new text only appears
-          once the morph is settling. */}
+      {/* Hero text */}
       <div className="absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-12 max-w-[44rem] pointer-events-none">
         <AnimatePresence mode="wait">
           <motion.div
@@ -234,40 +163,46 @@ export default function HeroCarousel() {
             exit="exit"
             className="pointer-events-auto"
           >
-            <div className="w-10 h-px bg-white mb-5" />
-            <p className="text-xs tracking-[0.28em] uppercase text-white/85 mb-4">
-              {current.eyebrow}
+            <p
+              className="text-xs tracking-[0.32em] uppercase mb-4"
+              style={{ color: "rgba(255,255,255,0.75)" }}
+            >
+              Active theme
             </p>
-            <h1 className="font-display uppercase text-white leading-[0.92] tracking-tight text-6xl sm:text-7xl md:text-8xl mb-6">
-              {current.title}
+            <h1
+              className="font-display uppercase text-white leading-[0.92] tracking-tight text-6xl sm:text-7xl md:text-8xl mb-4"
+              style={{ fontFamily: current.fontDisplay }}
+            >
+              {current.name}
             </h1>
-            <p className="text-white/75 max-w-md mb-9 leading-relaxed text-[15px]">
-              {current.body}
+            <p
+              className="text-white/80 max-w-md mb-9 leading-relaxed text-[15px]"
+              style={{ fontFamily: current.fontBody }}
+            >
+              {current.tagline}. Click any card on the right to switch the
+              page&apos;s palette, type, and shape.
             </p>
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                className="size-11 rounded-full bg-amber-400 text-black flex items-center justify-center hover:bg-amber-300 transition-colors"
-                aria-label="Save destination"
+                onClick={() => {
+                  const next = document.getElementById("about");
+                  next?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="rounded-full text-[11px] tracking-[0.28em] uppercase px-7 py-3 transition-colors"
+                style={{
+                  background: current.accent,
+                  color: current.accentInk,
+                }}
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M6 3h12v18l-6-4-6 4V3z" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                className="rounded-full border border-white/45 text-white px-7 py-3 text-[11px] tracking-[0.28em] uppercase hover:bg-white hover:text-black transition-colors"
-              >
-                Discover Location
+                See it applied
               </button>
             </div>
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* CARD RAIL - cards lift -6px and blur 4px while transitioning,
-          matching the "preparation" phase in the reference video where
-          all cards rise slightly and motion-blur for ~200ms. */}
+      {/* CARD RAIL */}
       <div
         className="absolute right-0 z-20 flex"
         style={{
@@ -281,7 +216,7 @@ export default function HeroCarousel() {
             <motion.button
               key={c.id}
               type="button"
-              layoutId={`dest-${c.id}`}
+              layoutId={`theme-${c.id}`}
               onClick={() => goTo(c._idx)}
               initial={{ opacity: 0, x: 50, scale: 0.92, filter: `blur(${BLUR_PX}px)` }}
               animate={{
@@ -306,26 +241,16 @@ export default function HeroCarousel() {
               style={{
                 width: `${card.w}px`,
                 height: `${card.h}px`,
-                background: c.fallback,
+                background: c.swatch,
                 willChange: "transform, filter",
               }}
-              aria-label={`Go to ${c.title}`}
-            >
-              <img
-                src={c.image}
-                alt={c.title}
-                className="absolute inset-0 w-full h-full object-cover"
-                draggable={false}
-              />
-            </motion.button>
+              aria-label={`Switch to ${c.name} theme`}
+            />
           ))}
         </AnimatePresence>
       </div>
 
-      {/* CARD LABELS - parallel layer, decoupled from card morph. Exit
-          animation is BLUR + SLIDE DOWN + FADE (matching the video
-          where labels blur out as the card lifts off), not just a
-          slide. */}
+      {/* CARD LABELS - parallel layer with blur+slide exit */}
       <div
         className="absolute right-0 z-[21] flex pointer-events-none"
         style={{
@@ -358,10 +283,13 @@ export default function HeroCarousel() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-3">
                 <p className="text-[9px] tracking-[0.22em] uppercase text-white/65 mb-1 truncate">
-                  {c.eyebrow}
+                  {c.tagline}
                 </p>
-                <p className="font-display uppercase text-white text-sm sm:text-base leading-tight tracking-tight">
-                  {c.title}
+                <p
+                  className="uppercase text-white text-sm sm:text-base leading-tight tracking-tight"
+                  style={{ fontFamily: c.fontDisplay }}
+                >
+                  {c.name}
                 </p>
               </div>
             </motion.div>
@@ -394,25 +322,24 @@ export default function HeroCarousel() {
           </button>
           <div className="ml-4 hidden sm:block h-px w-40 bg-white/25 relative overflow-hidden">
             <div
-              className="absolute inset-y-0 left-0 bg-amber-400"
+              className="absolute inset-y-0 left-0"
               style={{
+                background: current.accent,
                 width: `${progress}%`,
                 transition: paused ? "width 200ms ease-out" : "none",
               }}
             />
           </div>
         </div>
-        {/* Counter flips immediately on transition start - matches the
-            video where "02" appears at t=2.9s (just 0.2s after the
-            transition begins). */}
         <AnimatePresence mode="wait">
           <motion.div
             key={current.id}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, transition: { duration: 0.2, delay: 0.05 } }}
             exit={{ opacity: 0, transition: { duration: 0.15 } }}
-            className="font-display text-white text-4xl sm:text-5xl tracking-tight tabular-nums"
-            aria-label={`Slide ${active + 1} of ${LEN}`}
+            className="text-white text-4xl sm:text-5xl tracking-tight tabular-nums"
+            style={{ fontFamily: current.fontDisplay }}
+            aria-label={`Theme ${active + 1} of ${LEN}`}
           >
             {String(active + 1).padStart(2, "0")}
           </motion.div>
