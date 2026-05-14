@@ -4,6 +4,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { THEMES } from "@/lib/themes";
 import { useTheme } from "@/components/ThemeProvider";
+import { GooeyText } from "@/components/ui/gooey-text-morphing";
+
+// Morph theme cycles its hero title through this list, gluing the
+// transitions with the SVG threshold filter (gooey effect).
+const MORPH_TITLE_WORDS = ["Morph", "Shift", "Flow", "Blend", "Form"];
 
 const SLIDE_MS = 8500;
 const MORPH_S = 1.2;
@@ -169,12 +174,29 @@ export default function HeroCarousel() {
             >
               Active theme
             </p>
-            <h1
-              className="font-display uppercase text-white leading-[0.92] tracking-tight text-6xl sm:text-7xl md:text-8xl mb-4"
-              style={{ fontFamily: current.fontDisplay }}
-            >
-              {current.name}
-            </h1>
+            {current.id === "morph" ? (
+              <div className="mb-4 -ml-1">
+                <GooeyText
+                  texts={MORPH_TITLE_WORDS}
+                  morphTime={1.1}
+                  cooldownTime={1.6}
+                  className="h-[5.5rem] sm:h-[7rem] md:h-[9rem]"
+                  textClassName="text-6xl sm:text-7xl md:text-8xl tracking-tight !text-left !justify-start uppercase leading-none"
+                  textStyle={{
+                    color: "#FFFFFF",
+                    fontFamily: current.fontDisplay,
+                    fontWeight: 500,
+                  }}
+                />
+              </div>
+            ) : (
+              <h1
+                className="font-display uppercase text-white leading-[0.92] tracking-tight text-6xl sm:text-7xl md:text-8xl mb-4"
+                style={{ fontFamily: current.fontDisplay }}
+              >
+                {current.name}
+              </h1>
+            )}
             <p
               className="text-white/80 max-w-md mb-9 leading-relaxed text-[15px]"
               style={{ fontFamily: current.fontBody }}

@@ -34,9 +34,9 @@ export type Theme = {
 
 export const THEMES: Theme[] = [
   {
-    id: "editorial",
-    name: "Editorial",
-    tagline: "Warm & considered",
+    id: "morph",
+    name: "Morph",
+    tagline: "Liquid type, warm palette",
     swatch: "linear-gradient(135deg, #FAF5EC 0%, #E8DCC4 45%, #D89A2D 100%)",
     bg: "#FAF5EC",
     bgAlt: "#F2EADA",

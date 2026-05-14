@@ -27,7 +27,7 @@ type Props = {
   /**
    * Themes for which the scroll-reveal should be active. When the
    * current theme isn't in this list, children render statically.
-   * Default: only "editorial".
+   * Default: only the "morph" theme.
    */
   themes?: string[];
   delay?: number;
@@ -51,7 +51,7 @@ type Props = {
  */
 export default function ScrollReveal({
   children,
-  themes = ["editorial"],
+  themes = ["morph"],
   delay = 0,
   variant = "fade",
   className,

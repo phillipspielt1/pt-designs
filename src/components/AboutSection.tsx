@@ -17,7 +17,7 @@ const HEADLINE_MORPH = ["Young.", "Driven.", "Crafted.", "Considered."];
 
 export default function AboutSection() {
   const { activeId, active } = useTheme();
-  const isEditorial = activeId === "editorial";
+  const isMorph = activeId === "morph";
 
   return (
     <section
@@ -37,8 +37,8 @@ export default function AboutSection() {
             About us
           </p>
 
-          {/* Editorial: gooey morph headline.  Other themes: static title. */}
-          {isEditorial ? (
+          {/* Morph theme: gooey morphing headline.  Other themes: static. */}
+          {isMorph ? (
             <div className="mb-8">
               <GooeyText
                 texts={HEADLINE_MORPH}
