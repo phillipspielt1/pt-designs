@@ -161,8 +161,9 @@ export const THEMES: Theme[] = [
     audience: "Agencies, fashion, music, art studios",
     capability: "Editorial Hero",
     pitch:
-      "Auto-playing video bg, blown-out type that scales with scroll, image reveals. Built to be remembered.",
-    image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1800&q=80",
+      "Parallax image cluster, character-by-character morphing type, motion that earns attention. Built to be remembered.",
+    // Dark colourful code closeup - on-theme for a web-design studio.
+    image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1800&q=80",
     swatch:
       "linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 55%, #FF2D2D 100%)",
     bg: "#0A0A0A",

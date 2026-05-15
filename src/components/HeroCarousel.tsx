@@ -7,6 +7,7 @@ import { useTheme } from "@/components/ThemeProvider";
 import { GooeyText } from "@/components/ui/gooey-text-morphing";
 import { ShaderAnimation } from "@/components/ui/shader-animation";
 import TradesQuoteWidget from "@/components/TradesQuoteWidget";
+import BoldDarkHero from "@/components/BoldDarkHero";
 
 // Morph theme hero - three-line poster ("Two people. / [ADJ] / No nonsense.")
 // with three background swatches to choose from (no gradient).
@@ -276,9 +277,12 @@ export default function HeroCarousel() {
         </div>
       )}
 
-      {/* Hero text - Morph uses the dedicated three-line poster, others
-          fall through to the standard left-aligned panel. */}
-      {isMorphActive ? (
+      {/* Hero text - Bold & Dark gets the floating-image + TextRotate
+          composition; Morph gets the three-line poster; everything else
+          falls through to the standard left-aligned panel. */}
+      {current.id === "bold-dark" ? (
+        <BoldDarkHero />
+      ) : isMorphActive ? (
         <MorphHero
           ink={morphCfg.ink}
           eyebrowColor={morphCfg.eyebrow}
