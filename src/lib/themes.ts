@@ -99,9 +99,10 @@ export const THEMES: Theme[] = [
     capability: "Micro-Interactions",
     pitch:
       "Animated shader bg, buttons that wiggle, cards that hover, confetti on submit. Personality on every click.",
-    // A captured frame of the live shader animation - the card now
-    // previews the actual effect you get when this theme is active.
-    image: "/playful-bg.jpg",
+    // A captured frame of the live shader animation, picked by sweeping
+    // the animation and scoring the centre region for brightness +
+    // colour - this is the peak-colour moment, not a dim frame.
+    image: "/playful-bg-2.jpg",
     swatch:
       "linear-gradient(135deg, #FFEDD8 0%, #FAD8D8 35%, #A8DAEA 100%)",
     bg: "#FFEDD8",
