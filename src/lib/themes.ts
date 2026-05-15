@@ -130,25 +130,25 @@ export const THEMES: Theme[] = [
     id: "professional",
     name: "Professional",
     tagline: "Polished, trusted, established",
-    audience: "Law firms, accountants, consultants",
-    capability: "Scroll Storytelling",
+    audience: "Corporate, transport, professional services",
+    capability: "Stat-Driven Hero",
     pitch:
-      "Sticky sections, scroll-scrubbed numbers, parallax. Built to make a serious case as you read down the page.",
-    image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1800&q=80",
+      "Cinematic full-bleed hero, headline credibility stats, polished corporate styling. Built to make a business look established.",
+    image: "/professional-hero.jpg",
     swatch:
-      "linear-gradient(135deg, #0E1B2C 0%, #1B2F4A 55%, #C9A961 100%)",
+      "linear-gradient(135deg, #0A1422 0%, #14233A 55%, #3B6FE0 100%)",
     bg: "#0E1B2C",
     bgAlt: "#16263D",
-    ink: "#F2EAD8",
-    inkMuted: "#97A4B4",
-    accent: "#C9A961",
-    accentInk: "#0E1B2C",
-    line: "rgba(242,234,216,0.14)",
-    fontDisplay: "'Fraunces', 'Iowan Old Style', Georgia, serif",
+    ink: "#EEF2F8",
+    inkMuted: "#93A2B8",
+    accent: "#3B6FE0",
+    accentInk: "#FFFFFF",
+    line: "rgba(238,242,248,0.14)",
+    fontDisplay: "'Inter', system-ui, sans-serif",
     fontBody: "'Inter', system-ui, sans-serif",
-    radiusSm: "0.25rem",
-    radiusLg: "0.5rem",
-    shadow: "0 4px 12px rgba(0,0,0,0.30)",
+    radiusSm: "0.35rem",
+    radiusLg: "0.75rem",
+    shadow: "0 8px 24px rgba(0,0,0,0.40)",
   },
 
   /* ------------------------ 4. BOLD & DARK ----------------------------
@@ -163,8 +163,9 @@ export const THEMES: Theme[] = [
     capability: "Editorial Hero",
     pitch:
       "Parallax image cluster, character-by-character morphing type, motion that earns attention. Built to be remembered.",
-    // Dark colourful code closeup - on-theme for a web-design studio.
-    image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1800&q=80",
+    // Dark colourful code closeup, served locally so it can't fail to
+    // load the way a remote Unsplash URL intermittently did.
+    image: "/explore-bg.jpg",
     swatch:
       "linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 55%, #FF2D2D 100%)",
     bg: "#0A0A0A",

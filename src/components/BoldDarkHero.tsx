@@ -97,8 +97,8 @@ export default function BoldDarkHero() {
 
           <p className="mt-7 text-white/75 text-[15px] leading-relaxed max-w-md mx-auto">
             Editorial heroes, motion that earns attention, layouts people
-            actually remember. One of five live previews — built by VDT
-            Sites in 1–4 weeks.
+            actually remember. One of five live previews of what VDT Sites
+            builds.
           </p>
 
           <div className="mt-9 flex items-center justify-center gap-3 flex-wrap">

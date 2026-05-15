@@ -7,6 +7,7 @@ import { useTheme } from "@/components/ThemeProvider";
 import { GooeyText } from "@/components/ui/gooey-text-morphing";
 import { ShaderAnimation } from "@/components/ui/shader-animation";
 import BoldDarkHero from "@/components/BoldDarkHero";
+import ProfessionalHero from "@/components/ProfessionalHero";
 
 // Morph theme hero - three-line poster ("Two people. / [ADJ] / No nonsense.")
 // with three background swatches to choose from (no gradient).
@@ -289,6 +290,8 @@ export default function HeroCarousel() {
           falls through to the standard left-aligned panel. */}
       {current.id === "explore" ? (
         <BoldDarkHero />
+      ) : current.id === "professional" ? (
+        <ProfessionalHero />
       ) : isMorphActive ? (
         <MorphHero
           ink={morphCfg.ink}
@@ -336,8 +339,7 @@ export default function HeroCarousel() {
                 className="text-white/55 max-w-md mb-9 leading-relaxed text-[12px] italic"
                 style={{ fontFamily: current.fontBody }}
               >
-                One of 5 live previews — VDT Sites builds in any style,
-                shipped in 1–4 weeks.
+                One of 5 live previews. VDT Sites builds in any style.
               </p>
               <div className="flex items-center gap-3 flex-wrap">
                 <button
@@ -495,8 +497,8 @@ export default function HeroCarousel() {
         </AnimatePresence>
       </div>
 
-      {/* Controls + counter */}
-      <div className="absolute bottom-8 left-0 right-0 z-30 px-6 sm:px-12 flex items-center justify-between">
+      {/* Controls - prev/next arrows + auto-rotate progress bar. */}
+      <div className="absolute bottom-8 left-0 right-0 z-30 px-6 sm:px-12 flex items-center">
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -529,19 +531,6 @@ export default function HeroCarousel() {
             />
           </div>
         </div>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { duration: 0.2, delay: 0.05 } }}
-            exit={{ opacity: 0, transition: { duration: 0.15 } }}
-            className="text-white text-4xl sm:text-5xl tracking-tight tabular-nums"
-            style={{ fontFamily: current.fontDisplay }}
-            aria-label={`Theme ${active + 1} of ${LEN}`}
-          >
-            {String(active + 1).padStart(2, "0")}
-          </motion.div>
-        </AnimatePresence>
       </div>
     </section>
   );

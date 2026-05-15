@@ -7,7 +7,7 @@ import { useTheme } from "@/components/ThemeProvider";
 
 const BULLETS = [
   "No agency markup. You pay for work, not overhead.",
-  "Fast turnaround. Most projects done in 1–4 weeks.",
+  "Fast turnaround without the long agency timelines.",
   "Direct communication. You work with us, not a middle layer.",
 ];
 
@@ -78,7 +78,7 @@ export default function AboutSection() {
               fontFamily: "var(--theme-font-body)",
             }}
           >
-            We&apos;re Van Dusit &amp; Tristel — two VIU students based in
+            We&apos;re Van Dusit &amp; Tristel, two VIU students based in
             Nanaimo, BC, combining a genuine passion for design with a
             business-minded approach to every project. Being students means
             low overhead and big motivation. Every site we build is crafted

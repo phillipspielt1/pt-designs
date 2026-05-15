@@ -103,7 +103,7 @@ export default function ProfessionalIntegrations() {
           }}
         >
           Sites that talk to your CRM, accounting platform, scheduler, and
-          payment processor — without a brittle handoff.
+          payment processor, without a brittle handoff.
         </p>
 
         <div className="mt-8 flex items-center justify-center">

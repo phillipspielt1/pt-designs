@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s | VDT Sites",
   },
   description:
-    "VDT Sites is a two-person web design studio in Nanaimo, BC. We build fast, modern, SEO-ready websites for small businesses, shipped in 1 to 4 weeks.",
+    "VDT Sites is a two-person web design studio in Nanaimo, BC. We build fast, modern, SEO-ready websites for small businesses.",
   keywords: [
     "web design Nanaimo",
     "small business websites",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     siteName: "VDT Sites",
     title: "VDT Sites: Web Design for Small Business in Nanaimo, BC",
     description:
-      "A two-person web design studio in Nanaimo, BC. Fast, modern, SEO-ready websites for small businesses, shipped in 1 to 4 weeks.",
+      "A two-person web design studio in Nanaimo, BC. Fast, modern, SEO-ready websites for small businesses.",
   },
   twitter: {
     card: "summary_large_image",
