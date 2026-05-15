@@ -99,6 +99,15 @@ export default function HeroCarousel() {
     return () => window.removeEventListener("resize", update);
   }, []);
 
+  // Preload every theme's photo on mount so the card-to-hero morph
+  // never reveals a half-loaded image when the user clicks.
+  useEffect(() => {
+    THEMES.forEach((t) => {
+      const img = new window.Image();
+      img.src = t.image;
+    });
+  }, []);
+
   // Auto-advance
   useEffect(() => {
     if (paused) return;
@@ -166,8 +175,9 @@ export default function HeroCarousel() {
         />
       </div>
 
-      {/* HERO LAYER - swatch is each theme's gradient, except Morph
-          which uses a solid colour picked from the bg chip group. */}
+      {/* HERO LAYER - photo on top of each theme's gradient swatch.
+          Swatch shows while the photo loads (or if the URL ever 404s),
+          so the hero never appears as a blank frame. */}
       <AnimatePresence initial={false}>
         <motion.div
           key={current.id}
@@ -186,7 +196,17 @@ export default function HeroCarousel() {
             opacity: { duration: FADE_S, ease: FADE_EASE },
             default: { duration: MORPH_S, ease: EASE },
           }}
-        />
+        >
+          <img
+            src={current.image}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+            draggable={false}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.opacity = "0";
+            }}
+          />
+        </motion.div>
       </AnimatePresence>
 
       {/* Static vignette - only when the active hero is dark, so text
@@ -339,7 +359,17 @@ export default function HeroCarousel() {
                 willChange: "transform, filter",
               }}
               aria-label={`Switch to ${c.name} theme`}
-            />
+            >
+              <img
+                src={c.image}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                draggable={false}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).style.opacity = "0";
+                }}
+              />
+            </motion.button>
           ))}
         </AnimatePresence>
       </div>

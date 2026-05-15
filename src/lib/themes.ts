@@ -11,7 +11,17 @@ export type Theme = {
   id: string;
   name: string;
   tagline: string;
-  swatch: string; // CSS gradient used as the card art + hero background
+  /**
+   * Real photo URL used as the card art + hero background. Visually
+   * verified to actually depict its theme's subject (no relying on
+   * Unsplash IDs that 404 or point at a different image than expected).
+   */
+  image: string;
+  /**
+   * CSS gradient that sits behind the photo as a fallback - shows
+   * while the image is loading or if it ever fails to load.
+   */
+  swatch: string;
 
   // Color tokens
   bg: string;
@@ -43,6 +53,7 @@ export const THEMES: Theme[] = [
     id: "minimal",
     name: "Minimal",
     tagline: "Clean, quiet, intentional",
+    image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1800&q=80",
     swatch: "linear-gradient(135deg, #FFFFFF 0%, #EDEDED 55%, #0A0A0A 100%)",
     bg: "#FFFFFF",
     bgAlt: "#F7F7F5",
@@ -66,6 +77,7 @@ export const THEMES: Theme[] = [
     id: "playful",
     name: "Playful",
     tagline: "Warm, friendly, expressive",
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1800&q=80",
     swatch:
       "linear-gradient(135deg, #FFEDD8 0%, #FFC2D6 45%, #FF5C8A 100%)",
     bg: "#FFEDD8",
@@ -90,6 +102,7 @@ export const THEMES: Theme[] = [
     id: "professional",
     name: "Professional",
     tagline: "Polished, trusted, established",
+    image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1800&q=80",
     swatch:
       "linear-gradient(135deg, #0E1B2C 0%, #1B2F4A 55%, #C9A961 100%)",
     bg: "#0E1B2C",
@@ -114,6 +127,7 @@ export const THEMES: Theme[] = [
     id: "bold-dark",
     name: "Bold & Dark",
     tagline: "Loud, raw, magnetic",
+    image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1800&q=80",
     swatch:
       "linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 55%, #FF2D2D 100%)",
     bg: "#0A0A0A",
@@ -139,6 +153,7 @@ export const THEMES: Theme[] = [
     id: "trades",
     name: "Trades",
     tagline: "Hard-working, hi-vis, ready",
+    image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1800&q=80",
     swatch:
       "linear-gradient(135deg, #F8F6F2 0%, #1E1E1E 55%, #FF6B0F 100%)",
     bg: "#F8F6F2",
