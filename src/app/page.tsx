@@ -6,6 +6,7 @@ import HeroCarousel from "@/components/HeroCarousel";
 import PreviewBanner from "@/components/PreviewBanner";
 import PreviewEndStrip from "@/components/PreviewEndStrip";
 import ProcessSection from "@/components/ProcessSection";
+import ProfessionalIntegrations from "@/components/ProfessionalIntegrations";
 import SiteNav from "@/components/SiteNav";
 import ThemeProvider from "@/components/ThemeProvider";
 
@@ -20,6 +21,11 @@ export default function Home() {
           <SiteNav />
           <HeroCarousel />
         </div>
+
+        {/* Theme-specific capability demos that render in-page (not just
+            inside the hero). Each component checks the active theme and
+            returns null when it isn't its turn. */}
+        <ProfessionalIntegrations />
 
         {/* Hand-off strip between the preview (above) and VDT's actual
             brand story (below). Stays consistent regardless of theme. */}

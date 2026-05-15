@@ -98,22 +98,27 @@ export const THEMES: Theme[] = [
     audience: "Cafés, kids brands, bakeries, makers",
     capability: "Micro-Interactions",
     pitch:
-      "Buttons that wiggle, cards that hover, custom cursor, confetti on submit. Personality on every click.",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1800&q=80",
+      "Animated shader bg, buttons that wiggle, cards that hover, confetti on submit. Personality on every click.",
+    // Pastel rainbow balloons - reads "celebration / cafés / kids brands"
+    // and crops cleanly at every size.
+    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1800&q=80",
     swatch:
-      "linear-gradient(135deg, #FFEDD8 0%, #FFC2D6 45%, #FF5C8A 100%)",
+      "linear-gradient(135deg, #FFEDD8 0%, #FAD8D8 35%, #A8DAEA 100%)",
     bg: "#FFEDD8",
     bgAlt: "#FFE0C2",
     ink: "#28104E",
     inkMuted: "#6B5BA3",
-    accent: "#FF5C8A",
-    accentInk: "#FFFFFF",
+    // Pastel sky blue - playful + airy without the cosmetic-pink read.
+    // Paired with a deep teal-navy ink for button labels so the pastel
+    // doesn't wash out at the CTA.
+    accent: "#A8DAEA",
+    accentInk: "#1B2F3F",
     line: "rgba(40,16,78,0.14)",
     fontDisplay: "'Fraunces', Georgia, serif",
     fontBody: "'Hanken Grotesk', system-ui, sans-serif",
     radiusSm: "1rem",
     radiusLg: "2rem",
-    shadow: "0 12px 32px rgba(255,92,138,0.18)",
+    shadow: "0 12px 32px rgba(168,218,234,0.32)",
   },
 
   /* ------------------------ 3. PROFESSIONAL ---------------------------
