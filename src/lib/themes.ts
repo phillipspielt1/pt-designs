@@ -12,14 +12,28 @@ export type Theme = {
   name: string;
   tagline: string;
   /**
-   * Real photo URL used as the card art + hero background. Visually
-   * verified to actually depict its theme's subject (no relying on
-   * Unsplash IDs that 404 or point at a different image than expected).
+   * Who this style is built for. Used in the hero subtext + frames
+   * the carousel as a "what fits your business" picker rather than
+   * a generic aesthetic chooser.
+   */
+  audience: string;
+  /**
+   * Short capability pill rendered on each rail card thumbnail.
+   * Tells the visitor at a glance what this site demo shows them
+   * VDT can build (e.g. "QUOTE WIDGET", "MICRO-INTERACTIONS").
+   */
+  capability: string;
+  /**
+   * One sentence describing what this preview actually demonstrates -
+   * the interactive thing on the page, not just the styling.
+   */
+  pitch: string;
+  /**
+   * Real photo URL used as the card art + hero background.
    */
   image: string;
   /**
-   * CSS gradient that sits behind the photo as a fallback - shows
-   * while the image is loading or if it ever fails to load.
+   * CSS gradient fallback behind the photo (covers slow loads + 404s).
    */
   swatch: string;
 
@@ -53,6 +67,10 @@ export const THEMES: Theme[] = [
     id: "minimal",
     name: "Minimal",
     tagline: "Clean, quiet, intentional",
+    audience: "Tech, design studios, photographers",
+    capability: "Static · Fast",
+    pitch:
+      "Sub-second load, no animation noise, Lighthouse-100 build. Get out of the way of the work.",
     image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1800&q=80",
     swatch: "linear-gradient(135deg, #FFFFFF 0%, #EDEDED 55%, #0A0A0A 100%)",
     bg: "#FFFFFF",
@@ -77,6 +95,10 @@ export const THEMES: Theme[] = [
     id: "playful",
     name: "Playful",
     tagline: "Warm, friendly, expressive",
+    audience: "Cafés, kids brands, bakeries, makers",
+    capability: "Micro-Interactions",
+    pitch:
+      "Buttons that wiggle, cards that hover, custom cursor, confetti on submit. Personality on every click.",
     image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1800&q=80",
     swatch:
       "linear-gradient(135deg, #FFEDD8 0%, #FFC2D6 45%, #FF5C8A 100%)",
@@ -102,6 +124,10 @@ export const THEMES: Theme[] = [
     id: "professional",
     name: "Professional",
     tagline: "Polished, trusted, established",
+    audience: "Law firms, accountants, consultants",
+    capability: "Scroll Storytelling",
+    pitch:
+      "Sticky sections, scroll-scrubbed numbers, parallax. Built to make a serious case as you read down the page.",
     image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1800&q=80",
     swatch:
       "linear-gradient(135deg, #0E1B2C 0%, #1B2F4A 55%, #C9A961 100%)",
@@ -127,6 +153,10 @@ export const THEMES: Theme[] = [
     id: "bold-dark",
     name: "Bold & Dark",
     tagline: "Loud, raw, magnetic",
+    audience: "Agencies, fashion, music, art studios",
+    capability: "Editorial Hero",
+    pitch:
+      "Auto-playing video bg, blown-out type that scales with scroll, image reveals. Built to be remembered.",
     image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1800&q=80",
     swatch:
       "linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 55%, #FF2D2D 100%)",
@@ -153,6 +183,10 @@ export const THEMES: Theme[] = [
     id: "trades",
     name: "Trades",
     tagline: "Hard-working, hi-vis, ready",
+    audience: "Contractors, plumbers, electricians, builders",
+    capability: "Quote · Booking",
+    pitch:
+      "Live quote calculator and click-to-call sticky. Turns visitors into booked jobs while you're still on a worksite.",
     image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1800&q=80",
     swatch:
       "linear-gradient(135deg, #F8F6F2 0%, #1E1E1E 55%, #FF6B0F 100%)",

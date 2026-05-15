@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { THEMES } from "@/lib/themes";
 import { useTheme } from "@/components/ThemeProvider";
 import { GooeyText } from "@/components/ui/gooey-text-morphing";
+import TradesQuoteWidget from "@/components/TradesQuoteWidget";
 
 // Morph theme hero - three-line poster ("Two people. / [ADJ] / No nonsense.")
 // with three background swatches to choose from (no gradient).
@@ -277,10 +278,15 @@ export default function HeroCarousel() {
               className="pointer-events-auto"
             >
               <p
-                className="text-xs tracking-[0.32em] uppercase mb-4"
-                style={{ color: "rgba(255,255,255,0.75)" }}
+                className="text-[10px] tracking-[0.32em] uppercase mb-5 flex items-center gap-2 flex-wrap"
+                style={{ color: "rgba(255,255,255,0.85)" }}
               >
-                Active theme
+                <span
+                  aria-hidden
+                  className="inline-block size-1 rounded-full"
+                  style={{ background: current.accent }}
+                />
+                <span>Preview · For {current.audience}</span>
               </p>
               <h1
                 className="uppercase text-white leading-[0.92] tracking-tight text-6xl sm:text-7xl md:text-8xl mb-4"
@@ -289,18 +295,23 @@ export default function HeroCarousel() {
                 {current.name}
               </h1>
               <p
-                className="text-white/80 max-w-md mb-9 leading-relaxed text-[15px]"
+                className="text-white/85 max-w-md mb-4 leading-relaxed text-[15px]"
                 style={{ fontFamily: current.fontBody }}
               >
-                {current.tagline}. Click any card on the right to switch the
-                page&apos;s palette, type, and shape.
+                {current.pitch}
               </p>
-              <div className="flex items-center gap-3">
+              <p
+                className="text-white/55 max-w-md mb-9 leading-relaxed text-[12px] italic"
+                style={{ fontFamily: current.fontBody }}
+              >
+                One of 5 live previews — VDT Sites builds in any style,
+                shipped in 1–4 weeks.
+              </p>
+              <div className="flex items-center gap-3 flex-wrap">
                 <button
                   type="button"
                   onClick={() => {
-                    const next = document.getElementById("about");
-                    next?.scrollIntoView({ behavior: "smooth" });
+                    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
                   }}
                   className="rounded-full text-[11px] tracking-[0.28em] uppercase px-7 py-3 transition-colors"
                   style={{
@@ -308,9 +319,23 @@ export default function HeroCarousel() {
                     color: current.accentInk,
                   }}
                 >
-                  See it applied
+                  Get a quote
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="rounded-full text-[11px] tracking-[0.28em] uppercase px-7 py-3 transition-colors border border-white/40 text-white hover:bg-white/10"
+                >
+                  About VDT
                 </button>
               </div>
+
+              {/* Theme-specific capability demo. Each theme can drop its
+                  signature interactive widget here. Trades = live quote
+                  calculator. */}
+              {current.id === "trades" && <TradesQuoteWidget />}
             </motion.div>
           </AnimatePresence>
         </div>
@@ -405,6 +430,27 @@ export default function HeroCarousel() {
               style={{ width: `${card.w}px`, height: `${card.h}px` }}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
+
+              {/* Capability badge - tells the visitor what this card
+                  actually demos, not just what color it is. */}
+              <div className="absolute top-2 left-2 right-2 flex justify-start">
+                <span
+                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] tracking-[0.2em] uppercase backdrop-blur-md"
+                  style={{
+                    background: "rgba(255,255,255,0.18)",
+                    color: "#FFFFFF",
+                    border: "1px solid rgba(255,255,255,0.25)",
+                  }}
+                >
+                  <span
+                    aria-hidden
+                    className="inline-block size-1 rounded-full"
+                    style={{ background: c.accent }}
+                  />
+                  <span className="truncate max-w-[8rem]">{c.capability}</span>
+                </span>
+              </div>
+
               <div className="absolute bottom-0 left-0 right-0 p-3">
                 <p className="text-[9px] tracking-[0.22em] uppercase text-white/65 mb-1 truncate">
                   {c.tagline}

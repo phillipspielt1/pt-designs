@@ -3,6 +3,8 @@ import ContactForm from "@/components/ContactForm";
 import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
 import HeroCarousel from "@/components/HeroCarousel";
+import PreviewBanner from "@/components/PreviewBanner";
+import PreviewEndStrip from "@/components/PreviewEndStrip";
 import ProcessSection from "@/components/ProcessSection";
 import SiteNav from "@/components/SiteNav";
 import ThemeProvider from "@/components/ThemeProvider";
@@ -11,10 +13,17 @@ export default function Home() {
   return (
     <ThemeProvider>
       <main className="min-h-screen flex flex-col">
+        {/* Always-visible context strip: this is a showcase, not the brand. */}
+        <PreviewBanner />
+
         <div className="relative">
           <SiteNav />
           <HeroCarousel />
         </div>
+
+        {/* Hand-off strip between the preview (above) and VDT's actual
+            brand story (below). Stays consistent regardless of theme. */}
+        <PreviewEndStrip />
 
         <AboutSection />
         <ProcessSection />
