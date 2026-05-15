@@ -18,7 +18,7 @@ export default function Home() {
         <PreviewBanner />
 
         <div className="relative">
-          <SiteNav />
+          <SiteNav activeHref="/" />
           <HeroCarousel />
         </div>
 

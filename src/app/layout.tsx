@@ -1,11 +1,52 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const SITE_URL = "https://vdtsites.com";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://vdtsites.ca"),
-  title: "VDT Test",
-  description: "VDT Test - sandbox site for skills practice.",
-  robots: { index: false, follow: false },
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "VDT Sites: Web Design for Small Business in Nanaimo, BC",
+    template: "%s | VDT Sites",
+  },
+  description:
+    "VDT Sites is a two-person web design studio in Nanaimo, BC. We build fast, modern, SEO-ready websites for small businesses, shipped in 1 to 4 weeks.",
+  keywords: [
+    "web design Nanaimo",
+    "small business websites",
+    "web developer BC",
+    "website design Vancouver Island",
+    "VDT Sites",
+  ],
+  authors: [{ name: "VDT Sites" }],
+  creator: "VDT Sites",
+  publisher: "VDT Sites",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "en_CA",
+    url: SITE_URL,
+    siteName: "VDT Sites",
+    title: "VDT Sites: Web Design for Small Business in Nanaimo, BC",
+    description:
+      "A two-person web design studio in Nanaimo, BC. Fast, modern, SEO-ready websites for small businesses, shipped in 1 to 4 weeks.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "VDT Sites: Web Design for Small Business",
+    description:
+      "A two-person web design studio in Nanaimo, BC. Fast, modern websites for small businesses.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
