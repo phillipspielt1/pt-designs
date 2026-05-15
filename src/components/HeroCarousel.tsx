@@ -221,9 +221,17 @@ export default function HeroCarousel() {
           <motion.div
             key="shader-playful"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.9, delay: 0.4, ease: "easeOut" }}
+            // Enter: hold for the morph, then fade in slowly.
+            animate={{
+              opacity: 1,
+              transition: { duration: 0.9, delay: 0.4, ease: "easeOut" },
+            }}
+            // Exit: snap out fast so it doesn't linger when the user
+            // switches away from Playful (no delay, short duration).
+            exit={{
+              opacity: 0,
+              transition: { duration: 0.22, ease: "easeIn" },
+            }}
             className="absolute inset-0 z-[2] pointer-events-none"
           >
             <ShaderAnimation />
