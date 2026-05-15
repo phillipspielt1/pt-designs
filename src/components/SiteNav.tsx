@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useThemeOptional } from "@/components/ThemeProvider";
+import { accentForDark } from "@/lib/utils";
 
 type NavVariant = "overlay" | "solid";
 
@@ -29,6 +33,12 @@ export default function SiteNav({
   const solid = variant === "solid";
   const ink = solid ? "#15110B" : "#FFFFFF";
   const muted = solid ? "rgba(21,17,11,0.62)" : "rgba(255,255,255,0.85)";
+
+  // Active-link underline tints to the live theme on the home page.
+  // On un-themed pages (the blog) there's no provider, so it falls
+  // back to amber. accentForDark keeps a near-black accent visible.
+  const theme = useThemeOptional();
+  const underline = theme ? accentForDark(theme.active.accent) : "#FBBF24";
 
   return (
     <nav
@@ -81,7 +91,13 @@ export default function SiteNav({
                   {link.label}
                 </Link>
                 {isActive && (
-                  <span className="absolute left-0 right-0 -bottom-1.5 h-px bg-amber-400" />
+                  <span
+                    className="absolute left-0 right-0 -bottom-1.5 h-px"
+                    style={{
+                      background: underline,
+                      transition: "background-color 600ms ease",
+                    }}
+                  />
                 )}
               </li>
             );

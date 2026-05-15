@@ -25,6 +25,15 @@ export function useTheme() {
 }
 
 /**
+ * Like useTheme, but returns null instead of throwing when there's no
+ * provider above. Used by components (e.g. SiteNav) that render both
+ * inside the themed home page and on un-themed pages like the blog.
+ */
+export function useThemeOptional() {
+  return useContext(ThemeCtx);
+}
+
+/**
  * ThemeProvider holds the active theme state, exposes it via context, and
  * applies the theme's color/type tokens as CSS custom properties on its
  * root div. Every section below can simply read `var(--theme-bg)` etc.,
