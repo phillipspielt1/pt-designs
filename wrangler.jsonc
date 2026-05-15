@@ -8,12 +8,15 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
-  // Apex of vdtsites.ca. Cloudflare creates the DNS automatically on
-  // deploy when the zone is on this account. workers.dev URL stays live
-  // alongside the custom domain as a backup.
+  // One Worker, multiple custom domains. Cloudflare creates the DNS
+  // automatically on deploy for each zone on this account. The site is
+  // served identically on every hostname below. workers.dev stays live
+  // as a backup.
   "workers_dev": true,
   "routes": [
-    { "pattern": "vdtsites.ca", "custom_domain": true }
+    { "pattern": "vdtsites.ca", "custom_domain": true },
+    { "pattern": "vdtsites.com", "custom_domain": true },
+    { "pattern": "www.vdtsites.com", "custom_domain": true }
   ],
   // Cloudflare Workers Email Routing send_email binding. The destination
   // address MUST be a verified destination in Email Routing for this
