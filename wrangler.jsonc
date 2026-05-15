@@ -8,6 +8,14 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  // KV store for the /admin area: contact-form submissions, and later
+  // editable blog posts + site copy.
+  "kv_namespaces": [
+    {
+      "binding": "ADMIN_KV",
+      "id": "c3690d7ca5fe41fdad5a6a7daec42775"
+    }
+  ],
   // One Worker, multiple custom domains. Cloudflare creates the DNS
   // automatically on deploy for each zone on this account. The site is
   // served identically on every hostname below. workers.dev stays live

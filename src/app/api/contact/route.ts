@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { saveMessage } from "@/lib/admin";
 
 type Payload = {
   name: string;
@@ -120,8 +121,19 @@ export async function POST(req: Request) {
     "Sent from VDTTest contact form",
   ].join("\n");
 
+  // Persist to KV first so the submission is captured in /admin even
+  // if email delivery fails. This is the source of truth; the email is
+  // a best-effort notification on top.
+  const stored = await saveMessage({
+    name: name.trim(),
+    email: email.trim(),
+    message: message.trim(),
+  });
+
   const result = await deliver(from, to, subject, text, email);
-  if (!result.ok) {
+
+  // Only a hard failure (neither stored nor emailed) is an error.
+  if (!stored && !result.ok) {
     return NextResponse.json(
       { error: "Could not send. Try again later." },
       { status: 502 },
