@@ -46,22 +46,23 @@ export default function BoldDarkHero() {
   return (
     <div className="absolute inset-0 z-10">
       {/* Parallax cluster — negative sensitivity so images drift against
-          the cursor. Sits above the vignette (z-5), below the text. */}
+          the cursor. Bigger + pulled inward so the cluster reads as one
+          collage framing the headline rather than scattered corners. */}
       <Floating sensitivity={-0.6} className="z-[8]">
-        <FloatingElement depth={0.6} className="top-[12%] left-[4%]">
-          <DesignCard src={DESIGN_IMAGES[0].url} alt={DESIGN_IMAGES[0].alt} rotate={-7} className="w-32 sm:w-44 lg:w-52" />
+        <FloatingElement depth={0.6} className="top-[17%] left-[9%]">
+          <DesignCard src={DESIGN_IMAGES[0].url} alt={DESIGN_IMAGES[0].alt} rotate={-7} className="w-44 sm:w-56 lg:w-64" />
         </FloatingElement>
-        <FloatingElement depth={1.4} className="top-[5%] left-[31%]">
-          <DesignCard src={DESIGN_IMAGES[1].url} alt={DESIGN_IMAGES[1].alt} rotate={6} className="w-28 sm:w-36 lg:w-40" />
+        <FloatingElement depth={1.4} className="top-[8%] left-[35%]">
+          <DesignCard src={DESIGN_IMAGES[1].url} alt={DESIGN_IMAGES[1].alt} rotate={6} className="w-36 sm:w-48 lg:w-52" />
         </FloatingElement>
-        <FloatingElement depth={2} className="top-[44%] left-[2%]">
-          <DesignCard src={DESIGN_IMAGES[4].url} alt={DESIGN_IMAGES[4].alt} rotate={4} className="w-32 sm:w-44 lg:w-52" />
+        <FloatingElement depth={2} className="top-[47%] left-[12%]">
+          <DesignCard src={DESIGN_IMAGES[4].url} alt={DESIGN_IMAGES[4].alt} rotate={4} className="w-44 sm:w-56 lg:w-64" />
         </FloatingElement>
-        <FloatingElement depth={1} className="top-[9%] right-[5%]">
-          <DesignCard src={DESIGN_IMAGES[2].url} alt={DESIGN_IMAGES[2].alt} rotate={8} className="w-36 sm:w-48 lg:w-56" />
+        <FloatingElement depth={1} className="top-[14%] right-[9%]">
+          <DesignCard src={DESIGN_IMAGES[2].url} alt={DESIGN_IMAGES[2].alt} rotate={8} className="w-48 sm:w-64 lg:w-72" />
         </FloatingElement>
-        <FloatingElement depth={2.6} className="top-[40%] right-[7%]">
-          <DesignCard src={DESIGN_IMAGES[3].url} alt={DESIGN_IMAGES[3].alt} rotate={-9} className="w-24 sm:w-32 lg:w-36" />
+        <FloatingElement depth={2.6} className="top-[44%] right-[12%]">
+          <DesignCard src={DESIGN_IMAGES[3].url} alt={DESIGN_IMAGES[3].alt} rotate={-9} className="w-36 sm:w-44 lg:w-52" />
         </FloatingElement>
       </Floating>
 

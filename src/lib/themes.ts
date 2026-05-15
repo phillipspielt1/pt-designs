@@ -155,8 +155,8 @@ export const THEMES: Theme[] = [
    * Mood: loud, raw, magnetic. Anton condensed, black, electric red.
    * ------------------------------------------------------------------ */
   {
-    id: "bold-dark",
-    name: "Bold & Dark",
+    id: "explore",
+    name: "Explore",
     tagline: "Loud, raw, magnetic",
     audience: "Agencies, fashion, music, art studios",
     capability: "Editorial Hero",

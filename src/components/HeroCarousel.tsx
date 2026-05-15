@@ -277,10 +277,10 @@ export default function HeroCarousel() {
         </div>
       )}
 
-      {/* Hero text - Bold & Dark gets the floating-image + TextRotate
+      {/* Hero text - Explore gets the floating-image + TextRotate
           composition; Morph gets the three-line poster; everything else
           falls through to the standard left-aligned panel. */}
-      {current.id === "bold-dark" ? (
+      {current.id === "explore" ? (
         <BoldDarkHero />
       ) : isMorphActive ? (
         <MorphHero
