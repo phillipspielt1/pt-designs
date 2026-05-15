@@ -6,7 +6,6 @@ import { THEMES } from "@/lib/themes";
 import { useTheme } from "@/components/ThemeProvider";
 import { GooeyText } from "@/components/ui/gooey-text-morphing";
 import { ShaderAnimation } from "@/components/ui/shader-animation";
-import TradesQuoteWidget from "@/components/TradesQuoteWidget";
 import BoldDarkHero from "@/components/BoldDarkHero";
 
 // Morph theme hero - three-line poster ("Two people. / [ADJ] / No nonsense.")
@@ -357,10 +356,6 @@ export default function HeroCarousel() {
                 </button>
               </div>
 
-              {/* Theme-specific capability demo. Each theme can drop its
-                  signature interactive widget here. Trades = live quote
-                  calculator. */}
-              {current.id === "trades" && <TradesQuoteWidget />}
             </motion.div>
           </AnimatePresence>
         </div>
