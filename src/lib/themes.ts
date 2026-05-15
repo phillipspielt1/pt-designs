@@ -99,9 +99,9 @@ export const THEMES: Theme[] = [
     capability: "Micro-Interactions",
     pitch:
       "Animated shader bg, buttons that wiggle, cards that hover, confetti on submit. Personality on every click.",
-    // Pastel rainbow balloons - reads "celebration / cafés / kids brands"
-    // and crops cleanly at every size.
-    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1800&q=80",
+    // A captured frame of the live shader animation - the card now
+    // previews the actual effect you get when this theme is active.
+    image: "/playful-bg.jpg",
     swatch:
       "linear-gradient(135deg, #FFEDD8 0%, #FAD8D8 35%, #A8DAEA 100%)",
     bg: "#FFEDD8",
