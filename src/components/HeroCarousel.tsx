@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { THEMES } from "@/lib/themes";
 import { useTheme } from "@/components/ThemeProvider";
 import { GooeyText } from "@/components/ui/gooey-text-morphing";
+import { ShaderAnimation } from "@/components/ui/shader-animation";
 import TradesQuoteWidget from "@/components/TradesQuoteWidget";
 
 // Morph theme hero - three-line poster ("Two people. / [ADJ] / No nonsense.")
@@ -208,6 +209,26 @@ export default function HeroCarousel() {
             }}
           />
         </motion.div>
+      </AnimatePresence>
+
+      {/* PLAYFUL theme - GLSL shader animated bg. Mounts only when
+          Playful is active so the WebGL context isn't held for the
+          other four themes. Fades in over the morph so the
+          card-to-hero photo transition stays visible, then the shader
+          layer takes over. */}
+      <AnimatePresence>
+        {current.id === "playful" && (
+          <motion.div
+            key="shader-playful"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.9, delay: 0.4, ease: "easeOut" }}
+            className="absolute inset-0 z-[2] pointer-events-none"
+          >
+            <ShaderAnimation />
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {/* Static vignette - only when the active hero is dark, so text
